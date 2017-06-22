@@ -5,7 +5,7 @@
     <name>fastlegerest</name>
 
     <selftest>
-        <path>ofastlegerest/internal/selftest</path>
+        <path>fastlegerest/internal/selftest</path>
         <humanReadablePath>fastlegerest/internal/selftest</humanReadablePath>
     </selftest>
 
@@ -15,9 +15,9 @@
 
     <resources>
         <applicationProperties alias="oppfoelgingsdialog.properties"/>
-        <applicationCertificate alias="srvsfastlegerest"/>
+        <applicationCertificate alias="srvfastlegerest"/>
 
-        <webservice alias="ekstern:helse_helsepersonell_v1" mapToProperty="helsepersonellv1.endpoint" />
+        <webservice alias="ekstern:helse_fastlegeinformasjon" mapToProperty="fastlegeinformasjon.endpoint" />
 
 
         <baseUrl alias="isso-host"/>

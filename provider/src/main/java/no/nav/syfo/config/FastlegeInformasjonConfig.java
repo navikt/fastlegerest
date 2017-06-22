@@ -1,5 +1,6 @@
 package no.nav.syfo.config;
 
+import no.nav.modig.security.ws.SystemSAMLOutInterceptor;
 import no.nav.sbl.dialogarena.common.cxf.CXFClient;
 import no.nav.syfo.mocks.FastlegeV1Mock;
 import no.nhn.schemas.reg.flr.IFlrReadOperations;
@@ -16,14 +17,15 @@ public class FastlegeInformasjonConfig {
 
     @Bean
     public IFlrReadOperations fastlegeSoapClient() {
-        IFlrReadOperations prod = factory().configureStsForOnBehalfOfWithJWT().build();
+        SystemSAMLOutInterceptor systemSAMLOutInterceptor = new SystemSAMLOutInterceptor();
+//        IFlrReadOperations prod = factory().configureStsForOnBehalfOfWithJWT().build();
+        IFlrReadOperations prod = factory().withOutInterceptor(new SystemSAMLOutInterceptor()).build();
         IFlrReadOperations mock = new FastlegeV1Mock();
-
         return createMetricsProxyWithInstanceSwitcher("FASTLEGE_V1", prod, mock, FASTLEGE_MOCK_KEY, IFlrReadOperations.class);
     }
 
     private CXFClient<IFlrReadOperations> factory() {
-        return new CXFClient<>(IFlrReadOperations.class).address(getProperty("helsepersonellv1.endpoint.url"));
+        return new CXFClient<>(IFlrReadOperations.class).address(getProperty("fastlegeinformasjon.endpoint.url"));
     }
 
 }

@@ -31,7 +31,7 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>no.nav.no.nav.syfo.config.ApplicationConfig</param-value>
+        <param-value>no.nav.syfo.config.ApplicationConfig</param-value>
     </context-param>
 
 

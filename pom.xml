@@ -253,6 +253,11 @@
                 <version>${modig-security.version}</version>
             </dependency>
             <dependency>
+                <groupId>no.nav.modig</groupId>
+                <artifactId>modig-security-ws</artifactId>
+                <version>${modig-security.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>3.4</version>

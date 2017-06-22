@@ -3,6 +3,7 @@ package no.nav.syfo.rest.ressurser;
 import io.swagger.annotations.Api;
 import no.nav.metrics.aspects.Count;
 import no.nav.metrics.aspects.Timed;
+import no.nav.syfo.domain.Fastlege;
 import no.nav.syfo.services.FastlegeService;
 
 import javax.inject.Inject;
@@ -12,7 +13,7 @@ import javax.ws.rs.core.Response;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.ok;
 
-@Path("/fastlege}")
+@Path("/fastlege")
 @Consumes(APPLICATION_JSON)
 @Api(value = "fastlege", description = "Endepunkt for henting av fastlege")
 public class FastlegeRessurs {
@@ -23,8 +24,7 @@ public class FastlegeRessurs {
     @GET
     @Timed(name = "finnFastlege")
     @Count(name = "finnFastlege")
-    public Response finnFastlege(@QueryParam("fnr") String fnr) {
-        return ok()
-                .build();
+    public Fastlege finnFastlege(@QueryParam("fnr") String fnr) {
+        return fastlegeService.hentBrukersFastlege(fnr);
     }
 }
