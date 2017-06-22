@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://appconfig.aura.nav.no"
+             xsi:schemaLocation="http://appconfig.aura.nav.no http://maven.adeo.no/xsd/appconfig.xsd">
+
+    <name>fastlegerest</name>
+
+    <selftest>
+        <path>ofastlegerest/internal/selftest</path>
+        <humanReadablePath>fastlegerest/internal/selftest</humanReadablePath>
+    </selftest>
+
+    <artifacts>
+        <ear groupId="no.nav.syfo" artifactId="fastlegerest-ear"/>
+    </artifacts>
+
+    <resources>
+        <applicationProperties alias="oppfoelgingsdialog.properties"/>
+        <applicationCertificate alias="srvsfastlegerest"/>
+
+        <webservice alias="ekstern:helse_helsepersonell_v1" mapToProperty="helsepersonellv1.endpoint" />
+
+
+        <baseUrl alias="isso-host"/>
+        <baseUrl alias="isso-jwks"/>
+        <baseUrl alias="isso-issuer"/>
+        <credential alias="OpenIdConnectAgent"/>
+        <rest alias="oidc-login-api" mapToProperty="oidc-redirect"/>
+    </resources>
+
+    <exposed-services>
+        <exposedRest path="/fastlegerest/api/fastlege" name="fastlegeapi" description="Fastlege FSS REST-API"/>
+    </exposed-services>
+
+
+    <security serviceUserResourceAlias="srvfastlegerest" />
+
+    <loadBalancer isAlive="fastlegerest/internal/isAlive"/>
+</application>
