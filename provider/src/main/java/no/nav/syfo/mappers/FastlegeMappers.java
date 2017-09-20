@@ -9,8 +9,7 @@ public class FastlegeMappers {
 
     public static Function<WSGPOnContractAssociation, Fastlege> ws2fastlege = wsPatientToGPContractAssociation ->
             new Fastlege()
-            .withNavn(wsPatientToGPContractAssociation.getGP().getFirstName() + " " + wsPatientToGPContractAssociation.getGP().getLastName())
-            .withFra(wsPatientToGPContractAssociation.getValid().getFrom().toLocalDate())
-            .withTil(wsPatientToGPContractAssociation.getValid().getTo().toLocalDate())
-             ;
+                    .withNavn(wsPatientToGPContractAssociation.getGP().getFirstName() + " " + wsPatientToGPContractAssociation.getGP().getLastName())
+                    .withFra(wsPatientToGPContractAssociation.getValid().getFrom().toLocalDate())
+                    .withTil(wsPatientToGPContractAssociation.getValid().getTo().toLocalDate());
 }

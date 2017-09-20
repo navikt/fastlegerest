@@ -14,15 +14,13 @@ public class FastlegeV1Mock implements IFlrReadOperations {
         return new WSPatientToGPContractAssociation()
                 .withPatient(new WSPerson()
                         .withFirstName("Sygve Sykmeldt"))
-                .withGPContract(new WSGPContract()
-                        .withName("Lars Lege")
-                        .withDoctorCycles(new WSArrayOfGPOnContractAssociation()
-                                .withGPOnContractAssociations(
-                                        new WSGPOnContractAssociation()
-                                                .withValid(new WSPeriod())
-                                                .withGP(new WSPerson())
-                                ))
-                );
+                .withDoctorCycles(new WSArrayOfGPOnContractAssociation()
+                        .withGPOnContractAssociations(
+                                new WSGPOnContractAssociation()
+                                        .withGP(new WSPerson().withFirstName("Lege").withLastName("Legesen"))
+                                        .withValid(new WSPeriod().withFrom(LocalDateTime.now().minusYears(4)).withTo(LocalDateTime.now().plusYears(2)))
+                        ))
+                ;
     }
 
     @Override

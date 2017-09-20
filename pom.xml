@@ -52,7 +52,7 @@
         <!-- Egenlagde  -->
         <common-types.version>1.2</common-types.version>
         <common-web.version>2.0.4</common-web.version>
-        <common-cxf.version>3.1.44</common-cxf.version>
+        <common-cxf.version>2017.09.19.11.41</common-cxf.version>
         <common-jetty.version>2.0.19</common-jetty.version>
         <common-test.version>1.3</common-test.version>
         <modig-log.version>1.1.3</modig-log.version>
@@ -250,11 +250,6 @@
             <dependency>
                 <groupId>no.nav.modig</groupId>
                 <artifactId>modig-security-core</artifactId>
-                <version>${modig-security.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.modig</groupId>
-                <artifactId>modig-security-ws</artifactId>
                 <version>${modig-security.version}</version>
             </dependency>
             <dependency>

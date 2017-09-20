@@ -15,6 +15,7 @@ import static javax.ws.rs.core.Response.ok;
 
 @Path("/fastlege")
 @Consumes(APPLICATION_JSON)
+@Produces(APPLICATION_JSON)
 @Api(value = "fastlege", description = "Endepunkt for henting av fastlege")
 public class FastlegeRessurs {
 

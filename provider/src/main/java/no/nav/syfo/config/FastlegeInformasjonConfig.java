@@ -1,6 +1,5 @@
 package no.nav.syfo.config;
 
-import no.nav.modig.security.ws.SystemSAMLOutInterceptor;
 import no.nav.sbl.dialogarena.common.cxf.CXFClient;
 import no.nav.syfo.mocks.FastlegeV1Mock;
 import no.nhn.schemas.reg.flr.IFlrReadOperations;
@@ -17,9 +16,7 @@ public class FastlegeInformasjonConfig {
 
     @Bean
     public IFlrReadOperations fastlegeSoapClient() {
-        SystemSAMLOutInterceptor systemSAMLOutInterceptor = new SystemSAMLOutInterceptor();
-//        IFlrReadOperations prod = factory().configureStsForOnBehalfOfWithJWT().build();
-        IFlrReadOperations prod = factory().withOutInterceptor(new SystemSAMLOutInterceptor()).build();
+        IFlrReadOperations prod = factory().configureStsForSystemUserInFSS().build();
         IFlrReadOperations mock = new FastlegeV1Mock();
         return createMetricsProxyWithInstanceSwitcher("FASTLEGE_V1", prod, mock, FASTLEGE_MOCK_KEY, IFlrReadOperations.class);
     }
