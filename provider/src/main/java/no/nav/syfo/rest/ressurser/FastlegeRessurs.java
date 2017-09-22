@@ -8,6 +8,7 @@ import no.nav.syfo.domain.Fastlegekontor;
 import no.nav.syfo.domain.Pasient;
 import no.nav.syfo.domain.Pasientforhold;
 import no.nav.syfo.services.FastlegeService;
+import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -23,6 +24,7 @@ import static javax.ws.rs.core.Response.ok;
 @Consumes(APPLICATION_JSON)
 @Produces(APPLICATION_JSON)
 @Api(value = "fastlege", description = "Endepunkt for henting av fastlege")
+@Controller
 public class FastlegeRessurs {
 
     @Inject
