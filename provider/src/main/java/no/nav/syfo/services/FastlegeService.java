@@ -10,13 +10,14 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.ws.rs.NotFoundException;
-import javax.xml.bind.annotation.XmlElement;
 import java.util.List;
 
 import static java.time.LocalDate.now;
 import static java.util.stream.Collectors.toList;
+import static no.nav.sbl.java8utils.MapUtil.map;
 import static no.nav.sbl.java8utils.MapUtil.mapListe;
 import static no.nav.syfo.mappers.FastlegeMappers.ws2fastlege;
+import static no.nav.syfo.mappers.FastlegeMappers.ws2fastlegekontor;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /*
@@ -52,7 +53,9 @@ public class FastlegeService {
                     .withPasient(new Pasient()
                             .withFnr(brukersFnr)
                             .withNavn(brukerprofilService.hentNavnByFnr(brukersFnr))
-                    );
+                    )
+                    .withFastlegekontor(map(patientGPDetails.getGPContract().getGPOffice(), ws2fastlegekontor))
+                  ;
         } catch (IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage e) {
             LOG.error("Det skjedde en feil i soap-kallet", e);
             throw new RuntimeException();
