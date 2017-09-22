@@ -18,9 +18,23 @@
         <property name="locateExistingServerIfPossible" value="true"/>
     </bean>
 
+    <cache:advice id="tpsAdvice" key-generator="userkeygenerator">
+        <cache:caching cache="tps">
+            <cache:cacheable method="hent*"/>
+            <cache:cacheable method="finn*"/>
+        </cache:caching>
+    </cache:advice>
 
+    <cache:advice id="fastlegeAdvice" key-generator="simplekeygenerator">
+        <cache:caching cache="fastlege">
+            <cache:cacheable method="get*"/>
+        </cache:caching>
+    </cache:advice>
 
     <aop:config>
+        <aop:advisor advice-ref="tpsAdvice" pointcut="bean(brukerprofilV3)"/>
+        <aop:advisor advice-ref="fastlegeAdvice" pointcut="bean(fastlegeSoapClient)"/>
     </aop:config>
+
 
 </beans>

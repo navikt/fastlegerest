@@ -11,7 +11,8 @@ import org.springframework.context.annotation.*;
 @Import({
         CacheConfig.class,
         ServiceConfig.class,
-        FastlegeInformasjonConfig.class
+        FastlegeInformasjonConfig.class,
+        BrukerprofilConfig.class
 })
 @ComponentScan(basePackages = "no.nav.syfo.rest")
 public class ApplicationConfig {

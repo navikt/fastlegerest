@@ -1,18 +1,11 @@
 package no.nav.syfo.domain;
 
-import java.time.LocalDate;
-
 public class Fastlege {
-
     public String navn;
     public String fnr;
-    public String adresse;
-    public String legekontor;
-    public String tlf;
-    public String epost;
-    public LocalDate fra;
-    public LocalDate til;
-
+    public Pasient pasient;
+    public Fastlegekontor fastlegekontor;
+    public Pasientforhold pasientforhold;
 
     public Fastlege withNavn(String navn) {
         this.navn = navn;
@@ -23,35 +16,16 @@ public class Fastlege {
         return this;
     }
 
-    public Fastlege withAdresse(String adresse) {
-        this.adresse = adresse;
+    public Fastlege withPasient(Pasient pasient) {
+        this.pasient = pasient;
         return this;
     }
-
-    public Fastlege withLegekontor(String legekontor) {
-        this.legekontor = legekontor;
+    public Fastlege withFastlegekontor(Fastlegekontor fastlegekontor) {
+        this.fastlegekontor = fastlegekontor;
         return this;
     }
-
-    public Fastlege withTlf(String tlf) {
-        this.tlf = tlf;
+    public Fastlege withPasientforhold(Pasientforhold pasientforhold) {
+        this.pasientforhold = pasientforhold;
         return this;
     }
-
-    public Fastlege withEpost(String epost) {
-        this.epost = epost;
-        return this;
-    }
-
-    public Fastlege withFra(LocalDate fra) {
-        this.fra = fra;
-        return this;
-    }
-    public Fastlege withTil(LocalDate til) {
-        this.til = til;
-        return this;
-    }
-
-
-
 }

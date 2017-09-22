@@ -1,7 +1,8 @@
 package no.nav.syfo.services;
 
-import no.nav.sbl.java8utils.MapUtil;
 import no.nav.syfo.domain.Fastlege;
+import no.nav.syfo.domain.Pasient;
+import no.nhn.register.common.WSPhysicalAddress;
 import no.nhn.schemas.reg.flr.IFlrReadOperations;
 import no.nhn.schemas.reg.flr.IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage;
 import no.nhn.schemas.reg.flr.WSPatientToGPContractAssociation;
@@ -9,12 +10,12 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.ws.rs.NotFoundException;
-
-import java.time.LocalDate;
+import javax.xml.bind.annotation.XmlElement;
 import java.util.List;
 
 import static java.time.LocalDate.now;
-import static no.nav.sbl.java8utils.MapUtil.*;
+import static java.util.stream.Collectors.toList;
+import static no.nav.sbl.java8utils.MapUtil.mapListe;
 import static no.nav.syfo.mappers.FastlegeMappers.ws2fastlege;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -29,13 +30,29 @@ public class FastlegeService {
 
     @Inject
     private IFlrReadOperations fastlegeSoapClient;
-
+    @Inject
+    private BrukerprofilService brukerprofilService;
 
     public Fastlege hentBrukersFastlege(String brukersFnr) {
         try {
             WSPatientToGPContractAssociation patientGPDetails = fastlegeSoapClient.getPatientGPDetails(brukersFnr);
+            List<WSPhysicalAddress> adresser = patientGPDetails.getGPContract().getGPOffice().getPhysicalAddresses().getPhysicalAddresses().stream().filter(wsPhysicalAddress -> wsPhysicalAddress.getType().isActive()).collect(toList());
+            if (adresser.size() > 1) {
+                LOG.warn("NB! Dette legekontoret har mer enn en aktiv adresse!!");
+                for (WSPhysicalAddress address : adresser) {
+                    LOG.warn("CodeValue: " + address.getType().getCodeValue());
+                    LOG.warn("SimpleType: " + address.getType().getSimpleType());
+                    LOG.warn("OID: " + address.getType().getOID());
+                    LOG.warn("CodeText: " + address.getType().getCodeText());
+                    LOG.warn("getDescription: " + address.getDescription());
+                }
+            }
             List<Fastlege> fastleger = mapListe(patientGPDetails.getDoctorCycles().getGPOnContractAssociations(), ws2fastlege);
-            return finnAktivFastlege(fastleger);
+            return finnAktivFastlege(fastleger)
+                    .withPasient(new Pasient()
+                            .withFnr(brukersFnr)
+                            .withNavn(brukerprofilService.hentNavnByFnr(brukersFnr))
+                    );
         } catch (IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage e) {
             LOG.error("Det skjedde en feil i soap-kallet", e);
             throw new RuntimeException();
@@ -44,7 +61,7 @@ public class FastlegeService {
 
     private static Fastlege finnAktivFastlege(List<Fastlege> fastleger) {
         return fastleger.stream()
-                .filter(fastlege -> fastlege.fra.isBefore(now()) && fastlege.til.isAfter(now()))
+                .filter(fastlege -> fastlege.pasientforhold.fom.isBefore(now()) && fastlege.pasientforhold.tom.isAfter(now()))
                 .findFirst().orElseThrow(() -> new NotFoundException("Fant ikke aktiv fastlege"));
     }
 }

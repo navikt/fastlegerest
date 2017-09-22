@@ -18,7 +18,7 @@
         <applicationCertificate alias="srvfastlegerest"/>
 
         <webservice alias="ekstern:helse_fastlegeinformasjon" mapToProperty="fastlegeinformasjon.endpoint" />
-
+        <webservice alias="virksomhet:Brukerprofil_v3" mapToProperty="brukerprofilv3.endpoint"/>
 
         <baseUrl alias="isso-host"/>
         <baseUrl alias="isso-jwks"/>
@@ -28,7 +28,7 @@
     </resources>
 
     <exposed-services>
-        <exposedRest path="/fastlegerest/api/fastlege" name="fastlegeapi" description="Fastlege FSS REST-API"/>
+        <exposedRest path="/fastlegerest/api/fastlege/v1" name="fastlegeapi" description="Fastlege FSS REST-API"/>
     </exposed-services>
 
 
