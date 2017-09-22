@@ -9,6 +9,7 @@ import no.nav.syfo.domain.Pasient;
 import no.nav.syfo.domain.Pasientforhold;
 import no.nav.syfo.services.FastlegeService;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -19,6 +20,8 @@ import java.time.LocalDate;
 import static java.lang.System.*;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.ok;
+import static no.nav.metrics.MetricsFactory.createEvent;
+import static org.springframework.util.StringUtils.*;
 
 @Path("/fastlege/v1")
 @Consumes(APPLICATION_JSON)
@@ -53,7 +56,23 @@ public class FastlegeRessurs {
                             .withTom(LocalDate.now().plusYears(2))
                     );
         }
-        return fastlegeService.hentBrukersFastlege(fnr);
+        Fastlege fastlege = fastlegeService.hentBrukersFastlege(fnr);
+        sjekkForTommeData(fastlege);
+        return fastlege;
+    }
+
+    private void sjekkForTommeData(Fastlege fastlege) {
+        if (isEmpty(fastlege.fastlegekontor.navn)) {
+            createEvent("manglerNavn").report();
+        }
+
+        if (isEmpty(fastlege.fastlegekontor.adresse)) {
+            createEvent("manglerAdresse").report();
+        }
+
+        if (isEmpty(fastlege.fastlegekontor.telefon)) {
+            createEvent("manglerTelefon").report();
+        }
     }
 
     @GET
