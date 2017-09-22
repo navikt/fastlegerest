@@ -57,8 +57,8 @@ public class FastlegeService {
                     .withFastlegekontor(map(patientGPDetails.getGPContract().getGPOffice(), ws2fastlegekontor))
                   ;
         } catch (IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage e) {
-            LOG.error("Det skjedde en feil i soap-kallet", e);
-            throw new RuntimeException();
+            LOG.error("Personen er ikke tilknyttet noen fastlegekontrakt.", e);
+            throw new NotFoundException();
         }
     }
 
