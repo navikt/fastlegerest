@@ -41,7 +41,8 @@ public class FastlegeRessurs {
             return new Fastlege()
                     .withNavn("Lars Legesen")
                     .withFastlegekontor(new Fastlegekontor()
-                            .withAdresse("Bjerrgardsgate 7, 4047 Oslo")
+                            .withBesoeksadresse("Bjerrgardsgate 7, 4047 Oslo")
+                            .withPostadresse("Postboks 327, 3092 Oslo")
                             .withEpost("test@nav.no")
                             .withTelefon("90762514")
                             .withNavn("St. hanshaugen legesenter")
@@ -66,8 +67,12 @@ public class FastlegeRessurs {
             createEvent("manglerNavn").report();
         }
 
-        if (isEmpty(fastlege.fastlegekontor.adresse)) {
+        if (isEmpty(fastlege.fastlegekontor.besoeksadresse)) {
             createEvent("manglerAdresse").report();
+        }
+
+        if (isEmpty(fastlege.fastlegekontor.postadresse)) {
+            createEvent("manglerPostadresse").report();
         }
 
         if (isEmpty(fastlege.fastlegekontor.telefon)) {

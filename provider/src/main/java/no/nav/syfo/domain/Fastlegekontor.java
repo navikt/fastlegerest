@@ -3,7 +3,8 @@ package no.nav.syfo.domain;
 public class Fastlegekontor {
 
     public String navn;
-    public String adresse;
+    public String besoeksadresse;
+    public String postadresse;
     public String telefon;
     public String epost;
     public Integer orgnummer;
@@ -13,8 +14,13 @@ public class Fastlegekontor {
         return this;
     }
 
-    public Fastlegekontor withAdresse(String adresse) {
-        this.adresse = adresse;
+    public Fastlegekontor withBesoeksadresse(String besoeksadresse) {
+        this.besoeksadresse = besoeksadresse;
+        return this;
+    }
+
+    public Fastlegekontor withPostadresse(String postadresse) {
+        this.postadresse = postadresse;
         return this;
     }
 

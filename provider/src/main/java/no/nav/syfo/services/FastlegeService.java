@@ -2,6 +2,7 @@ package no.nav.syfo.services;
 
 import no.nav.syfo.domain.Fastlege;
 import no.nav.syfo.domain.Pasient;
+import no.nav.syfo.domain.Pasientforhold;
 import no.nhn.register.common.WSPhysicalAddress;
 import no.nhn.schemas.reg.flr.IFlrReadOperations;
 import no.nhn.schemas.reg.flr.IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage;
@@ -37,25 +38,18 @@ public class FastlegeService {
     public Fastlege hentBrukersFastlege(String brukersFnr) {
         try {
             WSPatientToGPContractAssociation patientGPDetails = fastlegeSoapClient.getPatientGPDetails(brukersFnr);
-            List<WSPhysicalAddress> adresser = patientGPDetails.getGPContract().getGPOffice().getPhysicalAddresses().getPhysicalAddresses().stream().filter(wsPhysicalAddress -> wsPhysicalAddress.getType().isActive()).collect(toList());
-            if (adresser.size() > 1) {
-                LOG.warn("NB! Dette legekontoret har mer enn en aktiv adresse!!");
-                for (WSPhysicalAddress address : adresser) {
-                    LOG.warn("CodeValue: " + address.getType().getCodeValue());
-                    LOG.warn("SimpleType: " + address.getType().getSimpleType());
-                    LOG.warn("OID: " + address.getType().getOID());
-                    LOG.warn("CodeText: " + address.getType().getCodeText());
-                    LOG.warn("getDescription: " + address.getDescription());
-                }
-            }
-            List<Fastlege> fastleger = mapListe(patientGPDetails.getDoctorCycles().getGPOnContractAssociations(), ws2fastlege);
+            List<Fastlege> fastleger = mapListe(patientGPDetails.getDoctorCycles().getGPOnContractAssociations(), ws2fastlege).stream()
+                    .map(fastlege -> fastlege.withPasientforhold(new Pasientforhold()
+                            .withFom(patientGPDetails.getPeriod().getFrom().toLocalDate())
+                            .withTom(patientGPDetails.getPeriod().getTo().toLocalDate())))
+                    .collect(toList());
+
             return finnAktivFastlege(fastleger)
                     .withPasient(new Pasient()
                             .withFnr(brukersFnr)
                             .withNavn(brukerprofilService.hentNavnByFnr(brukersFnr))
                     )
-                    .withFastlegekontor(map(patientGPDetails.getGPContract().getGPOffice(), ws2fastlegekontor))
-                  ;
+                    .withFastlegekontor(map(patientGPDetails.getGPContract().getGPOffice(), ws2fastlegekontor));
         } catch (IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage e) {
             LOG.error("Personen er ikke tilknyttet noen fastlegekontrakt.", e);
             throw new NotFoundException();
