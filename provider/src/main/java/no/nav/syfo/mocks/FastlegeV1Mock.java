@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 
 public class FastlegeV1Mock implements IFlrReadOperations {
 
-
     @Override
     public WSPatientToGPContractAssociation getPatientGPDetails(String s) throws IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage {
         return new WSPatientToGPContractAssociation()
@@ -40,9 +39,6 @@ public class FastlegeV1Mock implements IFlrReadOperations {
 
     @Override
     public WSArrayOfPatientToGPContractAssociation getGPPatientList(Long aLong) throws IFlrReadOperationsGetGPPatientListGenericFaultFaultFaultMessage {
-//        return new WSArrayOfPatientToGPContractAssociation().withPatientToGPContractAssociations(Arrays.asList(
-//                new WSPatientToGPContractAssociation().withGPContract(new WSGPContract().get)
-//        ));
         return null;
     }
 

@@ -8,6 +8,7 @@ import no.nav.syfo.domain.Fastlegekontor;
 import no.nav.syfo.domain.Pasient;
 import no.nav.syfo.domain.Pasientforhold;
 import no.nav.syfo.services.FastlegeService;
+import no.nav.syfo.services.LdapService;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 
@@ -20,6 +21,7 @@ import java.time.LocalDate;
 import static java.lang.System.*;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.ok;
+import static no.nav.brukerdialog.security.context.SubjectHandler.getSubjectHandler;
 import static no.nav.metrics.MetricsFactory.createEvent;
 import static org.springframework.util.StringUtils.*;
 
@@ -32,53 +34,21 @@ public class FastlegeRessurs {
 
     @Inject
     private FastlegeService fastlegeService;
+    @Inject
+    private LdapService ldapService;
 
     @GET
     @Timed(name = "finnFastlege")
     @Count(name = "finnFastlege")
     public Fastlege finnFastlege(@QueryParam("fnr") String fnr) {
-        if ("true".equals(getProperty("test.local"))) {
-            return new Fastlege()
-                    .withNavn("Lars Legesen")
-                    .withFastlegekontor(new Fastlegekontor()
-                            .withBesoeksadresse("Bjerrgardsgate 7, 4047 Oslo")
-                            .withPostadresse("Postboks 327, 3092 Oslo")
-                            .withEpost("test@nav.no")
-                            .withTelefon("90762514")
-                            .withNavn("St. hanshaugen legesenter")
-                            .withOrgnummer(***REMOVED***)
-                    )
-                    .withPasient(new Pasient()
-                            .withFnr("***REMOVED***")
-                            .withNavn("Ole Thomas Tørresen")
-                    )
-                    .withPasientforhold(new Pasientforhold()
-                            .withFom(LocalDate.now().minusYears(6))
-                            .withTom(LocalDate.now().plusYears(2))
-                    );
+        boolean harTilgang = ldapService.harTilgang(getSubjectHandler().getUid(), "0000-GA-SYFO-SENSITIV");
+
+        if (!harTilgang) {
+            throw new ForbiddenException();
         }
-        Fastlege fastlege = fastlegeService.hentBrukersFastlege(fnr);
-        sjekkForTommeData(fastlege);
-        return fastlege;
+        return fastlegeService.hentBrukersFastlege(fnr);
     }
 
-    private void sjekkForTommeData(Fastlege fastlege) {
-        if (isEmpty(fastlege.fastlegekontor.navn)) {
-            createEvent("manglerNavn").report();
-        }
-
-        if (isEmpty(fastlege.fastlegekontor.besoeksadresse)) {
-            createEvent("manglerAdresse").report();
-        }
-
-        if (isEmpty(fastlege.fastlegekontor.postadresse)) {
-            createEvent("manglerPostadresse").report();
-        }
-
-        if (isEmpty(fastlege.fastlegekontor.telefon)) {
-            createEvent("manglerTelefon").report();
-        }
-    }
 
     @GET
     @Path("/ping")
