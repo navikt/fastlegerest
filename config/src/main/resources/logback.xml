@@ -40,11 +40,11 @@
         </rollingPolicy>
     </appender>
 
-    <logger name="org.apache.cxf" level="INFO" additivity="false">
+    <logger name="org.apache.cxf" level="OFF" additivity="false">
         <appender-ref ref="infolog"/>
     </logger>
 
-    <logger name="no.nav.sbl.dialogarena.common.cxf" level="INFO">
+    <logger name="no.nav.sbl.dialogarena.common.cxf" level="OFF">
         <appender-ref ref="infolog"/>
     </logger>
 
@@ -52,7 +52,7 @@
         <appender-ref ref="infolog"/>
     </logger>
 
-    <root level="${fastlegerest.global.log.level:-INFO}">
+    <root level="INFO">
         <appender-ref ref="exceptionlog"/>
         <appender-ref ref="SYSLOG"/>
         <appender-ref ref="infolog"/>

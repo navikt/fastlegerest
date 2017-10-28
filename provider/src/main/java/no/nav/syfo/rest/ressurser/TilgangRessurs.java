@@ -2,7 +2,6 @@ package no.nav.syfo.rest.ressurser;
 
 
 import io.swagger.annotations.Api;
-import no.nav.brukerdialog.security.context.SubjectHandler;
 import no.nav.syfo.services.LdapService;
 import org.springframework.stereotype.Controller;
 
@@ -12,10 +11,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
-import java.util.Collections;
-
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static no.nav.brukerdialog.security.context.SubjectHandler.*;
+import static no.nav.brukerdialog.security.context.SubjectHandler.getSubjectHandler;
 
 @Path("/tilgang")
 @Consumes(APPLICATION_JSON)
