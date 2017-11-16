@@ -56,6 +56,20 @@ public class FastlegeService {
         }
     }
 
+    public List<Fastlege> hentBrukersFastleger(String brukersFnr) {
+        try {
+            WSPatientToGPContractAssociation patientGPDetails = fastlegeSoapClient.getPatientGPDetails(brukersFnr);
+            return mapListe(patientGPDetails.getDoctorCycles().getGPOnContractAssociations(), ws2fastlege).stream()
+                    .map(fastlege -> fastlege.withPasientforhold(new Pasientforhold()
+                            .withFom(patientGPDetails.getPeriod().getFrom().toLocalDate())
+                            .withTom(patientGPDetails.getPeriod().getTo().toLocalDate())))
+                    .collect(toList());
+        } catch (IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage e) {
+            LOG.error("Personen er ikke tilknyttet noen fastlegekontrakt.", e);
+            throw new NotFoundException();
+        }
+    }
+
     private static Fastlege finnAktivFastlege(List<Fastlege> fastleger) {
         return fastleger.stream()
                 .filter(fastlege -> fastlege.pasientforhold.fom.isBefore(now()) && fastlege.pasientforhold.tom.isAfter(now()))
