@@ -39,17 +39,17 @@ public class FastlegeService {
         try {
             WSPatientToGPContractAssociation patientGPDetails = fastlegeSoapClient.getPatientGPDetails(brukersFnr);
             List<Fastlege> fastleger = mapListe(patientGPDetails.getDoctorCycles().getGPOnContractAssociations(), ws2fastlege).stream()
-                    .map(fastlege -> fastlege.withPasientforhold(new Pasientforhold()
-                            .withFom(patientGPDetails.getPeriod().getFrom().toLocalDate())
-                            .withTom(patientGPDetails.getPeriod().getTo().toLocalDate())))
+                    .map(fastlege -> fastlege.pasientforhold(new Pasientforhold()
+                            .fom(patientGPDetails.getPeriod().getFrom().toLocalDate())
+                            .tom(patientGPDetails.getPeriod().getTo().toLocalDate())))
                     .collect(toList());
 
             return finnAktivFastlege(fastleger)
-                    .withPasient(new Pasient()
-                            .withFnr(brukersFnr)
-                            .withNavn(brukerprofilService.hentNavnByFnr(brukersFnr))
+                    .pasient(new Pasient()
+                            .fnr(brukersFnr)
+                            .navn(brukerprofilService.hentNavnByFnr(brukersFnr))
                     )
-                    .withFastlegekontor(map(patientGPDetails.getGPContract().getGPOffice(), ws2fastlegekontor));
+                    .fastlegekontor(map(patientGPDetails.getGPContract().getGPOffice(), ws2fastlegekontor));
         } catch (IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage e) {
             LOG.error("Personen er ikke tilknyttet noen fastlegekontrakt.", e);
             throw new NotFoundException();

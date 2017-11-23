@@ -8,10 +8,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(fluent = true)
 @EqualsAndHashCode
-public class Fastlege {
+public class Bruker {
+
     public String navn;
-    public String fnr;
-    public Pasient pasient;
-    public Fastlegekontor fastlegekontor;
-    public Pasientforhold pasientforhold;
 }

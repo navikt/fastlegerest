@@ -62,8 +62,20 @@
             <artifactId>brukerprofil-v3-tjenestespesifikasjon</artifactId>
         </dependency>
         <dependency>
+            <artifactId>diskresjonskodev1-tjenestespesifikasjon</artifactId>
+            <groupId>no.nav.sbl.dialogarena</groupId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.syfo.tjenester</groupId>
+            <artifactId>egenAnsatt-v1-tjenestespesifikasjon</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

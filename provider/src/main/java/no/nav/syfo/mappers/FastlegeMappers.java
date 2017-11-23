@@ -12,25 +12,25 @@ public class FastlegeMappers {
 
     public static Function<WSGPOffice, Fastlegekontor> ws2fastlegekontor = wsgpOffice ->
             new Fastlegekontor()
-                    .withNavn(wsgpOffice.getName())
-                    .withOrgnummer(wsgpOffice.getOrganizationNumber())
-                    .withTelefon(wsgpOffice.getElectronicAddresses().getElectronicAddresses().stream()
+                    .navn(wsgpOffice.getName())
+                    .orgnummer(wsgpOffice.getOrganizationNumber())
+                    .telefon(wsgpOffice.getElectronicAddresses().getElectronicAddresses().stream()
                             .filter(wsElectronicAddress -> wsElectronicAddress.getType().getCodeValue().equals("E_TLF"))
                             .map(WSElectronicAddress::getAddress)
                             .findFirst().orElse("")
                     )
-                    .withEpost(wsgpOffice.getElectronicAddresses().getElectronicAddresses().stream()
+                    .epost(wsgpOffice.getElectronicAddresses().getElectronicAddresses().stream()
                             .filter(wsElectronicAddress -> wsElectronicAddress.getType().getCodeValue().equals("E_EDI"))
                             .map(WSElectronicAddress::getAddress)
                             .findFirst().orElse("")
                     )
-                    .withPostadresse(wsgpOffice.getPhysicalAddresses().getPhysicalAddresses().stream()
+                    .postadresse(wsgpOffice.getPhysicalAddresses().getPhysicalAddresses().stream()
                             .filter(wsPhysicalAddress -> wsPhysicalAddress.getType().isActive())
                             .filter(wsPhysicalAddress -> "PST".equals(wsPhysicalAddress.getType().getCodeValue()))
                             .map(wsPhysicalAddress -> "Postboks " + wsPhysicalAddress.getPostbox() + ", " + postnummer(wsPhysicalAddress.getPostalCode()) + " " + wsPhysicalAddress.getCity())
                             .findFirst().orElse("")
                     )
-                    .withBesoeksadresse(wsgpOffice.getPhysicalAddresses().getPhysicalAddresses().stream()
+                    .besoeksadresse(wsgpOffice.getPhysicalAddresses().getPhysicalAddresses().stream()
                             .filter(wsPhysicalAddress -> wsPhysicalAddress.getType().isActive())
                             .filter(wsPhysicalAddress -> "RES".equals(wsPhysicalAddress.getType().getCodeValue()))
                             .map(wsPhysicalAddress -> wsPhysicalAddress.getStreetAddress() + ", " + postnummer(wsPhysicalAddress.getPostalCode()) + " " + wsPhysicalAddress.getCity())
@@ -48,7 +48,7 @@ public class FastlegeMappers {
 
     public static Function<WSGPOnContractAssociation, Fastlege> ws2fastlege = wsPatientToGPContractAssociation ->
             new Fastlege()
-                    .withNavn(wsPatientToGPContractAssociation.getGP().getFirstName() + " " + wsPatientToGPContractAssociation.getGP().getLastName())
-                    .withFnr(wsPatientToGPContractAssociation.getGP().getNIN());
+                    .navn(wsPatientToGPContractAssociation.getGP().getFirstName() + " " + wsPatientToGPContractAssociation.getGP().getLastName())
+                    .fnr(wsPatientToGPContractAssociation.getGP().getNIN());
 
 }
