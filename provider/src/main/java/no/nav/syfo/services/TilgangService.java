@@ -1,6 +1,5 @@
 package no.nav.syfo.services;
 
-import no.nav.syfo.domain.AdRoller;
 import no.nav.syfo.domain.Tilgang;
 
 import javax.inject.Inject;
@@ -19,21 +18,21 @@ public class TilgangService {
 
     public Tilgang sjekkTilgang(String fnr) {
    if (!harTilgangTilSykefravaersoppfoelging()) {
-        return new Tilgang().harTilgang(false).ikkeTilgangGrunn(SYFO.name());
+        return new Tilgang().ikkeTilgang(true).ikkeTilgangGrunn(SYFO.name());
     }
 
     String diskresjonskode = diskresjonskodeService.diskresjonskode(fnr);
     if ("6".equals(diskresjonskode)) {
-        return new Tilgang().harTilgang(false).ikkeTilgangGrunn(KODE6.name());
+        return new Tilgang().ikkeTilgang(true).ikkeTilgangGrunn(KODE6.name());
     } else if ("7".equals(diskresjonskode) && !harTilgangTilKode7()) {
-        return new Tilgang().harTilgang(false).ikkeTilgangGrunn(KODE7.name());
+        return new Tilgang().ikkeTilgang(true).ikkeTilgangGrunn(KODE7.name());
     }
 
     if (egenAnsattService.erEgenAnsatt(fnr) && !harTilgangTilEgenAnsatt()) {
-        return new Tilgang().harTilgang(false).ikkeTilgangGrunn(EGEN_ANSATT.name());
+        return new Tilgang().ikkeTilgang(true).ikkeTilgangGrunn(EGEN_ANSATT.name());
     }
 
-    return new Tilgang().harTilgang(true);
+    return new Tilgang().ikkeTilgang(false);
     }
 
     public boolean harTilgangTilTjenesten() {

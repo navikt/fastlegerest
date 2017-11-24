@@ -32,7 +32,7 @@ public class FastlegeRessurs {
     public Response finnFastlege(@QueryParam("fnr") String fnr) {
         Tilgang tilgang = tilgangService.sjekkTilgang(fnr);
 
-        if (!tilgang.harTilgang) {
+        if (tilgang.ikkeTilgang) {
             return Response
                     .status(403)
                     .entity(tilgang)
@@ -49,7 +49,7 @@ public class FastlegeRessurs {
     public Response finnFastleger(@QueryParam("fnr") String fnr) {
         Tilgang tilgang = tilgangService.sjekkTilgang(fnr);
 
-        if (!tilgang.harTilgang) {
+        if (tilgang.ikkeTilgang) {
             return Response
                     .status(403)
                     .entity(tilgang)

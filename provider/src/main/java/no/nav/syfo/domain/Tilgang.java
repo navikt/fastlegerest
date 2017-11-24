@@ -9,6 +9,6 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 @EqualsAndHashCode
 public class Tilgang {
-    public boolean harTilgang;
+    public boolean ikkeTilgang;
     public String ikkeTilgangGrunn;
 }
