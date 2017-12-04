@@ -39,7 +39,7 @@
         <jackson.version>2.7.2</jackson.version>
         <spring.version>4.2.5.RELEASE</spring.version>
         <slf4j.version>1.7.15</slf4j.version>
-        <logback.version>1.1.6</logback.version>
+        <logback.version>1.2.3</logback.version>
         <ehcache.version>2.10.3</ehcache.version>
         <commons-lang3.version>3.4</commons-lang3.version>
         <assertj.version>2.4.1</assertj.version>
@@ -47,11 +47,11 @@
         <mockito.version>1.10.19</mockito.version>
         <aspectjweaver.version>1.8.8</aspectjweaver.version>
         <swagger.version>1.5.10</swagger.version>
-        <cxf.version>3.1.11</cxf.version>
+        <cxf.version>3.2.1</cxf.version>
 
         <!-- Egenlagde  -->
         <common-types.version>2.0.10</common-types.version>
-        <common-web.version>5.0.22</common-web.version>
+        <common-web.version>5.0.28</common-web.version>
         <common-cxf.version>3.1.62</common-cxf.version>
         <common-jetty.version>2.0.19</common-jetty.version>
         <common-test.version>1.3</common-test.version>
@@ -66,7 +66,6 @@
         <brukerprofil-v3-tjenestespesifikasjon.version>3.0.3</brukerprofil-v3-tjenestespesifikasjon.version>
         <diskresjonskodev1-tjenestespesifikasjon.version>1.0.0</diskresjonskodev1-tjenestespesifikasjon.version>
         <egenAnsatt-v1-tjenestespesifikasjon.version>1.0.1</egenAnsatt-v1-tjenestespesifikasjon.version>
-
     </properties>
 
     <dependencyManagement>
