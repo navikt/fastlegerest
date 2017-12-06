@@ -49,7 +49,13 @@ public class FastlegeService {
     public List<Fastlege> hentBrukersFastleger(String brukersFnr) {
         try {
             WSPatientToGPContractAssociation patientGPDetails = fastlegeSoapClient.getPatientGPDetails(brukersFnr);
-            return hentFastleger(patientGPDetails);
+            return hentFastleger(patientGPDetails).stream()
+                    .map(fastlege -> fastlege
+                            .pasient(new Pasient()
+                                    .fnr(brukersFnr)
+                                    .navn(brukerprofilService.hentNavnByFnr(brukersFnr)))
+                            .fastlegekontor(map(patientGPDetails.getGPContract().getGPOffice(), ws2fastlegekontor))
+                    ).collect(toList());
         } catch (IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage e) {
             LOG.error("Personen er ikke tilknyttet noen fastlegekontrakt.", e);
             throw new NotFoundException();
