@@ -40,11 +40,11 @@
         </rollingPolicy>
     </appender>
 
-    <logger name="org.apache.cxf" level="OFF" additivity="false">
+    <logger name="org.apache.cxf" level="ERROR" additivity="false">
         <appender-ref ref="infolog"/>
     </logger>
 
-    <logger name="no.nav.sbl.dialogarena.common.cxf" level="OFF">
+    <logger name="no.nav.sbl.dialogarena.common.cxf" level="ERROR">
         <appender-ref ref="infolog"/>
     </logger>
 
