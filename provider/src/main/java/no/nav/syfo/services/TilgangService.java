@@ -17,22 +17,22 @@ public class TilgangService {
     private EgenAnsattService egenAnsattService;
 
     public Tilgang sjekkTilgang(String fnr) {
-   if (!harTilgangTilSykefravaersoppfoelging()) {
-        return new Tilgang().ikkeTilgang(true).ikkeTilgangGrunn(SYFO.name());
-    }
+        if (!harTilgangTilSykefravaersoppfoelging()) {
+            return new Tilgang().ikkeTilgang(true).ikkeTilgangGrunn(SYFO.name());
+        }
 
-    String diskresjonskode = diskresjonskodeService.diskresjonskode(fnr);
-    if ("6".equals(diskresjonskode)) {
-        return new Tilgang().ikkeTilgang(true).ikkeTilgangGrunn(KODE6.name());
-    } else if ("7".equals(diskresjonskode) && !harTilgangTilKode7()) {
-        return new Tilgang().ikkeTilgang(true).ikkeTilgangGrunn(KODE7.name());
-    }
+        String diskresjonskode = diskresjonskodeService.diskresjonskode(fnr);
+        if ("6".equals(diskresjonskode)) {
+            return new Tilgang().ikkeTilgang(true).ikkeTilgangGrunn(KODE6.name());
+        } else if ("7".equals(diskresjonskode) && !harTilgangTilKode7()) {
+            return new Tilgang().ikkeTilgang(true).ikkeTilgangGrunn(KODE7.name());
+        }
 
-    if (egenAnsattService.erEgenAnsatt(fnr) && !harTilgangTilEgenAnsatt()) {
-        return new Tilgang().ikkeTilgang(true).ikkeTilgangGrunn(EGEN_ANSATT.name());
-    }
+        if (egenAnsattService.erEgenAnsatt(fnr) && !harTilgangTilEgenAnsatt()) {
+            return new Tilgang().ikkeTilgang(true).ikkeTilgangGrunn(EGEN_ANSATT.name());
+        }
 
-    return new Tilgang().ikkeTilgang(false);
+        return new Tilgang().ikkeTilgang(false);
     }
 
     public boolean harTilgangTilTjenesten() {
