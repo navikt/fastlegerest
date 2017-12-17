@@ -14,7 +14,8 @@ import org.springframework.context.annotation.*;
         FastlegeInformasjonConfig.class,
         BrukerprofilConfig.class,
         DiskresjonskodeConfig.class,
-        EgenAnsattConfig.class
+        EgenAnsattConfig.class,
+        LdapContext.class
 })
 @ComponentScan(basePackages = "no.nav.syfo.rest")
 public class ApplicationConfig {

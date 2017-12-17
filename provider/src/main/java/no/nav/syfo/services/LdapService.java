@@ -53,4 +53,14 @@ public class LdapService {
     private static LdapContext ldapContext() throws NamingException {
         return new InitialLdapContext(env, null);
     }
+
+    public void ping() {
+        try {
+            String searchbase = "OU=Users,OU=NAV,OU=BusinessUnits," + getProperty("ldap.basedn");
+            Attributes ldapAttributes = new BasicAttributes();
+            ldapContext().search(searchbase, ldapAttributes);
+        } catch (NamingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

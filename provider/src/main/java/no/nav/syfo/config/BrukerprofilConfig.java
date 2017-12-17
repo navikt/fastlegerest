@@ -28,7 +28,7 @@ public class BrukerprofilConfig {
     }
 
     @Bean
-    public Pingable ping() {
+    public Pingable brukerprofilPing() {
         Pingable.Ping.PingMetadata pingMetadata = new Pingable.Ping.PingMetadata(ENDEPUNKT_URL, ENDEPUNKT_NAVN, KRITISK);
         final BrukerprofilV3 brukerprofilV3 = factory()
                 .configureStsForSystemUserInFSS()

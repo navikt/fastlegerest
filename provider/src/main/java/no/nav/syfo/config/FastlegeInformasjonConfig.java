@@ -12,17 +12,18 @@ import static no.nav.sbl.dialogarena.common.cxf.InstanceSwitcher.createMetricsPr
 @Configuration
 public class FastlegeInformasjonConfig {
 
-    private static final String FASTLEGE_MOCK_KEY = "fastlegev1.withmock";
+    private static final String MOCK_KEY = "fastlegev1.withmock";
+    private static final String ENDEPUNKT_URL = getProperty("fastlegeinformasjon.endpoint.url");
 
     @Bean
     public IFlrReadOperations fastlegeSoapClient() {
         IFlrReadOperations prod = factory().configureStsForSystemUserInFSS().build();
         IFlrReadOperations mock = new FastlegeV1Mock();
-        return createMetricsProxyWithInstanceSwitcher("FASTLEGE_V1", prod, mock, FASTLEGE_MOCK_KEY, IFlrReadOperations.class);
+        return createMetricsProxyWithInstanceSwitcher("FASTLEGE_V1", prod, mock, MOCK_KEY, IFlrReadOperations.class);
     }
 
     private CXFClient<IFlrReadOperations> factory() {
-        return new CXFClient<>(IFlrReadOperations.class).address(getProperty("fastlegeinformasjon.endpoint.url"));
+        return new CXFClient<>(IFlrReadOperations.class).address(ENDEPUNKT_URL);
     }
 
 }
