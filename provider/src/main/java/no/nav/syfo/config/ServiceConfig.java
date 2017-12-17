@@ -18,11 +18,6 @@ public class ServiceConfig {
     }
 
     @Bean
-    public LdapService ldapService() {
-        return new LdapService();
-    }
-
-    @Bean
     public DiskresjonskodeService diskresjonskodeService() {
         return new DiskresjonskodeService();
     }

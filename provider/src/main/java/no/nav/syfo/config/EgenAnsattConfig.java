@@ -30,7 +30,7 @@ public class EgenAnsattConfig {
     }
 
     @Bean
-    public Pingable ping() {
+    public Pingable egenansattPing() {
         Pingable.Ping.PingMetadata pingMetadata = new Pingable.Ping.PingMetadata(ENDEPUNKT_URL, ENDEPUNKT_NAVN, KRITISK);
         final EgenAnsattV1 brukerprofilV3 = factory()
                 .configureStsForSystemUserInFSS()
