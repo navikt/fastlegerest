@@ -8,6 +8,7 @@ import no.nhn.schemas.reg.flr.IFlrReadOperations;
 import no.nhn.schemas.reg.flr.IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage;
 import no.nhn.schemas.reg.flr.WSPatientToGPContractAssociation;
 import org.slf4j.Logger;
+import org.springframework.cache.annotation.Cacheable;
 
 import javax.inject.Inject;
 import javax.ws.rs.NotFoundException;
@@ -29,23 +30,12 @@ public class FastlegeService {
     @Inject
     private BrukerprofilService brukerprofilService;
 
+    @Cacheable(value = "fastlege", keyGenerator = "userkeygenerator")
     public Fastlege hentBrukersFastlege(String brukersFnr) {
-        try {
-            WSPatientToGPContractAssociation patientGPDetails = fastlegeSoapClient.getPatientGPDetails(brukersFnr);
-            List<Fastlege> fastleger = hentFastleger(patientGPDetails);
-
-            return finnAktivFastlege(fastleger)
-                    .pasient(new Pasient()
-                            .fnr(brukersFnr)
-                            .navn(brukerprofilService.hentNavnByFnr(brukersFnr))
-                    )
-                    .fastlegekontor(map(patientGPDetails.getGPContract().getGPOffice(), ws2fastlegekontor));
-        } catch (IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage e) {
-            LOG.error("Personen er ikke tilknyttet noen fastlegekontrakt.", e);
-            throw new NotFoundException();
-        }
+        return finnAktivFastlege(hentBrukersFastleger(brukersFnr));
     }
 
+    @Cacheable(value = "fastlege", keyGenerator = "userkeygenerator")
     public List<Fastlege> hentBrukersFastleger(String brukersFnr) {
         try {
             WSPatientToGPContractAssociation patientGPDetails = fastlegeSoapClient.getPatientGPDetails(brukersFnr);

@@ -13,8 +13,8 @@ import static no.nav.sbl.dialogarena.common.jetty.JettyStarterUtils.*;
 public class StartJetty {
     public static void main(String[] args) throws Exception {
         setVeilederIdent("Z990572");
-        setServicebruker("srvoppfoelgingsdialogrestfss");
-        setProperty("no.nav.modig.core.context.subjectHandlerImplementationClass", InternbrukerSubjectHandler.class.getName());
+        setServicebruker("srvfastlegerest");
+        setProperty("no.nav.brukerdialog.security.context.subjectHandlerImplementationClass", InternbrukerSubjectHandler.class.getName());
         Security.setProperty(AuthConfigFactory.DEFAULT_FACTORY_SECURITY_PROPERTY, AuthConfigFactoryImpl.class.getCanonicalName());
 
         Jetty jetty = usingWar()

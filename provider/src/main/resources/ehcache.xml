@@ -2,12 +2,11 @@
 <ehcache>
     <defaultCache eternal="true" maxElementsInMemory="100" overflowToDisk="false" />
 
-    <cache name="tps" maxElementsInMemory="1000"
+    <cache name="tilgang" maxElementsInMemory="1000"
            eternal="false"
            timeToLiveSeconds="3600"
            diskPersistent="false"
            overflowToDisk="false"/>
-
 
     <cache name="fastlege" maxElementsInMemory="1000"
            eternal="false"

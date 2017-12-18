@@ -158,6 +158,7 @@
         <dependency>
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>no.nav.dialogarena</groupId>

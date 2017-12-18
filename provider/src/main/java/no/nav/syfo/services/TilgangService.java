@@ -1,6 +1,7 @@
 package no.nav.syfo.services;
 
 import no.nav.syfo.domain.Tilgang;
+import org.springframework.cache.annotation.Cacheable;
 
 import javax.inject.Inject;
 
@@ -16,6 +17,7 @@ public class TilgangService {
     @Inject
     private EgenAnsattService egenAnsattService;
 
+    @Cacheable(value = "tilgang", keyGenerator = "userkeygenerator")
     public Tilgang sjekkTilgang(String fnr) {
         if (!harTilgangTilSykefravaersoppfoelging()) {
             return new Tilgang().ikkeTilgang(true).ikkeTilgangGrunn(SYFO.name());
@@ -35,6 +37,7 @@ public class TilgangService {
         return new Tilgang().ikkeTilgang(false);
     }
 
+    @Cacheable(value = "tilgang", keyGenerator = "userkeygenerator")
     public boolean harTilgangTilTjenesten() {
         return harTilgangTilSykefravaersoppfoelging();
     }
