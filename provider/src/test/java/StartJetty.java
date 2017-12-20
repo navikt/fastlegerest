@@ -1,29 +1,29 @@
 import no.nav.brukerdialog.security.context.InternbrukerSubjectHandler;
+import no.nav.brukerdialog.security.domain.OidcCredential;
 import no.nav.sbl.dialogarena.common.jetty.Jetty;
-import org.apache.geronimo.components.jaspi.AuthConfigFactoryImpl;
-import javax.security.auth.message.config.AuthConfigFactory;
-import java.security.Security;
 
+import static java.lang.System.getProperty;
 import static java.lang.System.setProperty;
-import static no.nav.brukerdialog.security.context.InternbrukerSubjectHandler.setServicebruker;
+import static no.nav.brukerdialog.security.context.InternbrukerSubjectHandler.setOidcCredential;
 import static no.nav.brukerdialog.security.context.InternbrukerSubjectHandler.setVeilederIdent;
+import static no.nav.brukerdialog.tools.ISSOProvider.getIDToken;
 import static no.nav.sbl.dialogarena.common.jetty.Jetty.usingWar;
 import static no.nav.sbl.dialogarena.common.jetty.JettyStarterUtils.*;
+import static no.nav.sbl.dialogarena.test.SystemProperties.setFrom;
 
 public class StartJetty {
     public static void main(String[] args) throws Exception {
-        setVeilederIdent("Z990572");
-        setServicebruker("srvfastlegerest");
+        setFrom("environment.properties");
+
         setProperty("no.nav.brukerdialog.security.context.subjectHandlerImplementationClass", InternbrukerSubjectHandler.class.getName());
-        Security.setProperty(AuthConfigFactory.DEFAULT_FACTORY_SECURITY_PROPERTY, AuthConfigFactoryImpl.class.getCanonicalName());
+        setVeilederIdent(getProperty("veileder.username"));
+        setOidcCredential(new OidcCredential(getIDToken()));
 
         Jetty jetty = usingWar()
                 .at("fastlegerest")
                 .port(8585)
                 .disableAnnotationScanning()
-                .configureForJaspic()
                 .overrideWebXml()
-                .loadProperties("/environment.properties")
                 .buildJetty();
         jetty.startAnd(first(waitFor(gotKeypress())).then(jetty.stop));
     }
