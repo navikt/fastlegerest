@@ -1,11 +1,10 @@
-import no.nav.brukerdialog.security.context.InternbrukerSubjectHandler;
-import no.nav.brukerdialog.security.domain.OidcCredential;
+import no.nav.brukerdialog.security.context.CustomizableSubjectHandler;
 import no.nav.sbl.dialogarena.common.jetty.Jetty;
 
 import static java.lang.System.getProperty;
 import static java.lang.System.setProperty;
-import static no.nav.brukerdialog.security.context.InternbrukerSubjectHandler.setOidcCredential;
-import static no.nav.brukerdialog.security.context.InternbrukerSubjectHandler.setVeilederIdent;
+import static no.nav.brukerdialog.security.context.CustomizableSubjectHandler.setInternSsoToken;
+import static no.nav.brukerdialog.security.context.CustomizableSubjectHandler.setUid;
 import static no.nav.brukerdialog.tools.ISSOProvider.getIDToken;
 import static no.nav.sbl.dialogarena.common.jetty.Jetty.usingWar;
 import static no.nav.sbl.dialogarena.common.jetty.JettyStarterUtils.*;
@@ -15,9 +14,9 @@ public class StartJetty {
     public static void main(String[] args) throws Exception {
         setFrom("environment.properties");
 
-        setProperty("no.nav.brukerdialog.security.context.subjectHandlerImplementationClass", InternbrukerSubjectHandler.class.getName());
-        setVeilederIdent(getProperty("veileder.username"));
-        setOidcCredential(new OidcCredential(getIDToken()));
+        setProperty("no.nav.brukerdialog.security.context.subjectHandlerImplementationClass", CustomizableSubjectHandler.class.getName());
+        setUid(getProperty("veileder.username"));
+        setInternSsoToken(getIDToken());
 
         Jetty jetty = usingWar()
                 .at("fastlegerest")
