@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 
+import static no.nav.brukerdialog.security.context.SubjectHandler.getSubjectHandler;
+
 public class DiskresjonskodeService {
     private static final Logger LOG = LoggerFactory.getLogger(DiskresjonskodeService.class);
 
@@ -19,8 +21,8 @@ public class DiskresjonskodeService {
                     .withIdent(fnr)
             ).getDiskresjonskode();
         } catch (RuntimeException e) {
-            LOG.error("Det skjedde en uventet feil mot TPS", e);
-            throw new RuntimeException("Feil fra TPS");
+            LOG.error("{} fikk en uventet feil mot TPS ved oppslag av {}", getSubjectHandler().getUid(), fnr, e);
+            throw e;
         }
     }
 }

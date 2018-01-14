@@ -1,19 +1,24 @@
 package no.nav.syfo.services;
 
 import no.nav.tjeneste.virksomhet.brukerprofil.v3.BrukerprofilV3;
+import no.nav.tjeneste.virksomhet.brukerprofil.v3.HentKontaktinformasjonOgPreferanserPersonIdentErUtgaatt;
+import no.nav.tjeneste.virksomhet.brukerprofil.v3.HentKontaktinformasjonOgPreferanserPersonIkkeFunnet;
+import no.nav.tjeneste.virksomhet.brukerprofil.v3.HentKontaktinformasjonOgPreferanserSikkerhetsbegrensning;
 import no.nav.tjeneste.virksomhet.brukerprofil.v3.informasjon.WSNorskIdent;
 import no.nav.tjeneste.virksomhet.brukerprofil.v3.informasjon.WSPerson;
 import no.nav.tjeneste.virksomhet.brukerprofil.v3.informasjon.WSPersonidenter;
 import no.nav.tjeneste.virksomhet.brukerprofil.v3.meldinger.WSHentKontaktinformasjonOgPreferanserRequest;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import javax.ws.rs.ForbiddenException;
 
+import static no.nav.brukerdialog.security.context.SubjectHandler.getSubjectHandler;
 import static org.apache.commons.lang3.text.WordUtils.capitalize;
+import static org.slf4j.LoggerFactory.getLogger;
 
 public class BrukerprofilService {
-    private static final Logger LOG = LoggerFactory.getLogger(BrukerprofilService.class);
+    private static final Logger LOG = getLogger(BrukerprofilService.class);
     @Inject
     private BrukerprofilV3 brukerprofilV3;
 
@@ -35,9 +40,18 @@ public class BrukerprofilService {
             }
             final String navnFraTps = wsPerson.getPersonnavn().getFornavn() + " " + mellomnavn + wsPerson.getPersonnavn().getEtternavn();
             return capitalize(navnFraTps.toLowerCase(), '-', ' ');
-        } catch (Exception e) {
-            LOG.error("Exception mot TPS med ident {}  -  {}", fnr, e.getMessage());
-            return "Vi fant ikke navnet";
+        } catch (HentKontaktinformasjonOgPreferanserPersonIdentErUtgaatt e) {
+            LOG.error("HentKontaktinformasjonOgPreferanserPersonIdentErUtgaatt for {} med FNR {}", getSubjectHandler().getUid(), fnr, e);
+            throw new RuntimeException();
+        } catch (HentKontaktinformasjonOgPreferanserSikkerhetsbegrensning e) {
+            LOG.error("Sikkerhetsbegrensning for {} med FNR {}",getSubjectHandler().getUid(), fnr, e);
+            throw new ForbiddenException();
+        } catch (HentKontaktinformasjonOgPreferanserPersonIkkeFunnet e) {
+            LOG.error("HentKontaktinformasjonOgPreferanserPersonIkkeFunnet for {} med FNR {}", getSubjectHandler().getUid(), fnr, e);
+            throw new ForbiddenException();
+        } catch (RuntimeException e) {
+            LOG.error("{} fikk RuntimeException mot TPS med ved oppslag av {}", getSubjectHandler().getUid(), fnr, e);
+            throw e;
         }
     }
 }

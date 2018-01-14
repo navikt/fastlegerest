@@ -3,7 +3,6 @@ package no.nav.syfo.services;
 import no.nav.syfo.domain.Fastlege;
 import no.nav.syfo.domain.Pasient;
 import no.nav.syfo.domain.Pasientforhold;
-import no.nhn.register.common.WSPhysicalAddress;
 import no.nhn.schemas.reg.flr.IFlrReadOperations;
 import no.nhn.schemas.reg.flr.IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage;
 import no.nhn.schemas.reg.flr.WSPatientToGPContractAssociation;
@@ -16,6 +15,7 @@ import java.util.List;
 
 import static java.time.LocalDate.now;
 import static java.util.stream.Collectors.toList;
+import static no.nav.brukerdialog.security.context.SubjectHandler.getSubjectHandler;
 import static no.nav.sbl.java8utils.MapUtil.map;
 import static no.nav.sbl.java8utils.MapUtil.mapListe;
 import static no.nav.syfo.mappers.FastlegeMappers.ws2fastlege;
@@ -47,8 +47,11 @@ public class FastlegeService {
                             .fastlegekontor(map(patientGPDetails.getGPContract().getGPOffice(), ws2fastlegekontor))
                     ).collect(toList());
         } catch (IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage e) {
-            LOG.error("Personen er ikke tilknyttet noen fastlegekontrakt.", e);
+            LOG.error("{} Søkte opp {} og fikk en feil fra fastlegetjenesten. Dette skjer trolig fordi FNRet ikke finnes", getSubjectHandler().getUid(), brukersFnr, e);
             throw new NotFoundException();
+        } catch (RuntimeException e) {
+            LOG.error("{} Søkte opp {} og fikk en feil fra fastlegetjenesten fordi tjenesten er nede", getSubjectHandler().getUid(), brukersFnr, e);
+            throw e;
         }
     }
 
