@@ -52,6 +52,8 @@
         <appender-ref ref="infolog"/>
     </logger>
 
+    <logger name="no.nav.sbl.dialogarena.common.web.selftest.SelfTestBaseServlet" level="OFF" />
+
     <root level="INFO">
         <appender-ref ref="exceptionlog"/>
         <appender-ref ref="SYSLOG"/>

@@ -47,7 +47,7 @@ public class FastlegeService {
                             .fastlegekontor(map(patientGPDetails.getGPContract().getGPOffice(), ws2fastlegekontor))
                     ).collect(toList());
         } catch (IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage e) {
-            LOG.error("{} Søkte opp {} og fikk en feil fra fastlegetjenesten. Dette skjer trolig fordi FNRet ikke finnes", getSubjectHandler().getUid(), brukersFnr, e);
+            LOG.error("{} Søkte opp {} og fikk en feil fra fastlegetjenesten. Dette skjer trolig fordi FNRet ikke finnes", getSubjectHandler().getUid(), brukersFnr);
             throw new NotFoundException();
         } catch (RuntimeException e) {
             LOG.error("{} Søkte opp {} og fikk en feil fra fastlegetjenesten fordi tjenesten er nede", getSubjectHandler().getUid(), brukersFnr, e);
