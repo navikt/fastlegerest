@@ -41,13 +41,13 @@ public class BrukerprofilService {
             final String navnFraTps = wsPerson.getPersonnavn().getFornavn() + " " + mellomnavn + wsPerson.getPersonnavn().getEtternavn();
             return capitalize(navnFraTps.toLowerCase(), '-', ' ');
         } catch (HentKontaktinformasjonOgPreferanserPersonIdentErUtgaatt e) {
-            LOG.error("HentKontaktinformasjonOgPreferanserPersonIdentErUtgaatt for {} med FNR {}", getSubjectHandler().getUid(), fnr, e);
+            LOG.error("HentKontaktinformasjonOgPreferanserPersonIdentErUtgaatt for {} med FNR {}", getSubjectHandler().getUid(), fnr);
             throw new RuntimeException();
         } catch (HentKontaktinformasjonOgPreferanserSikkerhetsbegrensning e) {
-            LOG.error("Sikkerhetsbegrensning for {} med FNR {}",getSubjectHandler().getUid(), fnr, e);
+            LOG.error("Sikkerhetsbegrensning for {} med FNR {}",getSubjectHandler().getUid(), fnr);
             throw new ForbiddenException();
         } catch (HentKontaktinformasjonOgPreferanserPersonIkkeFunnet e) {
-            LOG.error("HentKontaktinformasjonOgPreferanserPersonIkkeFunnet for {} med FNR {}", getSubjectHandler().getUid(), fnr, e);
+            LOG.error("HentKontaktinformasjonOgPreferanserPersonIkkeFunnet for {} med FNR {}", getSubjectHandler().getUid(), fnr);
             throw new ForbiddenException();
         } catch (RuntimeException e) {
             LOG.error("{} fikk RuntimeException mot TPS med ved oppslag av {}", getSubjectHandler().getUid(), fnr, e);
