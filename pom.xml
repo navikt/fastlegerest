@@ -66,8 +66,6 @@
         <!-- Tjenester -->
         <fastlegeinformasjonV1-tjenestespesifikasjon.version>1.0</fastlegeinformasjonV1-tjenestespesifikasjon.version>
         <brukerprofil-v3-tjenestespesifikasjon.version>3.0.3</brukerprofil-v3-tjenestespesifikasjon.version>
-        <diskresjonskodev1-tjenestespesifikasjon.version>1.0.0</diskresjonskodev1-tjenestespesifikasjon.version>
-        <egenAnsatt-v1-tjenestespesifikasjon.version>1.0.1</egenAnsatt-v1-tjenestespesifikasjon.version>
     </properties>
 
     <dependencyManagement>
@@ -81,16 +79,6 @@
                 <groupId>no.nav.sbl</groupId>
                 <artifactId>brukerprofil-v3-tjenestespesifikasjon</artifactId>
                 <version>${brukerprofil-v3-tjenestespesifikasjon.version}</version>
-            </dependency>
-            <dependency>
-                <artifactId>diskresjonskodev1-tjenestespesifikasjon</artifactId>
-                <groupId>no.nav.sbl.dialogarena</groupId>
-                <version>${diskresjonskodev1-tjenestespesifikasjon.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>no.nav.syfo.tjenester</groupId>
-                <artifactId>egenAnsatt-v1-tjenestespesifikasjon</artifactId>
-                <version>${egenAnsatt-v1-tjenestespesifikasjon.version}</version>
             </dependency>
             <dependency>
                 <groupId>javax.servlet</groupId>

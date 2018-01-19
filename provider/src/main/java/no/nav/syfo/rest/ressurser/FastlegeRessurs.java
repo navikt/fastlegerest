@@ -13,6 +13,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static javax.ws.rs.core.Response.Status.Family.SUCCESSFUL;
 
 @Path("/fastlege/v1")
 @Consumes(APPLICATION_JSON)
@@ -30,16 +31,13 @@ public class FastlegeRessurs {
     @Timed(name = "finnFastlege")
     @Count(name = "finnFastlege")
     public Response finnFastlege(@QueryParam("fnr") String fnr) {
-        Tilgang tilgang = tilgangService.sjekkTilgang(fnr);
+        Response tilgangResponse = tilgangService.sjekkTilgang(fnr);
 
-        if (tilgang.ikkeTilgang) {
-            return Response
-                    .status(403)
-                    .entity(tilgang)
-                    .type(APPLICATION_JSON)
-                    .build();
+        if (200 == tilgangResponse.getStatus()) {
+            return Response.ok(fastlegeService.hentBrukersFastlege(fnr)).build();
+        } else {
+            return tilgangResponse;
         }
-        return Response.ok(fastlegeService.hentBrukersFastlege(fnr)).build();
     }
 
     @GET
@@ -47,16 +45,13 @@ public class FastlegeRessurs {
     @Count(name = "finnFastleger")
     @Path("/fastleger")
     public Response finnFastleger(@QueryParam("fnr") String fnr) {
-        Tilgang tilgang = tilgangService.sjekkTilgang(fnr);
+        Response tilgangResponse = tilgangService.sjekkTilgang(fnr);
 
-        if (tilgang.ikkeTilgang) {
-            return Response
-                    .status(403)
-                    .entity(tilgang)
-                    .type(APPLICATION_JSON)
-                    .build();
+        if (200 == tilgangResponse.getStatus()) {
+            return Response.ok(fastlegeService.hentBrukersFastleger(fnr)).build();
+        } else {
+            return tilgangResponse;
         }
-        return Response.ok(fastlegeService.hentBrukersFastleger(fnr)).build();
     }
 
     @GET
