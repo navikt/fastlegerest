@@ -22,6 +22,7 @@
         <baseUrl alias="isso-issuer"/>
         <credential alias="isso-rp-user"/>
         <rest alias="veilarblogin.redirect-url" mapToProperty="oidc-redirect"/>
+        <rest alias="tilgangskontrollapi" mapToProperty="syfo-tilgangskontroll-api"/>
     </resources>
 
     <exposed-services>

@@ -12,7 +12,7 @@ public class TilgangService {
 
 //    @Cacheable(value = "tilgang", keyGenerator = "userkeygenerator")
     public Response sjekkTilgang(String fnr) {
-        return newClient().target(getProperty("syfo-tilgangskontroll_tilgangtilbruker.url"))
+        return newClient().target(getProperty("syfo-tilgangskontroll-api.url") + "/tilgangtilbruker")
                 .queryParam("fnr", fnr)
                 .request(MediaType.APPLICATION_JSON)
                 .get();
@@ -20,7 +20,7 @@ public class TilgangService {
 
 //    @Cacheable(value = "tilgang", keyGenerator = "userkeygenerator")
     public Response harTilgangTilTjenesten() {
-        return newClient().target(getProperty("syfo-tilgangskontroll_tilgangtiltjenesten.url"))
+        return newClient().target(getProperty("syfo-tilgangskontroll-api.url") + "/tilgangtiltjenesten")
                 .request(MediaType.APPLICATION_JSON)
                 .get();
     }
