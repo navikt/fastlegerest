@@ -10,7 +10,6 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Response;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -25,7 +24,7 @@ public class TilgangRessurs {
     private TilgangService tilgangService;
 
     @GET
-    public Response harTilgang() {
-        return tilgangService.harTilgangTilTjenesten();
+    public boolean harTilgang() {
+        return 200 == tilgangService.harTilgangTilTjenesten().getStatus();
     }
 }
