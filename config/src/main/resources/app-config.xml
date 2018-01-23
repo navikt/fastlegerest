@@ -16,16 +16,13 @@
     <resources>
         <webservice alias="ekstern:helse_fastlegeinformasjon" mapToProperty="fastlegeinformasjon.endpoint" />
         <webservice alias="virksomhet:Brukerprofil_v3" mapToProperty="brukerprofilv3.endpoint"/>
-        <webservice alias="virksomhet:Diskresjonskode_v1" mapToProperty="diskresjonskode.endpoint"/>
-        <webservice alias="virksomhet:EgenAnsatt_v1" mapToProperty="egenAnsatt.endpoint"/>
-
-        <ldap alias="ldap" mapToProperty="ldap"/>
 
         <baseUrl alias="isso-host"/>
         <baseUrl alias="isso-jwks"/>
         <baseUrl alias="isso-issuer"/>
         <credential alias="isso-rp-user"/>
         <rest alias="veilarblogin.redirect-url" mapToProperty="oidc-redirect"/>
+        <rest alias="tilgangskontrollapi" mapToProperty="syfo-tilgangskontroll-api"/>
     </resources>
 
     <exposed-services>

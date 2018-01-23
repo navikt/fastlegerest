@@ -25,6 +25,6 @@ public class TilgangRessurs {
 
     @GET
     public boolean harTilgang() {
-        return tilgangService.harTilgangTilTjenesten();
+        return 200 == tilgangService.harTilgangTilTjenesten().getStatus();
     }
 }
