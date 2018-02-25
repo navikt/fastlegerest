@@ -1,37 +1,36 @@
 package no.nav.syfo.services;
 
-import no.nav.brukerdialog.security.context.SubjectHandler;
 import org.springframework.cache.annotation.Cacheable;
 
 import javax.ws.rs.client.Client;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import static java.lang.System.getProperty;
 import static javax.ws.rs.client.ClientBuilder.newClient;
 import static javax.ws.rs.core.HttpHeaders.AUTHORIZATION;
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static no.nav.brukerdialog.security.context.SubjectHandler.getSubjectHandler;
 
 public class TilgangService {
 
     private Client client = newClient();
 
     @Cacheable(value = "tilgang", keyGenerator = "userkeygenerator")
-    public Response sjekkTilgang(String fnr) {
-        String ssoToken = SubjectHandler.getSubjectHandler().getInternSsoToken();
-        return client.target(getProperty("syfo-tilgangskontroll-api.url") + "/tilgangtilbruker")
+    public boolean sjekkTilgang(String fnr) {
+        String ssoToken = getSubjectHandler().getInternSsoToken();
+        return client.target(getProperty("TILGANGSKONTROLLAPI_URL") + "/tilgangtilbruker")
                 .queryParam("fnr", fnr)
-                .request(MediaType.APPLICATION_JSON)
+                .request(APPLICATION_JSON)
                 .header(AUTHORIZATION, "Bearer " + ssoToken)
-                .get();
+                .get().getStatus() == 200;
     }
 
     @Cacheable(value = "tilgang", keyGenerator = "userkeygenerator")
-    public Response harTilgangTilTjenesten() {
-        String ssoToken = SubjectHandler.getSubjectHandler().getInternSsoToken();
-        return client.target(getProperty("syfo-tilgangskontroll-api.url") + "/tilgangtiltjenesten")
-                .request(MediaType.APPLICATION_JSON)
+    public boolean harTilgangTilTjenesten() {
+        String ssoToken = getSubjectHandler().getInternSsoToken();
+        return client.target(getProperty("TILGANGSKONTROLLAPI_URL") + "/tilgangtiltjenesten")
+                .request(APPLICATION_JSON)
                 .header(AUTHORIZATION, "Bearer " + ssoToken)
-                .get();
+                .get().getStatus() == 200;
     }
 
 }

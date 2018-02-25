@@ -17,7 +17,7 @@ import static no.nav.sbl.dialogarena.types.Pingable.Ping.lyktes;
 public class FastlegeInformasjonConfig {
 
     private static final String MOCK_KEY = "fastlegev1.withmock";
-    private static final String ENDEPUNKT_URL = getProperty("fastlegeinformasjon.endpoint.url");
+    private static final String ENDEPUNKT_URL = getProperty("EKSTERN_HELSE_FASTLEGEINFORMASJON_ENDPOINTURL");
     private static final String ENDEPUNKT_NAVN = "FASTLEGE_HELSENETT";
     private static final boolean KRITISK = true;
 

@@ -15,7 +15,7 @@ import static no.nav.sbl.dialogarena.types.Pingable.Ping.lyktes;
 @Configuration
 public class BrukerprofilConfig {
     private static final String MOCK_KEY = "brukerprofilv3.withmock";
-    private static final String ENDEPUNKT_URL = getProperty("brukerprofilv3.endpoint.url");
+    private static final String ENDEPUNKT_URL = getProperty("VIRKSOMHET_BRUKERPROFIL_V3_ENDPOINTURL");
     private static final String ENDEPUNKT_NAVN = "BRUKERPROFIL_V3";
     private static final boolean KRITISK = true;
 
