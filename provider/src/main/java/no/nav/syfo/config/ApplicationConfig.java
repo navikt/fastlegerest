@@ -42,7 +42,7 @@ public class ApplicationConfig implements ApiApplication.NaisApiApplication {
     @Override
     public void configure(ApiAppConfigurator apiAppConfigurator) {
         apiAppConfigurator
-             //   .issoLogin()
+                .issoLogin()
                 .sts();
     }
 }
