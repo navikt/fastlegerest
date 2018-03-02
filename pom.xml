@@ -8,7 +8,7 @@
     <parent>
         <groupId>no.nav.sbl</groupId>
         <artifactId>mor-pom</artifactId>
-        <version>2018.02.15.12.54</version>
+        <version>2018.02.28.19.39</version>
     </parent>
     <groupId>no.nav.syfo</groupId>
     <artifactId>fastlegerest</artifactId>
@@ -27,8 +27,7 @@
             <dependency>
                 <groupId>no.nav.sbl</groupId>
                 <artifactId>bom</artifactId>
-                <!-- Denne og mor-pom versjon settes til fast versjon når PRene på api-app, common-jetty og oidc-security blir bygget fra master -->
-                <version>1-SNAPSHOT</version>
+                <version>2018.02.28.19.39</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
