@@ -64,7 +64,7 @@
         <oidc-security.version>2.5-digisyfo</oidc-security.version>
 
         <!-- Tjenester -->
-        <fastlegeinformasjonV1-tjenestespesifikasjon.version>1.0</fastlegeinformasjonV1-tjenestespesifikasjon.version>
+        <fastlegeinformasjonV1-tjenestespesifikasjon.version>2.1.2</fastlegeinformasjonV1-tjenestespesifikasjon.version>
         <brukerprofil-v3-tjenestespesifikasjon.version>3.0.3</brukerprofil-v3-tjenestespesifikasjon.version>
     </properties>
 
