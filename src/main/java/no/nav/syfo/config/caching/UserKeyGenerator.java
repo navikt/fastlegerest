@@ -8,10 +8,6 @@ import static no.nav.brukerdialog.security.context.SubjectHandler.getSubjectHand
 
 public class UserKeyGenerator extends KeyGenerator {
 
-    public UserKeyGenerator() {
-        super();
-    }
-
     @Override
     public Object generate(Object target, Method method, Object... params) {
         String cacheKey = toHexString(super.generate(target, method, params).hashCode());

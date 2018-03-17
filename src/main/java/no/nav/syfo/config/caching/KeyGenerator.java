@@ -1,6 +1,5 @@
 package no.nav.syfo.config.caching;
 
-
 import org.springframework.cache.interceptor.SimpleKeyGenerator;
 
 import java.lang.reflect.Method;
@@ -10,10 +9,6 @@ import static java.lang.reflect.Proxy.isProxyClass;
 import static org.springframework.aop.framework.AopProxyUtils.proxiedUserInterfaces;
 
 public class KeyGenerator extends SimpleKeyGenerator {
-
-    public KeyGenerator() {
-        super();
-    }
 
     @Override
     public Object generate(Object target, Method method, Object... params) {

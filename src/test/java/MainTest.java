@@ -1,3 +1,4 @@
+import localhost.ApplicationConfigTest;
 import no.nav.brukerdialog.security.context.CustomizableSubjectHandler;
 import no.nav.brukerdialog.security.domain.IdentType;
 
