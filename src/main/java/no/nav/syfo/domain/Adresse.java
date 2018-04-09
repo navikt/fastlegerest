@@ -8,7 +8,8 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(fluent = true)
 @EqualsAndHashCode
-public class Bruker {
-
-    public String navn;
+public class Adresse {
+    private String adresse;
+    private String postnummer;
+    private String poststed;
 }

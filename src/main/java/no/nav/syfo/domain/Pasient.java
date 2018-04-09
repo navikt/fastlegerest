@@ -9,7 +9,8 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 @EqualsAndHashCode
 public class Pasient {
-
-    public String navn;
-    public String fnr;
+    private String fornavn;
+    private String mellomnavn;
+    private String etternavn;
+    private String fnr;
 }

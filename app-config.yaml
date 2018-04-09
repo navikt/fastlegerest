@@ -29,6 +29,8 @@ fasitResources:
     resourceType: webserviceendpoint
   - alias: virksomhet:Brukerprofil_v3
     resourceType: webserviceendpoint
+  - alias: partner-ws
+    resourceType: webserviceendpoint
   - alias: securityTokenService
     resourceType: baseUrl
   - alias: isso-host
@@ -49,3 +51,6 @@ fasitResources:
   - alias: fastlegeapi
     resourceType: restservice
     path: /fastlegerest/api/fastlege/v1
+  - alias: fastlege-dialogmelding-api-v1
+    resourceType: restservice
+    path: /fastlegerest/api/dialogmelding/v1

@@ -17,6 +17,7 @@
     <properties>
         <fastlegeinformasjonV1-tjenestespesifikasjon.version>2.1.2</fastlegeinformasjonV1-tjenestespesifikasjon.version>
         <brukerprofil-v3-tjenestespesifikasjon.version>3.0.3</brukerprofil-v3-tjenestespesifikasjon.version>
+        <partner-emottak.version>1.0</partner-emottak.version>
     </properties>
 
     <dependencyManagement>
@@ -30,6 +31,11 @@
             </dependency>
             <dependency>
                 <groupId>no.nav.syfo.tjenester</groupId>
+                <artifactId>partner-emottak</artifactId>
+                <version>${partner-emottak.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>no.nav.syfo.tjenester</groupId>
                 <artifactId>fastlegeinformasjonV1-tjenestespesifikasjon</artifactId>
                 <version>${fastlegeinformasjonV1-tjenestespesifikasjon.version}</version>
             </dependency>
@@ -39,6 +45,16 @@
                 <version>${brukerprofil-v3-tjenestespesifikasjon.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-jaxrs</artifactId>
+                <version>1.9.12</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.jaxrs</groupId>
+                <artifactId>jackson-jaxrs-json-provider</artifactId>
+                <version>2.5.4</version>
+            </dependency>
+            <dependency>
                 <groupId>no.nav.sbl</groupId>
                 <artifactId>java8-utils</artifactId>
                 <version>1.1</version>
@@ -46,6 +62,10 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
+        <dependency>
+            <groupId>no.nav.syfo.tjenester</groupId>
+            <artifactId>partner-emottak</artifactId>
+        </dependency>
         <dependency>
             <groupId>no.nav.sbl</groupId>
             <artifactId>api-app</artifactId>
@@ -83,6 +103,14 @@
             <artifactId>common-cxf</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxws</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-jackson</artifactId>
         </dependency>
@@ -97,10 +125,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
             <groupId>no.nav.sbl</groupId>

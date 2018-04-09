@@ -48,12 +48,12 @@ public class FastlegeMappersTest {
                 )
         ));
 
-        assertThat(fastlegekontor.navn).isEqualTo("Fastlegekontoret");
-        assertThat(fastlegekontor.orgnummer).isEqualTo(123456789);
-        assertThat(fastlegekontor.telefon).isEqualTo("");
-        assertThat(fastlegekontor.epost).isEqualTo("");
-        assertThat(fastlegekontor.besoeksadresse).isEqualTo("Sannergata 2, 4000 Oslo");
-        assertThat(fastlegekontor.postadresse).isEqualTo("Postboks St. Olavs plass, 3030 Oslo");
+        assertThat(fastlegekontor.navn()).isEqualTo("Fastlegekontoret");
+        assertThat(fastlegekontor.orgnummer()).isEqualTo("123456789");
+        assertThat(fastlegekontor.telefon()).isEqualTo("");
+        assertThat(fastlegekontor.epost()).isEqualTo("");
+        assertThat(fastlegekontor.besoeksadresseToString()).isEqualTo("Sannergata 2, 4000 Oslo");
+        assertThat(fastlegekontor.postadresseToString()).isEqualTo("Postboks St. Olavs plass, 3030 Oslo");
     }
 
     @Test
@@ -77,10 +77,10 @@ public class FastlegeMappersTest {
                 .withPhysicalAddresses(new WSArrayOfPhysicalAddress())
         );
 
-        assertThat(fastlegekontor.navn).isEqualTo("Fastlegekontoret");
-        assertThat(fastlegekontor.orgnummer).isEqualTo(123456789);
-        assertThat(fastlegekontor.telefon).isEqualTo("12345678");
-        assertThat(fastlegekontor.epost).isEqualTo("test@nav.no");
+        assertThat(fastlegekontor.navn()).isEqualTo("Fastlegekontoret");
+        assertThat(fastlegekontor.orgnummer()).isEqualTo("123456789");
+        assertThat(fastlegekontor.telefon()).isEqualTo("12345678");
+        assertThat(fastlegekontor.epost()).isEqualTo("test@nav.no");
     }
 
 }

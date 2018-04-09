@@ -15,6 +15,7 @@ import org.springframework.context.annotation.*;
         ServiceConfig.class,
         FastlegeInformasjonConfig.class,
         BrukerprofilConfig.class,
+        PartnerEmottakConfig.class
 })
 @ComponentScan(basePackages = "no.nav.syfo.rest")
 public class ApplicationConfig implements ApiApplication.NaisApiApplication {

@@ -38,12 +38,15 @@ public class FastlegeService {
     @Cacheable(value = "fastlege", keyGenerator = "userkeygenerator")
     public List<Fastlege> hentBrukersFastleger(String brukersFnr) {
         try {
+            Pasient pasient = brukerprofilService.hentNavnByFnr(brukersFnr);
             WSPatientToGPContractAssociation patientGPDetails = fastlegeSoapClient.getPatientGPDetails(brukersFnr);
             return hentFastleger(patientGPDetails).stream()
                     .map(fastlege -> fastlege
                             .pasient(new Pasient()
                                     .fnr(brukersFnr)
-                                    .navn(brukerprofilService.hentNavnByFnr(brukersFnr)))
+                                    .fornavn(pasient.fornavn())
+                                    .mellomnavn(pasient.mellomnavn())
+                                    .etternavn(pasient.etternavn()))
                             .fastlegekontor(map(patientGPDetails.getGPContract().getGPOffice(), ws2fastlegekontor))
                     ).collect(toList());
         } catch (IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage e) {
@@ -65,7 +68,7 @@ public class FastlegeService {
 
     private static Fastlege finnAktivFastlege(List<Fastlege> fastleger) {
         return fastleger.stream()
-                .filter(fastlege -> fastlege.pasientforhold.fom.isBefore(now()) && fastlege.pasientforhold.tom.isAfter(now()))
+                .filter(fastlege -> fastlege.pasientforhold().fom().isBefore(now()) && fastlege.pasientforhold().tom().isAfter(now()))
                 .findFirst().orElseThrow(() -> new NotFoundException("Fant ikke aktiv fastlege"));
     }
 }
