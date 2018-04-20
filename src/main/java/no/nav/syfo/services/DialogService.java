@@ -25,7 +25,7 @@ public class DialogService {
     private static final String HOST = "local".equalsIgnoreCase(
             getProperty("FASIT_ENVIRONMENT_NAME")) ? "localhost:8080" : "dialogfordeler";
 
-    private static final boolean SEND_TIL_EXTENSOR = "q1".equalsIgnoreCase(getProperty("FASIT_ENVIRONMENT_NAME", "local"));
+    private static final boolean SEND_TIL_OVERRIDE = "q1".equalsIgnoreCase(getProperty("FASIT_ENVIRONMENT_NAME", "local"));
 
     private Client client = newClient();
     private SystemUserTokenProvider systemUserTokenProvider = new SystemUserTokenProvider();
@@ -39,7 +39,10 @@ public class DialogService {
         Fastlege fastlege = fastlegeService.hentBrukersFastlege(oppfolgingsplan.getSykmeldtFnr());
         String org = fastlege.fastlegekontor().orgnummer();
 
-        if (SEND_TIL_EXTENSOR) {
+        if (SEND_TIL_OVERRIDE) {
+            LOG.info("Sender til Fürst");
+            org = "***REMOVED***";
+        } else if (false) {
             LOG.info("Sender til Extensor");
             org = "***REMOVED***";
         }
