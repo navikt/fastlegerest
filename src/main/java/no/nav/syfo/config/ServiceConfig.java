@@ -1,8 +1,6 @@
 package no.nav.syfo.config;
 
-import no.nav.syfo.services.BrukerprofilService;
-import no.nav.syfo.services.FastlegeService;
-import no.nav.syfo.services.TilgangService;
+import no.nav.syfo.services.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,6 +20,16 @@ public class ServiceConfig {
     @Bean
     public TilgangService tilgangService() {
         return new TilgangService();
+    }
+
+    @Bean
+    public PartnerService partnerService() {
+        return new PartnerService();
+    }
+
+    @Bean
+    public DialogService dialogService() {
+        return new DialogService();
     }
 }
 

@@ -1,5 +1,6 @@
 package no.nav.syfo.services;
 
+import no.nav.syfo.domain.Pasient;
 import no.nav.tjeneste.virksomhet.brukerprofil.v3.BrukerprofilV3;
 import no.nav.tjeneste.virksomhet.brukerprofil.v3.HentKontaktinformasjonOgPreferanserPersonIdentErUtgaatt;
 import no.nav.tjeneste.virksomhet.brukerprofil.v3.HentKontaktinformasjonOgPreferanserPersonIkkeFunnet;
@@ -14,7 +15,6 @@ import javax.inject.Inject;
 import javax.ws.rs.ForbiddenException;
 
 import static no.nav.brukerdialog.security.context.SubjectHandler.getSubjectHandler;
-import static org.apache.commons.lang3.text.WordUtils.capitalize;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class BrukerprofilService {
@@ -22,7 +22,7 @@ public class BrukerprofilService {
     @Inject
     private BrukerprofilV3 brukerprofilV3;
 
-    public String hentNavnByFnr(String fnr) {
+    public Pasient hentNavnByFnr(String fnr) {
         if (!fnr.matches("\\d{11}$")) {
             throw new RuntimeException();
         }
@@ -34,17 +34,16 @@ public class BrukerprofilService {
                                     .withValue("FNR")
                             )
                             .withIdent(fnr))).getBruker();
-            String mellomnavn = wsPerson.getPersonnavn().getMellomnavn() == null ? "" : wsPerson.getPersonnavn().getMellomnavn();
-            if (!"".equals(mellomnavn)) {
-                mellomnavn = mellomnavn + " ";
-            }
-            final String navnFraTps = wsPerson.getPersonnavn().getFornavn() + " " + mellomnavn + wsPerson.getPersonnavn().getEtternavn();
-            return capitalize(navnFraTps.toLowerCase(), '-', ' ');
+            return new Pasient()
+                    .fnr(fnr)
+                    .fornavn(wsPerson.getPersonnavn().getFornavn())
+                    .mellomnavn(wsPerson.getPersonnavn().getMellomnavn())
+                    .etternavn(wsPerson.getPersonnavn().getEtternavn());
         } catch (HentKontaktinformasjonOgPreferanserPersonIdentErUtgaatt e) {
             LOG.error("HentKontaktinformasjonOgPreferanserPersonIdentErUtgaatt for {} med FNR {}", getSubjectHandler().getUid(), fnr);
             throw new RuntimeException();
         } catch (HentKontaktinformasjonOgPreferanserSikkerhetsbegrensning e) {
-            LOG.error("Sikkerhetsbegrensning for {} med FNR {}",getSubjectHandler().getUid(), fnr);
+            LOG.error("Sikkerhetsbegrensning for {} med FNR {}", getSubjectHandler().getUid(), fnr);
             throw new ForbiddenException();
         } catch (HentKontaktinformasjonOgPreferanserPersonIkkeFunnet e) {
             LOG.error("HentKontaktinformasjonOgPreferanserPersonIkkeFunnet for {} med FNR {}", getSubjectHandler().getUid(), fnr);

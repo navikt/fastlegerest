@@ -1,9 +1,6 @@
 package no.nav.syfo.mocks;
 
 import no.nav.tjeneste.virksomhet.brukerprofil.v3.BrukerprofilV3;
-import no.nav.tjeneste.virksomhet.brukerprofil.v3.HentKontaktinformasjonOgPreferanserPersonIdentErUtgaatt;
-import no.nav.tjeneste.virksomhet.brukerprofil.v3.HentKontaktinformasjonOgPreferanserPersonIkkeFunnet;
-import no.nav.tjeneste.virksomhet.brukerprofil.v3.HentKontaktinformasjonOgPreferanserSikkerhetsbegrensning;
 import no.nav.tjeneste.virksomhet.brukerprofil.v3.informasjon.WSBruker;
 import no.nav.tjeneste.virksomhet.brukerprofil.v3.informasjon.WSPersonnavn;
 import no.nav.tjeneste.virksomhet.brukerprofil.v3.meldinger.WSHentKontaktinformasjonOgPreferanserRequest;
@@ -16,8 +13,8 @@ public class BrukerprofilMock implements BrukerprofilV3 {
     }
 
     @Override
-    public WSHentKontaktinformasjonOgPreferanserResponse hentKontaktinformasjonOgPreferanser(WSHentKontaktinformasjonOgPreferanserRequest request) throws HentKontaktinformasjonOgPreferanserSikkerhetsbegrensning, HentKontaktinformasjonOgPreferanserPersonIkkeFunnet, HentKontaktinformasjonOgPreferanserPersonIdentErUtgaatt {
+    public WSHentKontaktinformasjonOgPreferanserResponse hentKontaktinformasjonOgPreferanser(WSHentKontaktinformasjonOgPreferanserRequest request) {
         return new WSHentKontaktinformasjonOgPreferanserResponse().withBruker(new WSBruker()
-                .withPersonnavn(new WSPersonnavn().withFornavn("Test").withEtternavn("Testesen")));
+                .withPersonnavn(new WSPersonnavn().withFornavn("MOCKDATA: Test").withEtternavn("MOCKDATA: Testesen")));
     }
 }

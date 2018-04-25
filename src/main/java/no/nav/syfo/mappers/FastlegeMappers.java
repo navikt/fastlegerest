@@ -1,5 +1,6 @@
 package no.nav.syfo.mappers;
 
+import no.nav.syfo.domain.Adresse;
 import no.nav.syfo.domain.Fastlege;
 import no.nav.syfo.domain.Fastlegekontor;
 import no.nhn.register.common.WSElectronicAddress;
@@ -8,12 +9,14 @@ import no.nhn.schemas.reg.flr.WSGPOnContractAssociation;
 
 import java.util.function.Function;
 
+import static no.nav.sbl.java8utils.MapUtil.mapNullable;
+
 public class FastlegeMappers {
 
     public static Function<WSGPOffice, Fastlegekontor> ws2fastlegekontor = wsgpOffice ->
             new Fastlegekontor()
                     .navn(wsgpOffice.getName())
-                    .orgnummer(wsgpOffice.getOrganizationNumber())
+                    .orgnummer(mapNullable(wsgpOffice.getOrganizationNumber(), Object::toString))
                     .telefon(wsgpOffice.getElectronicAddresses().getElectronicAddresses().stream()
                             .filter(wsElectronicAddress -> wsElectronicAddress.getType().getCodeValue().equals("E_TLF"))
                             .findFirst()
@@ -30,15 +33,21 @@ public class FastlegeMappers {
                             .filter(wsPhysicalAddress -> wsPhysicalAddress.getType() != null && wsPhysicalAddress.getType().isActive())
                             .filter(wsPhysicalAddress -> "PST".equals(wsPhysicalAddress.getType().getCodeValue()))
                             .findFirst()
-                            .map(wsPhysicalAddress -> "Postboks " + wsPhysicalAddress.getPostbox() + ", " + postnummer(wsPhysicalAddress.getPostalCode()) + " " + wsPhysicalAddress.getCity())
-                            .orElse("")
+                            .map(wsPhysicalAddress -> new Adresse()
+                                    .adresse(wsPhysicalAddress.getPostbox())
+                                    .postnummer(postnummer(wsPhysicalAddress.getPostalCode()))
+                                    .poststed(wsPhysicalAddress.getCity()))
+                            .orElse(null)
                     )
                     .besoeksadresse(wsgpOffice.getPhysicalAddresses().getPhysicalAddresses().stream()
                             .filter(wsPhysicalAddress -> wsPhysicalAddress.getType() != null && wsPhysicalAddress.getType().isActive())
                             .filter(wsPhysicalAddress -> "RES".equals(wsPhysicalAddress.getType().getCodeValue()))
                             .findFirst()
-                            .map(wsPhysicalAddress -> wsPhysicalAddress.getStreetAddress() + ", " + postnummer(wsPhysicalAddress.getPostalCode()) + " " + wsPhysicalAddress.getCity())
-                            .orElse("")
+                            .map(wsPhysicalAddress -> new Adresse()
+                                    .adresse(wsPhysicalAddress.getStreetAddress())
+                                    .postnummer(postnummer(wsPhysicalAddress.getPostalCode()))
+                                    .poststed(wsPhysicalAddress.getCity()))
+                            .orElse(null)
                     );
 
     private static String postnummer(Integer postalCode) {
@@ -52,7 +61,10 @@ public class FastlegeMappers {
 
     public static Function<WSGPOnContractAssociation, Fastlege> ws2fastlege = wsPatientToGPContractAssociation ->
             new Fastlege()
-                    .navn(wsPatientToGPContractAssociation.getGP().getFirstName() + " " + wsPatientToGPContractAssociation.getGP().getLastName())
+                    .helsepersonellregisterId(mapNullable(wsPatientToGPContractAssociation.getHprNumber(), Object::toString))
+                    .fornavn(wsPatientToGPContractAssociation.getGP().getFirstName())
+                    .mellomnavn(wsPatientToGPContractAssociation.getGP().getMiddleName())
+                    .etternavn(wsPatientToGPContractAssociation.getGP().getLastName())
                     .fnr(wsPatientToGPContractAssociation.getGP().getNIN());
 
 }
