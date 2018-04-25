@@ -61,7 +61,7 @@ public class FastlegeMappers {
 
     public static Function<WSGPOnContractAssociation, Fastlege> ws2fastlege = wsPatientToGPContractAssociation ->
             new Fastlege()
-                    .hpr(mapNullable(wsPatientToGPContractAssociation.getHprNumber(), Object::toString))
+                    .helsepersonellregisterId(mapNullable(wsPatientToGPContractAssociation.getHprNumber(), Object::toString))
                     .fornavn(wsPatientToGPContractAssociation.getGP().getFirstName())
                     .mellomnavn(wsPatientToGPContractAssociation.getGP().getMiddleName())
                     .etternavn(wsPatientToGPContractAssociation.getGP().getLastName())

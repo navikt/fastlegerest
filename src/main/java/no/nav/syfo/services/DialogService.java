@@ -40,9 +40,6 @@ public class DialogService {
         String org = fastlege.fastlegekontor().orgnummer();
 
         if (SEND_TIL_OVERRIDE) {
-            LOG.info("Sender til Fürst");
-            org = "***REMOVED***";
-        } else if (false) {
             LOG.info("Sender til Extensor");
             org = "***REMOVED***";
         }
@@ -90,7 +87,7 @@ public class DialogService {
     private RSBehandler tilBehandler(Fastlege fastlege) {
         return new RSBehandler(
                 fastlege.fnr(),
-                fastlege.hpr(),
+                fastlege.helsepersonellregisterId(),
                 fastlege.fornavn(),
                 fastlege.mellomnavn(),
                 fastlege.etternavn());

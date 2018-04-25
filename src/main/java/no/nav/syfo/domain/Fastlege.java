@@ -13,7 +13,7 @@ public class Fastlege {
     private String mellomnavn;
     private String etternavn;
     private String fnr;
-    private String hpr;
+    private String helsepersonellregisterId;
     private Pasient pasient;
     private Fastlegekontor fastlegekontor;
     private Pasientforhold pasientforhold;
