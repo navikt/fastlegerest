@@ -16,6 +16,9 @@ public class TilgangService {
 
     @Cacheable(value = "tilgang", keyGenerator = "userkeygenerator")
     public boolean sjekkTilgang(String fnr) {
+        if ("true".equals(getProperty("LOCAL_MOCK"))) {
+            return true;
+        }
         String ssoToken = getSubjectHandler().getInternSsoToken();
         return client.target(getProperty("TILGANGSKONTROLLAPI_URL") + "/tilgangtilbruker")
                 .queryParam("fnr", fnr)
@@ -26,6 +29,9 @@ public class TilgangService {
 
     @Cacheable(value = "tilgang", keyGenerator = "userkeygenerator")
     public boolean harTilgangTilTjenesten() {
+        if ("true".equals(getProperty("LOCAL_MOCK"))) {
+            return true;
+        }
         String ssoToken = getSubjectHandler().getInternSsoToken();
         return client.target(getProperty("TILGANGSKONTROLLAPI_URL") + "/tilgangtiltjenesten")
                 .request(APPLICATION_JSON)
