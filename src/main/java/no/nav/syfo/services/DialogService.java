@@ -6,6 +6,7 @@ import no.nav.syfo.domain.Partnerinformasjon;
 import no.nav.syfo.domain.Pasient;
 import no.nav.syfo.domain.dialogmelding.*;
 import no.nav.syfo.domain.oppfolgingsplan.RSOppfolgingsplan;
+import no.nav.syfo.services.exceptions.PartnerinformasjonIkkeFunnet;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -25,8 +26,6 @@ public class DialogService {
     private static final String HOST = "local".equalsIgnoreCase(
             getProperty("FASIT_ENVIRONMENT_NAME")) ? "localhost:8080" : "dialogfordeler";
 
-    private static final boolean SEND_TIL_OVERRIDE = "q1".equalsIgnoreCase(getProperty("FASIT_ENVIRONMENT_NAME", "local"));
-
     private Client client = newClient();
     private SystemUserTokenProvider systemUserTokenProvider = new SystemUserTokenProvider();
 
@@ -37,21 +36,14 @@ public class DialogService {
 
     public void sendOppfolgingsplan(final RSOppfolgingsplan oppfolgingsplan) {
         Fastlege fastlege = fastlegeService.hentBrukersFastlege(oppfolgingsplan.getSykmeldtFnr());
-        String org = fastlege.fastlegekontor().orgnummer();
-
-        if (SEND_TIL_OVERRIDE) {
-            LOG.info("Sender til Extensor");
-            org = "***REMOVED***";
-        }
-
-        final String orgnummer = org;
+        String orgnummer = fastlege.fastlegekontor().orgnummer();
 
         Partnerinformasjon partnerinformasjon = partnerService.hentPartnerinformasjon(orgnummer)
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> {
-                    LOG.error("Fant ikke partnerinformasjon for orgnummer " + orgnummer);
-                    return new RuntimeException("Fant ikke partnerinformasjon for orgnummer " + orgnummer);
+                    LOG.warn("Fant ikke partnerinformasjon for orgnummer " + orgnummer);
+                    return new PartnerinformasjonIkkeFunnet("Fant ikke partnerinformasjon for orgnummer " + orgnummer);
                 });
 
         RSHodemelding hodemelding =

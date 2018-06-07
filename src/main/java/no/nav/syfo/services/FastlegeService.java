@@ -3,6 +3,7 @@ package no.nav.syfo.services;
 import no.nav.syfo.domain.Fastlege;
 import no.nav.syfo.domain.Pasient;
 import no.nav.syfo.domain.Pasientforhold;
+import no.nav.syfo.services.exceptions.FastlegeIkkeFunnet;
 import no.nhn.schemas.reg.flr.IFlrReadOperations;
 import no.nhn.schemas.reg.flr.IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage;
 import no.nhn.schemas.reg.flr.WSPatientToGPContractAssociation;
@@ -10,7 +11,6 @@ import org.slf4j.Logger;
 import org.springframework.cache.annotation.Cacheable;
 
 import javax.inject.Inject;
-import javax.ws.rs.NotFoundException;
 import java.util.List;
 
 import static java.time.LocalDate.now;
@@ -50,8 +50,8 @@ public class FastlegeService {
                             .fastlegekontor(map(patientGPDetails.getGPContract().getGPOffice(), ws2fastlegekontor))
                     ).collect(toList());
         } catch (IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage e) {
-            LOG.error("{} Søkte opp {} og fikk en feil fra fastlegetjenesten. Dette skjer trolig fordi FNRet ikke finnes", getSubjectHandler().getUid(), brukersFnr);
-            throw new NotFoundException();
+            LOG.warn("{} Søkte opp {} og fikk en feil fra fastlegetjenesten. Dette skjer trolig fordi FNRet ikke finnes", getSubjectHandler().getUid(), brukersFnr, e);
+            throw new FastlegeIkkeFunnet("Feil ved oppslag av fastlege");
         } catch (RuntimeException e) {
             LOG.error("{} Søkte opp {} og fikk en feil fra fastlegetjenesten fordi tjenesten er nede", getSubjectHandler().getUid(), brukersFnr, e);
             throw e;
@@ -69,6 +69,6 @@ public class FastlegeService {
     private static Fastlege finnAktivFastlege(List<Fastlege> fastleger) {
         return fastleger.stream()
                 .filter(fastlege -> fastlege.pasientforhold().fom().isBefore(now()) && fastlege.pasientforhold().tom().isAfter(now()))
-                .findFirst().orElseThrow(() -> new NotFoundException("Fant ikke aktiv fastlege"));
+                .findFirst().orElseThrow(() -> new FastlegeIkkeFunnet("Fant ikke aktiv fastlege"));
     }
 }
