@@ -20,6 +20,9 @@ public class MainTest {
         setInternSsoToken(getIDToken(getProperty("veileder.username"), getProperty("veileder.password")));
         setIdentType(IdentType.InternBruker);
 
+        //Workaround for å få med begrunnelse for feil
+        setProperty("VIS_DETALJER_VED_FEIL", "true");
+
         String[] _args = {"8585"};
         startApp(ApplicationConfigTest.class, _args);
     }
