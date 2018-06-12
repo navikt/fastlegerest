@@ -42,7 +42,7 @@ public class DialogService {
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> {
-                    LOG.warn("Fant ikke partnerinformasjon for orgnummer " + orgnummer);
+                    LOG.warn("Fant ikke partnerinformasjon for orgnummer {}", orgnummer);
                     return new PartnerinformasjonIkkeFunnet("Fant ikke partnerinformasjon for orgnummer " + orgnummer);
                 });
 
@@ -111,7 +111,7 @@ public class DialogService {
 
         int responsekode = response.getStatus();
         if (responsekode >= 300) {
-            LOG.error("Feil ved sending av oppfølgingsdialog til fastlege: Fikk responskode " + responsekode);
+            LOG.error("Feil ved sending av oppfølgingsdialog til fastlege: Fikk responskode {}", responsekode);
             throw new RuntimeException("Feil ved sending av oppfølgingsdialog til fastlege: Fikk responskode " + responsekode);
         }
     }
