@@ -6,6 +6,7 @@ import no.nav.syfo.domain.Partnerinformasjon;
 import no.nav.syfo.domain.Pasient;
 import no.nav.syfo.domain.dialogmelding.*;
 import no.nav.syfo.domain.oppfolgingsplan.RSOppfolgingsplan;
+import no.nav.syfo.services.exceptions.FastlegeIkkeFunnet;
 import no.nav.syfo.services.exceptions.PartnerinformasjonIkkeFunnet;
 import org.slf4j.Logger;
 
@@ -35,7 +36,8 @@ public class DialogService {
     private PartnerService partnerService;
 
     public void sendOppfolgingsplan(final RSOppfolgingsplan oppfolgingsplan) {
-        Fastlege fastlege = fastlegeService.hentBrukersFastlege(oppfolgingsplan.getSykmeldtFnr());
+        Fastlege fastlege = fastlegeService.hentBrukersFastlege(oppfolgingsplan.getSykmeldtFnr())
+                .orElseThrow(() -> new FastlegeIkkeFunnet("Fant ikke aktiv fastlege"));
         String orgnummer = fastlege.fastlegekontor().orgnummer();
 
         Partnerinformasjon partnerinformasjon = partnerService.hentPartnerinformasjon(orgnummer)

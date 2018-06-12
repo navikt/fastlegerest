@@ -5,6 +5,7 @@ import no.nav.metrics.aspects.Count;
 import no.nav.metrics.aspects.Timed;
 import no.nav.syfo.services.FastlegeService;
 import no.nav.syfo.services.TilgangService;
+import no.nav.syfo.services.exceptions.FastlegeIkkeFunnet;
 import org.springframework.stereotype.Controller;
 
 import javax.inject.Inject;
@@ -32,7 +33,8 @@ public class FastlegeRessurs {
     @Count(name = "finnFastlege")
     public Response finnFastlege(@QueryParam("fnr") String fnr) {
         if (tilgangService.sjekkTilgang(fnr)) {
-            return ok(fastlegeService.hentBrukersFastlege(fnr)).build();
+            return ok(fastlegeService.hentBrukersFastlege(fnr)
+                    .orElseThrow(() -> new NotFoundException("Fant ikke aktiv fastlege"))).build();
         } else {
             return status(403).build();
         }
@@ -44,7 +46,11 @@ public class FastlegeRessurs {
     @Path("/fastleger")
     public Response finnFastleger(@QueryParam("fnr") String fnr) {
         if (tilgangService.sjekkTilgang(fnr)) {
-            return ok(fastlegeService.hentBrukersFastleger(fnr)).build();
+            try {
+                return ok(fastlegeService.hentBrukersFastleger(fnr)).build();
+            } catch (FastlegeIkkeFunnet e) {
+                throw new NotFoundException();
+            }
         } else {
             return status(403).build();
         }

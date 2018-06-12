@@ -12,6 +12,7 @@ import org.springframework.cache.annotation.Cacheable;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Optional;
 
 import static java.time.LocalDate.now;
 import static java.util.stream.Collectors.toList;
@@ -31,7 +32,7 @@ public class FastlegeService {
     private BrukerprofilService brukerprofilService;
 
     @Cacheable(value = "fastlege", keyGenerator = "userkeygenerator")
-    public Fastlege hentBrukersFastlege(String brukersFnr) {
+    public Optional<Fastlege> hentBrukersFastlege(String brukersFnr) {
         return finnAktivFastlege(hentBrukersFastleger(brukersFnr));
     }
 
@@ -66,9 +67,9 @@ public class FastlegeService {
                 .collect(toList());
     }
 
-    private static Fastlege finnAktivFastlege(List<Fastlege> fastleger) {
+    private static Optional<Fastlege> finnAktivFastlege(List<Fastlege> fastleger) {
         return fastleger.stream()
                 .filter(fastlege -> fastlege.pasientforhold().fom().isBefore(now()) && fastlege.pasientforhold().tom().isAfter(now()))
-                .findFirst().orElseThrow(() -> new FastlegeIkkeFunnet("Fant ikke aktiv fastlege"));
+                .findFirst();
     }
 }
