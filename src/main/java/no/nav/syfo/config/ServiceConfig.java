@@ -8,6 +8,11 @@ import org.springframework.context.annotation.Configuration;
 public class ServiceConfig {
 
     @Bean
+    public AdresseregisterService adresseregisterService() {
+        return new AdresseregisterService();
+    }
+
+    @Bean
     public FastlegeService fastlegeService() {
         return new FastlegeService();
     }

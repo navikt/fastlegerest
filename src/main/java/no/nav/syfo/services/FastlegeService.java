@@ -61,9 +61,11 @@ public class FastlegeService {
 
     private List<Fastlege> hentFastleger(WSPatientToGPContractAssociation patientGPDetails) {
         return mapListe(patientGPDetails.getDoctorCycles().getGPOnContractAssociations(), ws2fastlege).stream()
-                .map(fastlege -> fastlege.pasientforhold(new Pasientforhold()
-                        .fom(patientGPDetails.getPeriod().getFrom().toLocalDate())
-                        .tom(patientGPDetails.getPeriod().getTo().toLocalDate())))
+                .map(fastlege -> fastlege
+                        .pasientforhold(new Pasientforhold()
+                                .fom(patientGPDetails.getPeriod().getFrom().toLocalDate())
+                                .tom(patientGPDetails.getPeriod().getTo().toLocalDate()))
+                        .herId(patientGPDetails.getGPHerId()))
                 .collect(toList());
     }
 

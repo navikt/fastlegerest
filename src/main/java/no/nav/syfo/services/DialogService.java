@@ -34,19 +34,32 @@ public class DialogService {
     private FastlegeService fastlegeService;
     @Inject
     private PartnerService partnerService;
+    @Inject
+    private AdresseregisterService adresseregisterService;
 
     public void sendOppfolgingsplan(final RSOppfolgingsplan oppfolgingsplan) {
         Fastlege fastlege = fastlegeService.hentBrukersFastlege(oppfolgingsplan.getSykmeldtFnr())
                 .orElseThrow(() -> new FastlegeIkkeFunnet("Fant ikke aktiv fastlege"));
         String orgnummer = fastlege.fastlegekontor().orgnummer();
 
+        Integer fastlegeForeldreEnhetHerId = adresseregisterService.hentFastlegeOrganisasjonPerson(fastlege.herId())
+                .foreldreEnhetHerId();
+
         Partnerinformasjon partnerinformasjon = partnerService.hentPartnerinformasjon(orgnummer)
                 .stream()
+                .filter(partnerinfo -> {
+                    boolean harHerIdLikFastlegeForeldreHerID = partnerinfo.getHerId().equals(String.valueOf(fastlegeForeldreEnhetHerId));
+                    // TODO: Fjern denne log'en når det er verifisert at deling med fastelege fungerer som det skal i produksjon
+                    LOG.info("Er Parterinformasjon sin HerId lik Fastlege sin HerId: {}", harHerIdLikFastlegeForeldreHerID);
+                    return harHerIdLikFastlegeForeldreHerID;
+                })
                 .findFirst()
                 .orElseThrow(() -> {
                     LOG.warn("Fant ikke partnerinformasjon for orgnummer {}", orgnummer);
                     return new PartnerinformasjonIkkeFunnet("Fant ikke partnerinformasjon for orgnummer " + orgnummer);
                 });
+
+
 
         RSHodemelding hodemelding =
                 tilHodemelding(

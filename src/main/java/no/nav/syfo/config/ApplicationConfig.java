@@ -13,6 +13,7 @@ import org.springframework.context.annotation.*;
 @Import({
         CacheConfig.class,
         ServiceConfig.class,
+        AdresseregisterConfig.class,
         FastlegeInformasjonConfig.class,
         BrukerprofilConfig.class,
         PartnerEmottakConfig.class

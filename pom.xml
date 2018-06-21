@@ -15,6 +15,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
+        <adresseregisteretV1-tjenestespesifikasjon.version>1.0.2</adresseregisteretV1-tjenestespesifikasjon.version>
         <fastlegeinformasjonV1-tjenestespesifikasjon.version>2.1.2</fastlegeinformasjonV1-tjenestespesifikasjon.version>
         <brukerprofil-v3-tjenestespesifikasjon.version>3.0.3</brukerprofil-v3-tjenestespesifikasjon.version>
         <partner-emottak.version>1.0</partner-emottak.version>
@@ -28,6 +29,11 @@
                 <version>2018.02.28.19.39</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>no.nav.syfo.tjenester</groupId>
+                <artifactId>adresseregisteretV1-tjenestespesifikasjon</artifactId>
+                <version>${adresseregisteretV1-tjenestespesifikasjon.version}</version>
             </dependency>
             <dependency>
                 <groupId>no.nav.syfo.tjenester</groupId>
@@ -73,6 +79,10 @@
         <dependency>
             <groupId>no.nav.sbl.dialogarena</groupId>
             <artifactId>test-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>no.nav.syfo.tjenester</groupId>
+            <artifactId>adresseregisteretV1-tjenestespesifikasjon</artifactId>
         </dependency>
         <dependency>
             <groupId>no.nav.syfo.tjenester</groupId>
