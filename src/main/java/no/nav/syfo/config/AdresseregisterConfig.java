@@ -35,7 +35,7 @@ public class AdresseregisterConfig {
                 .build();
         return () -> {
             try {
-                pinger.getOrganizationPersonDetails(1345);
+                pinger.ping();
                 return lyktes(pingMetadata);
             } catch (Exception e) {
                 return feilet(pingMetadata, e);
