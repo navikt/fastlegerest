@@ -2,6 +2,7 @@ package no.nav.syfo.services;
 
 import no.nav.brukerdialog.security.oidc.SystemUserTokenProvider;
 import no.nav.syfo.domain.Fastlege;
+import no.nav.syfo.domain.OrganisasjonPerson;
 import no.nav.syfo.domain.Partnerinformasjon;
 import no.nav.syfo.domain.Pasient;
 import no.nav.syfo.domain.dialogmelding.*;
@@ -15,8 +16,13 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
+import java.util.Optional;
 
 import static java.lang.System.getProperty;
+import static java.util.Optional.of;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 import static javax.ws.rs.client.ClientBuilder.newClient;
 import static javax.ws.rs.core.HttpHeaders.AUTHORIZATION;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -40,26 +46,8 @@ public class DialogService {
     public void sendOppfolgingsplan(final RSOppfolgingsplan oppfolgingsplan) {
         Fastlege fastlege = fastlegeService.hentBrukersFastlege(oppfolgingsplan.getSykmeldtFnr())
                 .orElseThrow(() -> new FastlegeIkkeFunnet("Fant ikke aktiv fastlege"));
-        String orgnummer = fastlege.fastlegekontor().orgnummer();
 
-        Integer fastlegeForeldreEnhetHerId = adresseregisterService.hentFastlegeOrganisasjonPerson(fastlege.herId())
-                .foreldreEnhetHerId();
-
-        Partnerinformasjon partnerinformasjon = partnerService.hentPartnerinformasjon(orgnummer)
-                .stream()
-                .filter(partnerinfo -> {
-                    boolean harHerIdLikFastlegeForeldreHerID = partnerinfo.getHerId().equals(String.valueOf(fastlegeForeldreEnhetHerId));
-                    // TODO: Fjern denne log'en når det er verifisert at deling med fastelege fungerer som det skal i produksjon
-                    LOG.info("Er Parterinformasjon sin HerId lik Fastlege sin HerId: {}", harHerIdLikFastlegeForeldreHerID);
-                    return harHerIdLikFastlegeForeldreHerID;
-                })
-                .findFirst()
-                .orElseThrow(() -> {
-                    LOG.warn("Fant ikke partnerinformasjon for orgnummer {}", orgnummer);
-                    return new PartnerinformasjonIkkeFunnet("Fant ikke partnerinformasjon for orgnummer " + orgnummer);
-                });
-
-
+        Partnerinformasjon partnerinformasjon = getPartnerinformasjon(fastlege);
 
         RSHodemelding hodemelding =
                 tilHodemelding(
@@ -69,6 +57,60 @@ public class DialogService {
                         tilVedlegg(oppfolgingsplan));
 
         send(hodemelding);
+    }
+
+    Partnerinformasjon getPartnerinformasjon(Fastlege fastlege) {
+        //TODO: Loggmeldinger med DIALOGMELDING-TRACE skal fjernes når sending til fastlege er verifisert at fungerer
+
+        String orgnummer = fastlege.fastlegekontor().orgnummer();
+        Optional<String> fastlegeForeldreEnhetHerId = of(fastlege)
+                .map(Fastlege::herId)
+                .map(adresseregisterService::hentFastlegeOrganisasjonPerson)
+                .map(OrganisasjonPerson::foreldreEnhetHerId)
+                .map(Object::toString);
+
+        LOG.info("DIALOGMELDING-TRACE: Fant fastlegeForeldreEnhetHerId: {}", fastlegeForeldreEnhetHerId.orElse(null));
+
+        List<Partnerinformasjon> partnerinformasjonListe = partnerService.hentPartnerinformasjon(orgnummer);
+
+        LOG.info("DIALOGMELDING-TRACE: Fant {} partnere for orgnummer {}: [{}]",
+                partnerinformasjonListe.size(),
+                orgnummer,
+                partnerinformasjonListe.stream().map(partnerinformasjon -> "(index=" + partnerinformasjonListe.indexOf(partnerinformasjon) + ", partner=" + partnerinformasjon.getPartnerId() + ", her=" + partnerinformasjon.getHerId() + ")").collect(joining(", ")));
+
+        try {
+            Partnerinformasjon valgtPartnerinformasjon = partnerinformasjonListe
+                    .stream()
+                    .filter(partner -> partner.getHerId() != null)
+                    .filter(partnerinfo -> {
+                        boolean harHerIdLikFastlegeForeldreHerID = fastlegeForeldreEnhetHerId.map(partnerinfo.getHerId()::equals).orElse(false);
+                        LOG.info("DIALOGMELDING-TRACE: Er Parterinformasjon sin HerId({}) lik Fastlege sin HerId({}): {}",
+                                partnerinfo.getHerId(),
+                                fastlegeForeldreEnhetHerId.orElse(null),
+                                harHerIdLikFastlegeForeldreHerID);
+                        return harHerIdLikFastlegeForeldreHerID;
+                    })
+                    .findFirst()
+                    .orElseThrow(() -> {
+                        LOG.warn("Fant ikke partnerinformasjon for orgnummer {}", orgnummer);
+                        return new PartnerinformasjonIkkeFunnet("Fant ikke partnerinformasjon for orgnummer " + orgnummer);
+                    });
+
+            LOG.info("DIALOGMELDING-TRACE: Av {} mulige partnere er index {} valgt",
+                    partnerinformasjonListe.size(),
+                    partnerinformasjonListe.indexOf(valgtPartnerinformasjon));
+
+            return valgtPartnerinformasjon;
+        } catch (PartnerinformasjonIkkeFunnet e) {
+            LOG.info("DIALOGMELDING-TRACE: Fant {} partnere, men ingen ble valgt", partnerinformasjonListe.size());
+            LOG.info("DIALOGMELDING-TRACE: Partnerinformasjon.herid: {} - fastlegeForeldreEnhetHerId: {}",
+                    partnerinformasjonListe.stream().map(Partnerinformasjon::getHerId).collect(toList()),
+                    fastlegeForeldreEnhetHerId.orElse(null));
+            throw e;
+        } catch (Exception e) {
+            LOG.info("DIALOGMELDING-TRACE: Annen feil oppstått", e);
+            throw e;
+        }
     }
 
     private RSHodemelding tilHodemelding(RSMeldingInfo meldingInfo, RSVedlegg vedlegg) {
