@@ -18,12 +18,14 @@ public class CacheConfig {
 
     public static final CacheConfiguration TILGANG = setupCache("tilgang");
     public static final CacheConfiguration FASTLEGE = setupCache("fastlege");
+    public static final CacheConfiguration FASTLEGEORGANISAJON = setupCache("fastlegeOrganisasjon");
 
     @Bean
     public CacheManager ehCacheManager() {
         net.sf.ehcache.config.Configuration config = new net.sf.ehcache.config.Configuration();
         config.addCache(TILGANG);
         config.addCache(FASTLEGE);
+        config.addCache(FASTLEGEORGANISAJON);
         return CacheManager.newInstance(config);
     }
 
