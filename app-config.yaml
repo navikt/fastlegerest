@@ -8,10 +8,10 @@ port: 8080
 healthcheck:
   liveness:
     path: fastlegerest/internal/isAlive
-    initialDelay: 20
+    initialDelay: 60
   readiness:
     path: fastlegerest/internal/selftest
-    initialDelay: 20
+    initialDelay: 60
 prometheus:
   enabled: true
   path: fastlegerest/internal/metrics
