@@ -25,8 +25,6 @@ fasitResources:
     resourceType: credential
   - alias: loadbalancer:fastlegerest
     resourceType: loadbalancerconfig
-  - alias: serviceGateway
-    resourceType: webservicegateway
   - alias: ekstern:helse_fastlegeinformasjon
     resourceType: webserviceendpoint
   - alias: virksomhet:Brukerprofil_v3
