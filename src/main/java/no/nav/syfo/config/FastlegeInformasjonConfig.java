@@ -13,7 +13,9 @@ import static no.nav.sbl.dialogarena.common.cxf.InstanceSwitcher.createMetricsPr
 public class FastlegeInformasjonConfig {
 
     private static final String MOCK_KEY = "fastlegev1.withmock";
-    private static final String SERVICEGATEWAY_URL = getProperty("SERVICEGATEWAY_URL");
+    private static final String ENDEPUNKT_URL = getProperty("EKSTERN_HELSE_FASTLEGEINFORMASJON_ENDPOINTURL");
+    private static final String ENDEPUNKT_NAVN = "FASTLEGE_HELSENETT";
+    private static final boolean KRITISK = true;
 
     @Bean
     public IFlrReadOperations fastlegeSoapClient() {
@@ -22,8 +24,27 @@ public class FastlegeInformasjonConfig {
         return createMetricsProxyWithInstanceSwitcher("FASTLEGE_V1", prod, mock, MOCK_KEY, IFlrReadOperations.class);
     }
 
+    //IFlrReadOperations mangler ping()
+//    @Bean
+//    public Pingable fastlegePing() {
+//        Pingable.Ping.PingMetadata pingMetadata = new Pingable.Ping.PingMetadata(ENDEPUNKT_URL, ENDEPUNKT_NAVN, KRITISK);
+//        final IFlrReadOperations pinger = factory()
+//                .configureStsForSystemUserInFSS()
+//                .build();
+//        return () -> {
+//            try {
+//                pinger.ping();
+//                return lyktes(pingMetadata);
+//            } catch (IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage e) {
+//                return lyktes(pingMetadata);
+//            } catch (Exception e) {
+//                return feilet(pingMetadata, e);
+//            }
+//        };
+//    }
+
     private CXFClient<IFlrReadOperations> factory() {
-        return new CXFClient<>(IFlrReadOperations.class).address(SERVICEGATEWAY_URL);
+        return new CXFClient<>(IFlrReadOperations.class).address(ENDEPUNKT_URL);
     }
 
 }

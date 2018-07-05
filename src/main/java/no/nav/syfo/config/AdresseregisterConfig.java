@@ -16,7 +16,7 @@ import static no.nav.sbl.dialogarena.types.Pingable.Ping.lyktes;
 public class AdresseregisterConfig {
 
     private static final String MOCK_KEY = "adresseregisterv1.withmock";
-    private static final String ENDEPUNKT_URL = getProperty("EKSTERN_HELSE_ADRESSEREGISTERET_ENDPOINTURL");
+    private static final String ENDEPUNKT_URL = getProperty("EKSTERN_HELSE_ADRESSEREGISTERET_V1_ENDPOINTURL");
     private static final String ENDEPUNKT_NAVN = "ADRESSEREGISTER_HELSENETT";
     private static final boolean KRITISK = true;
 
