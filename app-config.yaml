@@ -27,6 +27,8 @@ fasitResources:
     resourceType: loadbalancerconfig
   - alias: ekstern:helse_fastlegeinformasjon
     resourceType: webserviceendpoint
+  - alias: ekstern:helse_adresseregisteret_v1
+    resourceType: webserviceendpoint
   - alias: virksomhet:Brukerprofil_v3
     resourceType: webserviceendpoint
   - alias: partner-ws
