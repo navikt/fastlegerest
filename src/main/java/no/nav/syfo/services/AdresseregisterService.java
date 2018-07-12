@@ -4,6 +4,7 @@ import no.nav.syfo.domain.OrganisasjonPerson;
 import no.nav.syfo.services.exceptions.OrganisasjonPersonInformasjonIkkeFunnet;
 import no.nhn.register.communicationparty.ICommunicationPartyService;
 import no.nhn.register.communicationparty.ICommunicationPartyServiceGetOrganizationPersonDetailsGenericFaultFaultFaultMessage;
+import no.nhn.register.communicationparty.WSDepartment;
 import no.nhn.register.communicationparty.WSOrganizationPerson;
 import org.slf4j.Logger;
 import org.springframework.cache.annotation.Cacheable;
@@ -27,12 +28,12 @@ public class AdresseregisterService {
                     wsOrganizationPerson.getDepartments().getDepartments()
                             .stream()
                             .findFirst()
-                            .map(op -> new OrganisasjonPerson(op.getParentHerId()))
+                            .map(WSDepartment::getHerId)
                             .orElse(null),
                     wsOrganizationPerson.getDepartments().getDepartments()
                             .stream()
                             .findFirst()
-                            .map(op -> new OrganisasjonPerson(op.getParentHerId()))
+                            .map(WSDepartment::getParentHerId)
                             .orElse(null));
             return wsOrganizationPerson.getDepartments().getDepartments()
                     .stream()
