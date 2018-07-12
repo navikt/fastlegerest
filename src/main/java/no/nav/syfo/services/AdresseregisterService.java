@@ -24,25 +24,7 @@ public class AdresseregisterService {
     public OrganisasjonPerson hentFastlegeOrganisasjonPerson(Integer herId) {
         try {
             WSOrganizationPerson wsOrganizationPerson = adresseregisterSoapClient.getOrganizationPersonDetails(herId);
-            LOG.info("DIALOGMELDING-TRACE: Fant wsOrganizationPerson med parentHerId: {} og herId: {}",
-                    wsOrganizationPerson.getDepartments().getDepartments()
-                            .stream()
-                            .findFirst()
-                            .map(WSDepartment::getHerId)
-                            .orElse(null),
-                    wsOrganizationPerson.getDepartments().getDepartments()
-                            .stream()
-                            .findFirst()
-                            .map(WSDepartment::getParentHerId)
-                            .orElse(null));
-            return wsOrganizationPerson.getDepartments().getDepartments()
-                    .stream()
-                    .findFirst()
-                    .map(op -> new OrganisasjonPerson(op.getParentHerId()))
-                    .orElseThrow(() -> {
-                        LOG.warn("Fant ikke parentHerId for organisasjon for fastlege med HerId {}", herId);
-                        return new OrganisasjonPersonInformasjonIkkeFunnet("Fant ikke organisasjon for fastlege med HerId " + herId);
-                    });
+            return new OrganisasjonPerson(wsOrganizationPerson.getParentHerId());
         } catch (ICommunicationPartyServiceGetOrganizationPersonDetailsGenericFaultFaultFaultMessage e) {
             LOG.error("{} Søkte opp fastlege med HerId {} og fikk en feil fra adresseregister fordi fastlegen mangler HerId", getSubjectHandler().getUid(), herId, e);
             throw new OrganisasjonPersonInformasjonIkkeFunnet("Fant ikke partnerinformasjon for orgnummer " + herId);
