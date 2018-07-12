@@ -25,7 +25,7 @@ public class AdresseregisterService {
             WSOrganizationPerson wsOrganizationPerson = adresseregisterSoapClient.getOrganizationPersonDetails(herId);
             return wsOrganizationPerson.getDepartments().getDepartments()
                     .stream()
-                    .filter(wsDepartment -> wsDepartment.getParentHerId().equals(herId))
+                    .filter(wsDepartment -> wsDepartment.getHerId().equals(herId))
                     .findFirst()
                     .map(op -> new OrganisasjonPerson(op.getParentHerId()))
                     .orElseThrow(() -> {
