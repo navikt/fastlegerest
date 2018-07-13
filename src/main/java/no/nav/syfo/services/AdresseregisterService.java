@@ -27,7 +27,7 @@ public class AdresseregisterService {
             return new OrganisasjonPerson(wsOrganizationPerson.getParentHerId());
         } catch (ICommunicationPartyServiceGetOrganizationPersonDetailsGenericFaultFaultFaultMessage e) {
             LOG.error("{} Søkte opp fastlege med HerId {} og fikk en feil fra adresseregister fordi fastlegen mangler HerId", getSubjectHandler().getUid(), herId, e);
-            throw new OrganisasjonPersonInformasjonIkkeFunnet("Fant ikke partnerinformasjon for orgnummer " + herId);
+            throw new OrganisasjonPersonInformasjonIkkeFunnet("Fant ikke parentHerId for fastlege med HerId " + herId);
         } catch (RuntimeException e) {
             LOG.error("{} Søkte opp fastlege med HerId {} og fikk en uventet feil fra adresseregister fordi tjenesten er nede", getSubjectHandler().getUid(), herId, e);
             throw e;
