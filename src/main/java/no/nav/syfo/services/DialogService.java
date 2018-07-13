@@ -79,6 +79,10 @@ public class DialogService {
                 partnerinformasjonListe.stream().map(partnerinformasjon -> "(index=" + partnerinformasjonListe.indexOf(partnerinformasjon) + ", partner=" + partnerinformasjon.getPartnerId() + ", her=" + partnerinformasjon.getHerId() + ")").collect(joining(", ")));
 
         try {
+            if (partnerinformasjonListe.isEmpty()) {
+                LOG.warn("Fant ikke partnerinformasjon for orgnummer {} fordi partnerregister returnerte tom liste", orgnummer);
+                throw new PartnerinformasjonIkkeFunnet("Fant ikke partnerinformasjon for orgnummer " + orgnummer);
+            }
             Partnerinformasjon valgtPartnerinformasjon = partnerinformasjonListe
                     .stream()
                     .filter(partner -> partner.getHerId() != null)
@@ -92,7 +96,7 @@ public class DialogService {
                     })
                     .findFirst()
                     .orElseThrow(() -> {
-                        LOG.warn("Fant ikke partnerinformasjon for orgnummer {}", orgnummer);
+                        LOG.warn("Fant ikke partnerinformasjon for orgnummer {} fordi HerId ikke var lik fasteleges ForeldreHerId", orgnummer);
                         return new PartnerinformasjonIkkeFunnet("Fant ikke partnerinformasjon for orgnummer " + orgnummer);
                     });
 
