@@ -152,9 +152,9 @@ public class DialogService {
                 partnerinformasjon.getHerId(),
                 fastlege.fastlegekontor().orgnummer(),
                 fastlege.fastlegekontor().navn(),
-                fastlege.fastlegekontor().postadresse().adresse(),
-                fastlege.fastlegekontor().postadresse().postnummer(),
-                fastlege.fastlegekontor().postadresse().poststed(),
+                Optional.ofNullable(fastlege.fastlegekontor().postadresse().adresse()).orElse(null),
+                Optional.ofNullable(fastlege.fastlegekontor().postadresse().postnummer()).orElse(null),
+                Optional.ofNullable(fastlege.fastlegekontor().postadresse().poststed()).orElse(null),
                 tilBehandler(fastlege));
     }
 
