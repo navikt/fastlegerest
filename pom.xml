@@ -16,7 +16,7 @@
 
     <properties>
         <adresseregisteretV1-tjenestespesifikasjon.version>1.0.2</adresseregisteretV1-tjenestespesifikasjon.version>
-        <fastlegeinformasjonV1-tjenestespesifikasjon.version>2.1.2</fastlegeinformasjonV1-tjenestespesifikasjon.version>
+        <fastlegeinformasjonV1-tjenestespesifikasjon.version>2.1.4</fastlegeinformasjonV1-tjenestespesifikasjon.version>
         <brukerprofil-v3-tjenestespesifikasjon.version>3.0.3</brukerprofil-v3-tjenestespesifikasjon.version>
         <partner-emottak.version>1.0</partner-emottak.version>
     </properties>
