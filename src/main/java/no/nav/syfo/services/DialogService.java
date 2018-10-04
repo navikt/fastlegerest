@@ -1,10 +1,7 @@
 package no.nav.syfo.services;
 
 import no.nav.brukerdialog.security.oidc.SystemUserTokenProvider;
-import no.nav.syfo.domain.Fastlege;
-import no.nav.syfo.domain.OrganisasjonPerson;
-import no.nav.syfo.domain.Partnerinformasjon;
-import no.nav.syfo.domain.Pasient;
+import no.nav.syfo.domain.*;
 import no.nav.syfo.domain.dialogmelding.*;
 import no.nav.syfo.domain.oppfolgingsplan.RSOppfolgingsplan;
 import no.nav.syfo.services.exceptions.FastlegeIkkeFunnet;
@@ -21,6 +18,7 @@ import java.util.Optional;
 
 import static java.lang.System.getProperty;
 import static java.util.Optional.of;
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static javax.ws.rs.client.ClientBuilder.newClient;
@@ -152,9 +150,9 @@ public class DialogService {
                 partnerinformasjon.getHerId(),
                 fastlege.fastlegekontor().orgnummer(),
                 fastlege.fastlegekontor().navn(),
-                Optional.ofNullable(fastlege.fastlegekontor().postadresse().adresse()).orElse(null),
-                Optional.ofNullable(fastlege.fastlegekontor().postadresse().postnummer()).orElse(null),
-                Optional.ofNullable(fastlege.fastlegekontor().postadresse().poststed()).orElse(null),
+                ofNullable(fastlege.fastlegekontor().postadresse()).map(Adresse::adresse).orElse(null),
+                ofNullable(fastlege.fastlegekontor().postadresse()).map(Adresse::postnummer).orElse(null),
+                ofNullable(fastlege.fastlegekontor().postadresse()).map(Adresse::poststed).orElse(null),
                 tilBehandler(fastlege));
     }
 
