@@ -1,7 +1,5 @@
-Bygges og deployes her enn så lenge:
+# Fastlegerest
 
-http://bekkci.devillo.no/job/digisyfo/job/fastlegerest/
+Fastlegerest er en backendapp som tilbyr integrasjon mot pasient og helse-journal systemene via dialogfordeler. 
 
-Kun tilgjengelig for deploy i T6, Q1, Q0 og P enn så lenge. 
-
-pipeline-Anders jobber med en egen Jenkins-server for Digisyfo
+Syfomotebehov er en nais-applikasjon. 
