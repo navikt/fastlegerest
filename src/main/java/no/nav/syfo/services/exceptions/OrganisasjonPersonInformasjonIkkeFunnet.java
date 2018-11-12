@@ -1,10 +1,8 @@
 package no.nav.syfo.services.exceptions;
 
-import no.nav.apiapp.feil.Feil;
-
-public class OrganisasjonPersonInformasjonIkkeFunnet extends Feil {
+public class OrganisasjonPersonInformasjonIkkeFunnet extends RuntimeException {
 
     public OrganisasjonPersonInformasjonIkkeFunnet(String message) {
-        super(Type.UKJENT, message);
+        super(message);
     }
 }

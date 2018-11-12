@@ -1,10 +1,8 @@
 package no.nav.syfo.services.exceptions;
 
-import no.nav.apiapp.feil.Feil;
-
-public class PartnerinformasjonIkkeFunnet extends Feil {
+public class PartnerinformasjonIkkeFunnet extends RuntimeException {
 
     public PartnerinformasjonIkkeFunnet(String message) {
-        super(Type.UKJENT, message);
+        super(message);
     }
 }
