@@ -1,8 +1,8 @@
 package no.nav.syfo.config;
 
+
 import no.nav.syfo.config.caching.CacheConfig;
 import org.springframework.context.annotation.*;
-
 
 @Configuration
 @EnableAspectJAutoProxy
@@ -16,5 +16,8 @@ import org.springframework.context.annotation.*;
         PartnerEmottakConfig.class
 
 })
-public class ApplicationConfig{
+public class LocalApplicationConfig {
+    public LocalApplicationConfig(){
+
+    }
 }
