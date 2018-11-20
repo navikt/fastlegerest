@@ -1,0 +1,16 @@
+server:
+  port: 8899
+  servlet:
+    context-path: /fastlegerest
+
+brukerprofil.v3.endpointurl: "https://wasapp-t1.adeo.no/tpsws/Brukerprofil_v3"
+mockBrukerprofil_V3: true
+
+securitytokenservice.url: "https://e34jbsl01816.devillo.no:8443/SecurityTokenServiceProvider/"
+
+srvfastlegerest:
+  username: ""
+  password: ""
+
+no.nav.modig.security.sts.url: "https://e34jbsl01816.devillo.no:8443/SecurityTokenServiceProvider/"
+isso-host.url: "https://isso-t.adeo.no/isso/oauth2"
