@@ -3,14 +3,21 @@ server:
   servlet:
     context-path: /fastlegerest
 
+spring.profiles.active: local
+
 brukerprofil.v3.endpointurl: "https://wasapp-t1.adeo.no/tpsws/Brukerprofil_v3"
 mockBrukerprofil_V3: true
 
 securitytokenservice.url: "https://e34jbsl01816.devillo.no:8443/SecurityTokenServiceProvider/"
 
 srvfastlegerest:
-  username: ""
-  password: ""
+  username: ***REMOVED***
+  password: ***REMOVED***
 
 no.nav.modig.security.sts.url: "https://e34jbsl01816.devillo.no:8443/SecurityTokenServiceProvider/"
 isso-host.url: "https://isso-t.adeo.no/isso/oauth2"
+
+tilgangskontrollapi.url: "https://app-t6.adeo.no/syfo-tilgangskontroll/api/tilgang"
+
+local_mock: true
+

@@ -37,8 +37,10 @@
         <dialogarena-common-cxf.version>2018.10.23.14.04</dialogarena-common-cxf.version>
         <junit-jupiter.version>5.3.1</junit-jupiter.version>
         <junit-platform.version>1.3.1</junit-platform.version>
-        <oidc-spring-support.version>0.2.9-20180920.081530-4</oidc-spring-support.version>
+        <oidc-spring-support.version>0.2.9</oidc-spring-support.version>
         <auth.version>2018.11.20.15.56</auth.version>
+        <maven-failsafe-plugin.version>2.22.0</maven-failsafe-plugin.version>
+        <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
     </properties>
 
 
@@ -168,7 +170,7 @@
         <dependency>
             <groupId>no.nav.security</groupId>
             <artifactId>oidc-spring-test</artifactId>
-            <version>${oidc-spring-support.version}</version>
+            <version>0.2.5</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -203,6 +205,10 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+           <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

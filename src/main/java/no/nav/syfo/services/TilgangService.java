@@ -1,42 +1,80 @@
 package no.nav.syfo.services;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import javax.ws.rs.client.Client;
+import javax.inject.Inject;
+import java.util.Collections;
 
-import static java.lang.System.getProperty;
-import static javax.ws.rs.client.ClientBuilder.newClient;
-import static javax.ws.rs.core.HttpHeaders.AUTHORIZATION;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static no.nav.brukerdialog.security.context.SubjectHandler.getSubjectHandler;
+import static org.springframework.web.util.UriComponentsBuilder.fromHttpUrl;
 
+@Service
 public class TilgangService {
 
-    private Client client = newClient();
+    private final String TILGANGSKONTROLLAPI_URL;
+    private final boolean HAR_LOCAL_MOCK;
+    private RestTemplate restTemplate;
+
+
+    @Inject
+    public TilgangService(
+            @Value("${tilgangskontrollapi.url}") String url,
+            @Value("${local_mock}") boolean erLokalMock,
+            RestTemplate restTemplate
+    ){
+        this.TILGANGSKONTROLLAPI_URL = url;
+        this.HAR_LOCAL_MOCK = erLokalMock;
+        this.restTemplate = restTemplate;
+    }
+
 
     @Cacheable(value = "tilgang", keyGenerator = "userkeygenerator")
     public boolean sjekkTilgang(String fnr) {
-        if ("true".equals(getProperty("LOCAL_MOCK"))) {
+        if (HAR_LOCAL_MOCK == true) {
             return true;
         }
-        String ssoToken = getSubjectHandler().getInternSsoToken();
-        return client.target(getProperty("TILGANGSKONTROLLAPI_URL") + "/tilgangtilbruker")
+
+        final String url = fromHttpUrl(TILGANGSKONTROLLAPI_URL + "/tilgangtilbruker")
                 .queryParam("fnr", fnr)
-                .request(APPLICATION_JSON)
-                .header(AUTHORIZATION, "Bearer " + ssoToken)
-                .get().getStatus() == 200;
+                .toUriString();
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                lagRequest(),
+                String.class
+                );
+
+        return response.getStatusCode().is2xxSuccessful();
+    }
+
+    public boolean harIkkeTilgang(String fnr) {
+        return !sjekkTilgang(fnr);
     }
 
     @Cacheable(value = "tilgang", keyGenerator = "userkeygenerator")
     public boolean harTilgangTilTjenesten() {
-        if ("true".equals(getProperty("LOCAL_MOCK"))) {
+        if (HAR_LOCAL_MOCK == true) {
             return true;
         }
-        String ssoToken = getSubjectHandler().getInternSsoToken();
-        return client.target(getProperty("TILGANGSKONTROLLAPI_URL") + "/tilgangtiltjenesten")
-                .request(APPLICATION_JSON)
-                .header(AUTHORIZATION, "Bearer " + ssoToken)
-                .get().getStatus() == 200;
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                TILGANGSKONTROLLAPI_URL + "/tilgangtilbruker",
+                HttpMethod.GET,
+                lagRequest(),
+                String.class
+        );
+
+        return response.getStatusCode().is2xxSuccessful();
+    }
+
+    private HttpEntity<String> lagRequest(){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        return new HttpEntity<>(headers);
     }
 
 }

@@ -1,3 +1,4 @@
 server:
   servlet:
     context-path: /fastlegerest
+spring.profiles.active: remote
