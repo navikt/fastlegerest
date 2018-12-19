@@ -11,12 +11,12 @@ import java.util.Optional;
 @Accessors(fluent = true)
 @EqualsAndHashCode
 public class Fastlegekontor {
-    private String navn;
-    private Adresse besoeksadresse;
-    private Adresse postadresse;
-    private String telefon;
-    private String epost;
-    private String orgnummer;
+    public String navn;
+    public Adresse besoeksadresse;
+    public Adresse postadresse;
+    public String telefon;
+    public String epost;
+    public String orgnummer;
 
     public String postadresseToString() {
         return Optional.ofNullable(postadresse)

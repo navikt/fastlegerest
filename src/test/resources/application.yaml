@@ -21,3 +21,11 @@ tilgangskontrollapi.url: "https://app-t6.adeo.no/syfo-tilgangskontroll/api/tilga
 
 local_mock: true
 
+no.nav.security.oidc:
+  issuers: intern
+  issuer:
+    intern:
+      discoveryurl: http:://metadata
+      accepted_audience: aud-localhost
+      cookie_name: localhost-idtoken
+

@@ -1,4 +1,7 @@
 server:
   servlet:
     context-path: /fastlegerest
+
+local_mock: true
+
 spring.profiles.active: remote

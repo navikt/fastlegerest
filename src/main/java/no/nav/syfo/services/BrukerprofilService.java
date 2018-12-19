@@ -1,22 +1,20 @@
 package no.nav.syfo.services;
 
+import no.nav.common.auth.SubjectHandler;
 import no.nav.syfo.domain.Pasient;
-import no.nav.tjeneste.virksomhet.brukerprofil.v3.BrukerprofilV3;
-import no.nav.tjeneste.virksomhet.brukerprofil.v3.HentKontaktinformasjonOgPreferanserPersonIdentErUtgaatt;
-import no.nav.tjeneste.virksomhet.brukerprofil.v3.HentKontaktinformasjonOgPreferanserPersonIkkeFunnet;
-import no.nav.tjeneste.virksomhet.brukerprofil.v3.HentKontaktinformasjonOgPreferanserSikkerhetsbegrensning;
-import no.nav.tjeneste.virksomhet.brukerprofil.v3.informasjon.WSNorskIdent;
-import no.nav.tjeneste.virksomhet.brukerprofil.v3.informasjon.WSPerson;
-import no.nav.tjeneste.virksomhet.brukerprofil.v3.informasjon.WSPersonidenter;
+import no.nav.tjeneste.virksomhet.brukerprofil.v3.*;
+import no.nav.tjeneste.virksomhet.brukerprofil.v3.informasjon.*;
 import no.nav.tjeneste.virksomhet.brukerprofil.v3.meldinger.WSHentKontaktinformasjonOgPreferanserRequest;
 import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.ws.rs.ForbiddenException;
 
-import static no.nav.brukerdialog.security.context.SubjectHandler.getSubjectHandler;
 import static org.slf4j.LoggerFactory.getLogger;
 
+
+@Service
 public class BrukerprofilService {
     private static final Logger LOG = getLogger(BrukerprofilService.class);
     @Inject
@@ -40,16 +38,20 @@ public class BrukerprofilService {
                     .mellomnavn(wsPerson.getPersonnavn().getMellomnavn())
                     .etternavn(wsPerson.getPersonnavn().getEtternavn());
         } catch (HentKontaktinformasjonOgPreferanserPersonIdentErUtgaatt e) {
-            LOG.error("HentKontaktinformasjonOgPreferanserPersonIdentErUtgaatt for {} med FNR {}", getSubjectHandler().getUid(), fnr);
+            LOG.error("HentKontaktinformasjonOgPreferanserPersonIdentErUtgaatt for {} med FNR {}",
+                    SubjectHandler.getIdent().orElse("-"), fnr);
             throw new RuntimeException();
         } catch (HentKontaktinformasjonOgPreferanserSikkerhetsbegrensning e) {
-            LOG.error("Sikkerhetsbegrensning for {} med FNR {}", getSubjectHandler().getUid(), fnr);
+            LOG.error("Sikkerhetsbegrensning for {} med FNR {}",
+                    SubjectHandler.getIdent().orElse("-"), fnr);
             throw new ForbiddenException();
         } catch (HentKontaktinformasjonOgPreferanserPersonIkkeFunnet e) {
-            LOG.error("HentKontaktinformasjonOgPreferanserPersonIkkeFunnet for {} med FNR {}", getSubjectHandler().getUid(), fnr);
+            LOG.error("HentKontaktinformasjonOgPreferanserPersonIkkeFunnet for {} med FNR {}",
+                    SubjectHandler.getIdent().orElse("-"), fnr);
             throw new ForbiddenException();
         } catch (RuntimeException e) {
-            LOG.error("{} fikk RuntimeException mot TPS med ved oppslag av {}", getSubjectHandler().getUid(), fnr, e);
+            LOG.error("{} fikk RuntimeException mot TPS med ved oppslag av {}",
+                    SubjectHandler.getIdent().orElse("-"), fnr, e);
             throw e;
         }
     }
