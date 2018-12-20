@@ -68,7 +68,6 @@ public class FastlegeRessursTest {
 
     @Test
     public void finnFastlege() throws Exception {
-
         this.mvc.perform(get("/fastlege/v1?fnr=" + FNR)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION, "Bearer " + token))
@@ -85,7 +84,6 @@ public class FastlegeRessursTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(LEGEKONTOR)));
     }
-
 
     private void mockFastLegeSoapClient() throws IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage {
         WSArrayOfGPOnContractAssociation fastlege = mockFastlege();

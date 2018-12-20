@@ -5,8 +5,10 @@ server:
 
 spring.profiles.active: local
 
-brukerprofil.v3.endpointurl: "https://wasapp-t1.adeo.no/tpsws/Brukerprofil_v3"
+virksomhet.brukerprofil.v3.endpointurl: "https://wasapp-t1.adeo.no/tpsws/Brukerprofil_v3"
+ekstern.helse.fastlegeinformasjon.endpointurl: "https://pep-gw-t6.oera-t.local:9443/ekstern/helse/fastlegeinformasjon"
 mockBrukerprofil_V3: true
+mockEksternHelse: true
 
 securitytokenservice.url: "https://e34jbsl01816.devillo.no:8443/SecurityTokenServiceProvider/"
 

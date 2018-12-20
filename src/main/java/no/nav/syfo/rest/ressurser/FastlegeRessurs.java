@@ -21,14 +21,18 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Api(value = "fastlege", description = "Endepunkt for henting av fastlege")
 public class FastlegeRessurs {
 
-    @Inject
     private FastlegeService fastlegeService;
-    @Inject
     private TilgangService tilgangService;
+
+    @Inject
+    public FastlegeRessurs(final FastlegeService fastlegeService, final TilgangService tilgangService) {
+        this.fastlegeService = fastlegeService;
+        this.tilgangService = tilgangService;
+    }
 
     @GetMapping(path = "/fastlege/v1", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
-    @ProtectedWithClaims(issuer="intern")
+    @ProtectedWithClaims(issuer = "intern")
     public Fastlege finnFastlege(@QueryParam("fnr") String fnr) {
         if (tilgangService.harIkkeTilgang(fnr)) {
             throw new ForbiddenException("Ikke tilgang");
@@ -39,7 +43,7 @@ public class FastlegeRessurs {
 
     @GetMapping(path = "/fastleger", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
-    @ProtectedWithClaims(issuer="intern")
+    @ProtectedWithClaims(issuer = "intern")
     public List<Fastlege> finnFastleger(@QueryParam("fnr") String fnr) {
         if (tilgangService.harIkkeTilgang(fnr)) {
             throw new ForbiddenException("Ikke tilgang");

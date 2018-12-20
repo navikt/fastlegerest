@@ -22,12 +22,14 @@ import static org.slf4j.LoggerFactory.getLogger;
 @Service
 public class FastlegeService {
     private static final Logger LOG = getLogger(FastlegeService.class);
-
-    @Inject
     private IFlrReadOperations fastlegeSoapClient;
+    private BrukerprofilService brukerprofilService;
 
     @Inject
-    private BrukerprofilService brukerprofilService;
+    public FastlegeService(final IFlrReadOperations fastlegeSoapClient, final BrukerprofilService brukerprofilService){
+        this.fastlegeSoapClient = fastlegeSoapClient;
+        this.brukerprofilService = brukerprofilService;
+    }
 
     @Cacheable(value = "fastlege")
     public Optional<Fastlege> hentBrukersFastlege(String brukersFnr) {
