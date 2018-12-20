@@ -10,6 +10,7 @@ ekstern.helse.fastlegeinformasjon.endpointurl: "https://pep-gw-t6.oera-t.local:9
 ekstern.helse.adresseregisteret.v1.endpointurl: "https://pep-gw-t6.oera-t.local:9443/ekstern/helse/adresseregisteret/v1"
 mockBrukerprofil_V3: true
 mockEksternHelse: false
+mockAdresseregisteretV1: false
 
 securitytokenservice.url: "https://e34jbsl01816.devillo.no:8443/SecurityTokenServiceProvider/"
 
@@ -24,6 +25,8 @@ tilgangskontrollapi.url: "https://app-t6.adeo.no/syfo-tilgangskontroll/api/tilga
 
 local_mock: true
 
+fasit.environment.name: local
+
 no.nav.security.oidc:
   issuers: intern
   issuer:
@@ -31,4 +34,3 @@ no.nav.security.oidc:
       discoveryurl: http:://metadata
       accepted_audience: aud-localhost
       cookie_name: localhost-idtoken
-

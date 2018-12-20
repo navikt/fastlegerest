@@ -1,49 +1,29 @@
 package no.nav.syfo.config;
 
-import no.nav.sbl.dialogarena.common.cxf.CXFClient;
-import no.nav.sbl.dialogarena.types.Pingable;
-import no.nav.syfo.mocks.AdresseregisterV1Mock;
+import no.nav.syfo.consumer.util.ws.LogErrorHandler;
+import no.nav.syfo.consumer.util.ws.WsClient;
 import no.nhn.register.communicationparty.ICommunicationPartyService;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.*;
 
-import static java.lang.System.getProperty;
-import static no.nav.sbl.dialogarena.common.cxf.InstanceSwitcher.createMetricsProxyWithInstanceSwitcher;
-import static no.nav.sbl.dialogarena.types.Pingable.Ping.feilet;
-import static no.nav.sbl.dialogarena.types.Pingable.Ping.lyktes;
+import static java.util.Collections.singletonList;
+import static no.nav.syfo.consumer.util.ws.STSClientConfig.configureRequestSamlToken;
 
 @Configuration
 public class AdresseregisterConfig {
 
-    private static final String MOCK_KEY = "adresseregisterv1.withmock";
-    private static final String ENDEPUNKT_URL = getProperty("EKSTERN_HELSE_ADRESSEREGISTERET_V1_ENDPOINTURL");
-    private static final String ENDEPUNKT_NAVN = "ADRESSEREGISTER_HELSENETT";
-    private static final boolean KRITISK = true;
-
     @Bean
-    public ICommunicationPartyService adresseregisterSoapClient() {
-        ICommunicationPartyService prod = factory().configureStsForSystemUserInFSS().build();
-        ICommunicationPartyService mock = new AdresseregisterV1Mock();
-        return createMetricsProxyWithInstanceSwitcher("ADRESSEREGISTER_V1", prod, mock, MOCK_KEY, ICommunicationPartyService.class);
+    @Primary
+    @ConditionalOnProperty(value = "mockAdresseregisteretV1", havingValue = "false", matchIfMissing = true)
+    public ICommunicationPartyService adresseregisterSoapClient(
+            @Value("{$ekstern.helse.adresseregisteret.v1.endpointurl}") String serviceUrl) {
+
+        ICommunicationPartyService port = new WsClient<ICommunicationPartyService>()
+                .createPort(serviceUrl, ICommunicationPartyService.class, singletonList(new LogErrorHandler()));
+
+        configureRequestSamlToken(port);
+        return port;
     }
 
-    @Bean
-    public Pingable adresseregisterPing() {
-        Pingable.Ping.PingMetadata pingMetadata = new Pingable.Ping.PingMetadata(ENDEPUNKT_URL, ENDEPUNKT_NAVN, KRITISK);
-        final ICommunicationPartyService pinger = factory()
-                .configureStsForSystemUserInFSS()
-                .build();
-        return () -> {
-            try {
-                pinger.ping();
-                return lyktes(pingMetadata);
-            } catch (Exception e) {
-                return feilet(pingMetadata, e);
-            }
-        };
-    }
-
-    private CXFClient<ICommunicationPartyService> factory() {
-        return new CXFClient<>(ICommunicationPartyService.class).address(ENDEPUNKT_URL);
-    }
 }
