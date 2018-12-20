@@ -1,6 +1,6 @@
 package no.nav.syfo.rest.ressurser;
 
-import no.nav.security.oidc.context.OIDCRequestContextHolder;
+import no.nav.security.spring.oidc.test.JwtTokenGenerator;
 import no.nav.syfo.LocalApplication;
 import no.nav.tjeneste.virksomhet.brukerprofil.v3.BrukerprofilV3;
 import no.nhn.schemas.reg.flr.IFlrReadOperations;
@@ -16,9 +16,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import javax.inject.Inject;
-
-import static no.nav.syfo.util.OidcTestHelper.loggInnVeileder;
 import static org.apache.http.HttpHeaders.AUTHORIZATION;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -34,11 +31,8 @@ public class FastlegeRessursTest {
 
     private static final String FNR = "***REMOVED***";
     private static final String VEILEDER_ID = "veilederID";
-    public static final String LEGEKONTOR = "Pontypandy Legekontor";
-    private String token;
-
-    @Inject
-    private OIDCRequestContextHolder oidcRequestContextHolder;
+    private static final String LEGEKONTOR = "Pontypandy Legekontor";
+    private static final String token = JwtTokenGenerator.createSignedJWT(VEILEDER_ID).serialize();
 
     @Autowired
     private MockMvc mvc;
@@ -51,7 +45,6 @@ public class FastlegeRessursTest {
 
     @Before
     public void setUp() throws Exception {
-        token = loggInnVeileder(oidcRequestContextHolder, VEILEDER_ID);
         MockUtils.mockBrukerProfil(brukerprofilV3);
         MockUtils.mockFastLegeSoapClient(fastlegeSoapClient);
     }
