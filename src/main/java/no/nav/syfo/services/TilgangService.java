@@ -1,5 +1,8 @@
 package no.nav.syfo.services;
 
+import no.nav.security.oidc.context.OIDCRequestContextHolder;
+import no.nav.syfo.OIDCIssuer;
+import no.nav.syfo.util.OIDCUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.*;
@@ -17,21 +20,25 @@ public class TilgangService {
     private final String TILGANGSKONTROLLAPI_URL;
     private final boolean HAR_LOCAL_MOCK;
     private RestTemplate restTemplate;
+    private OIDCRequestContextHolder contextHolder;
+
 
 
     @Inject
     public TilgangService(
-            @Value("${tilgangskontrollapi.url}") String url,
-            @Value("${local_mock}") boolean erLokalMock,
-            RestTemplate restTemplate
+            final @Value("${tilgangskontrollapi.url}") String url,
+            final @Value("${local_mock}") boolean erLokalMock,
+            final RestTemplate restTemplate,
+            final OIDCRequestContextHolder contextHolder
     ){
         this.TILGANGSKONTROLLAPI_URL = url;
         this.HAR_LOCAL_MOCK = erLokalMock;
         this.restTemplate = restTemplate;
+        this.contextHolder = contextHolder;
     }
 
 
-    @Cacheable(value = "tilgang", keyGenerator = "userkeygenerator")
+    @Cacheable(value = "tilgang")
     public boolean sjekkTilgang(String fnr) {
         if (HAR_LOCAL_MOCK == true) {
             return true;
@@ -55,7 +62,7 @@ public class TilgangService {
         return !sjekkTilgang(fnr);
     }
 
-    @Cacheable(value = "tilgang", keyGenerator = "userkeygenerator")
+    @Cacheable(value = "tilgang")
     public boolean harTilgangTilTjenesten() {
         if (HAR_LOCAL_MOCK == true) {
             return true;
@@ -74,6 +81,7 @@ public class TilgangService {
     private HttpEntity<String> lagRequest(){
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.set("Authorization", "Bearer" + OIDCUtil.tokenFraOIDC(contextHolder, OIDCIssuer.INTERN));
         return new HttpEntity<>(headers);
     }
 
