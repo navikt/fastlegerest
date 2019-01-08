@@ -1,14 +1,13 @@
 package no.nav.syfo.services;
 
 import lombok.extern.slf4j.Slf4j;
+import no.nav.brukerdialog.security.context.SubjectHandler;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
-import no.nav.syfo.OIDCIssuer;
 import no.nav.syfo.domain.Fastlege;
 import no.nav.syfo.domain.Partnerinformasjon;
 import no.nav.syfo.domain.dialogmelding.RSHodemelding;
 import no.nav.syfo.domain.oppfolgingsplan.RSOppfolgingsplan;
 import no.nav.syfo.services.exceptions.FastlegeIkkeFunnet;
-import no.nav.syfo.util.OIDCUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -33,7 +32,7 @@ public class DialogService {
             final PartnerService partnerService,
             final OIDCRequestContextHolder contextHolder,
             final RestTemplate restTemplate,
-            @Value("${fasit.environment.name}") String host ) {
+            final @Value("${fasit.environment.name}") String host ) {
         this.fastlegeService = fastlegeService;
         this.partnerService = partnerService;
         this.contextHolder = contextHolder;
@@ -69,9 +68,9 @@ public class DialogService {
 
     private HttpHeaders lagHeaders(){
         HttpHeaders headers = new HttpHeaders();
+        SubjectHandler.getSubjectHandler().getInternSsoToken();
         headers.setAccept(Collections.singletonList(org.springframework.http.MediaType.APPLICATION_JSON));
-        OIDCUtil oidutil = new OIDCUtil();
-        headers.set("Authorization", "Bearer" + oidutil.tokenFraOIDC(contextHolder, OIDCIssuer.INTERN)); //TODO: er dette system token?
+        headers.set("Authorization", "Bearer" + SubjectHandler.getSubjectHandler().getInternSsoToken());
         return headers;
 
     }
