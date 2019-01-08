@@ -1,19 +1,16 @@
 package no.nav.syfo.services;
 
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
-import no.nav.syfo.LocalApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.client.RestTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 
 @RunWith(MockitoJUnitRunner.class)
-@SpringBootTest(classes = LocalApplication.class)
 public class TilgangServiceTest {
 
     public static final String FNR = "***REMOVED***";
