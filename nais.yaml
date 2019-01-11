@@ -55,6 +55,8 @@ fasitResources:
     resourceType: restservice
   - alias: tilgangskontrollapi
     resourceType: restservice
+  - alias: security-token-service-token
+    resourceType: restservice
   exposed:
   - alias: fastlegeapi
     resourceType: restservice

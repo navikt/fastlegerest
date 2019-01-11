@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import no.nav.emottak.schemas.*;
 import no.nav.security.spring.oidc.test.JwtTokenGenerator;
 import no.nav.syfo.LocalApplication;
+import no.nav.syfo.domain.Token;
 import no.nav.syfo.domain.oppfolgingsplan.RSOppfolgingsplan;
 import no.nav.tjeneste.virksomhet.brukerprofil.v3.BrukerprofilV3;
 import no.nhn.register.communicationparty.*;
@@ -13,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -36,7 +38,7 @@ public class DialogRessursTest {
 
     private static final int HER_ID = 123;
     private static final String VEILEDER_ID = "veilederID";
-    private static final String token = JwtTokenGenerator.createSignedJWT(VEILEDER_ID).serialize();
+    private static final String VEILEDER_TOKEN = JwtTokenGenerator.createSignedJWT(VEILEDER_ID).serialize();
 
     @MockBean
     private ICommunicationPartyService adresseregisterSoapClient;
@@ -51,6 +53,11 @@ public class DialogRessursTest {
     private PartnerResource partnerResource;
 
     @MockBean
+    @Qualifier("BasicAuth")
+    private RestTemplate basicAuthRestTemplate;
+
+    @MockBean
+    @Qualifier("Oidc")
     private RestTemplate restTemplate;
 
     @Autowired
@@ -66,6 +73,7 @@ public class DialogRessursTest {
         MockUtils.mockFastLegeSoapClient(fastlegeSoapClient);
         mockPartnerResource();
         mockDialogfordeler();
+        mockTokenService();
     }
 
     @Test
@@ -74,7 +82,7 @@ public class DialogRessursTest {
         RSOppfolgingsplan oppfolgingsplan = new RSOppfolgingsplan("***REMOVED***", oppfolgingsplanPDF);
 
         this.mvc.perform(post("/dialogmelding/v1/sendOppfolgingsplan")
-                .header("Authorization", "Bearer " + token)
+                .header("Authorization", "Bearer " + VEILEDER_TOKEN)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(oppfolgingsplan))
@@ -99,9 +107,19 @@ public class DialogRessursTest {
         ResponseEntity<Object> responseEntity200 = new ResponseEntity<>(HttpStatus.OK);
         when(restTemplate.exchange(
                 Mockito.anyString(),
-                Mockito.<HttpMethod> eq(HttpMethod.POST),
-                Mockito.<HttpEntity<?>> any(),
-                Mockito.<Class<Object>> any()
+                Mockito.<HttpMethod>eq(HttpMethod.POST),
+                Mockito.<HttpEntity<?>>any(),
+                Mockito.<Class<Object>>any()
         )).thenReturn(responseEntity200);
+    }
+
+    private void mockTokenService() {
+        Token token = Token.builder().access_token("testtoken").build();
+        when(basicAuthRestTemplate.exchange(
+                Mockito.anyString(),
+                Mockito.<HttpMethod>eq(HttpMethod.GET),
+                Mockito.<HttpEntity<?>>any(),
+                Mockito.<Class<Object>>any()
+        )).thenReturn(new ResponseEntity<>(token, HttpStatus.OK));
     }
 }

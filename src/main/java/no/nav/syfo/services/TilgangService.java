@@ -3,6 +3,7 @@ package no.nav.syfo.services;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.syfo.OIDCIssuer;
 import no.nav.syfo.util.OIDCUtil;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.*;
@@ -28,7 +29,7 @@ public class TilgangService {
     public TilgangService(
             final @Value("${tilgangskontrollapi.url}") String url,
             final @Value("${local_mock}") boolean erLokalMock,
-            final RestTemplate restTemplate,
+            final @Qualifier("Oidc") RestTemplate restTemplate,
             final OIDCRequestContextHolder contextHolder
     ){
         this.TILGANGSKONTROLLAPI_URL = url;

@@ -1,13 +1,12 @@
 package no.nav.syfo.services;
 
 import lombok.extern.slf4j.Slf4j;
-import no.nav.brukerdialog.security.context.SubjectHandler;
-import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.syfo.domain.Fastlege;
 import no.nav.syfo.domain.Partnerinformasjon;
 import no.nav.syfo.domain.dialogmelding.RSHodemelding;
 import no.nav.syfo.domain.oppfolgingsplan.RSOppfolgingsplan;
 import no.nav.syfo.services.exceptions.FastlegeIkkeFunnet;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,7 @@ public class DialogService {
 
     private FastlegeService fastlegeService;
     private PartnerService partnerService;
-    private OIDCRequestContextHolder contextHolder;
+    private TokenService tokenService;
     private RestTemplate restTemplate;
     private String HOST;
 
@@ -30,13 +29,13 @@ public class DialogService {
     public DialogService (
             final FastlegeService fastlegeService,
             final PartnerService partnerService,
-            final OIDCRequestContextHolder contextHolder,
-            final RestTemplate restTemplate,
+            final TokenService tokenService,
+            final @Qualifier("Oidc") RestTemplate restTemplate,
             final @Value("${fasit.environment.name}") String host ) {
         this.fastlegeService = fastlegeService;
         this.partnerService = partnerService;
-        this.contextHolder = contextHolder;
         this.restTemplate = restTemplate;
+        this.tokenService = tokenService;
         this.HOST = "local".equalsIgnoreCase(host) ? "localhost:8080" : "dialogfordeler";
     }
 
@@ -68,10 +67,10 @@ public class DialogService {
 
     private HttpHeaders lagHeaders(){
         HttpHeaders headers = new HttpHeaders();
-        SubjectHandler.getSubjectHandler().getInternSsoToken();
         headers.setAccept(Collections.singletonList(org.springframework.http.MediaType.APPLICATION_JSON));
-        headers.set("Authorization", "Bearer" + SubjectHandler.getSubjectHandler().getInternSsoToken());
+        headers.set("Authorization", "Basic " + tokenService.getToken());
         return headers;
 
     }
+
 }

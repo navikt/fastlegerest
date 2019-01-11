@@ -10,10 +10,13 @@ import no.nhn.register.common.WSArrayOfPhysicalAddress;
 import no.nhn.schemas.reg.common.en.WSPeriod;
 import no.nhn.schemas.reg.flr.*;
 import org.mockito.Mockito;
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 public class MockUtils {
     public static final String LEGEKONTOR = "Pontypandy Legekontor";
@@ -68,5 +71,15 @@ public class MockUtils {
 
         Mockito.when(brukerprofilV3.hentKontaktinformasjonOgPreferanser(anyRequest))
                 .thenReturn(kontaktinfoResponse);
+    }
+
+    static void mockResponseFraTilgangskontroll(RestTemplate restTemplate, HttpStatus httpStatus) {
+        ResponseEntity<Object> responseEntity200 = new ResponseEntity<>(httpStatus);
+        when(restTemplate.exchange(
+                Mockito.anyString(),
+                Mockito.<HttpMethod>eq(HttpMethod.GET),
+                Mockito.<HttpEntity<?>>any(),
+                Mockito.<Class<Object>>any()
+        )).thenReturn(responseEntity200);
     }
 }

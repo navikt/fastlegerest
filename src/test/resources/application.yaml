@@ -18,6 +18,8 @@ srvfastlegerest:
   username: ***REMOVED***
   password: ***REMOVED***
 
+security-token-service-token.url: "https://sts.url"
+
 no.nav.modig.security.sts.url: "https://e34jbsl01816.devillo.no:8443/SecurityTokenServiceProvider/"
 isso-host.url: "https://isso-t.adeo.no/isso/oauth2"
 
