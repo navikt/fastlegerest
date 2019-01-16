@@ -11,11 +11,11 @@ healthcheck:
     path: fastlegerest/internal/isAlive
     initialDelay: 120
   readiness:
-    path: fastlegerest/internal/selftest
+    path: fastlegerest/internal/isReady
     initialDelay: 120
 prometheus:
   enabled: true
-  path: fastlegerest/internal/metrics
+  path: fastlegerest/internal/prometheus
 resources:
   limits:
     cpu: 3000m
@@ -57,6 +57,10 @@ fasitResources:
     resourceType: restservice
   - alias: security-token-service-token
     resourceType: restservice
+  - alias: opam_oidc_discovery
+    resourceType: baseurl
+    propertyMap:
+      url: NO_NAV_SECURITY_OIDC_ISSUER_INTERN_DISCOVERYURL
   exposed:
   - alias: fastlegeapi
     resourceType: restservice

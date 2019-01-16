@@ -2,6 +2,28 @@ server:
   servlet:
     context-path: /fastlegerest
 
-local_mock: true
+no.nav.security.oidc:
+  issuers: intern
+  issuer:
+    intern:
+      discoveryurl: <SETTES FRA FASIT>
+      accepted_audience: modiabrukerdialog-p,modiabrukerdialog-q1,veilarblogin-p,veilarblogin-q1
+      cookie_name: ID_token
 
-spring.profiles.active: remote
+local_mock: false
+
+spring:
+  profiles.active: remote
+  main.banner-mode: 'off'
+    jta.atomikos.datasource:
+      max-pool-size: 32
+      min-pool-size: 8
+
+management:
+  endpoint.prometheus.enabled: true
+  endpoints.web:
+    base-path: /internal
+    exposure.include: prometheus
+    path-mapping.prometheus: /prometheus
+
+logging.config: classpath:logback-spring.xml
