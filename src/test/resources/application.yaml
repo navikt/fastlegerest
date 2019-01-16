@@ -3,16 +3,20 @@ server:
   servlet:
     context-path: /fastlegerest
 
-spring.profiles.active: local
+spring:
+  profiles.active: local
+  main.banner-mode: 'off'
+  jta.atomikos.datasource:
+    min-pool-size: 8
+    max-pool-size: 32
 
-virksomhet.brukerprofil.v3.endpointurl: "https://wasapp-t1.adeo.no/tpsws/Brukerprofil_v3"
-ekstern.helse.fastlegeinformasjon.endpointurl: "https://pep-gw-t6.oera-t.local:9443/ekstern/helse/fastlegeinformasjon"
-ekstern.helse.adresseregisteret.v1.endpointurl: "https://pep-gw-t6.oera-t.local:9443/ekstern/helse/adresseregisteret/v1"
+virksomhet.brukerprofil.v3.endpointurl: "https://brukerprofil_v3.url"
+ekstern.helse.fastlegeinformasjon.endpointurl: "https://fastlegeinformasjon.url"
+ekstern.helse.adresseregisteret.v1.endpointurl: "https://adresseregisteret.url"
 partner.ws.endpointurl: "https://emottak.url"
 mockBrukerprofil_V3: true
-mockEksternHelse: false
-mockAdresseregisteretV1: false
-
+mockEksternHelse: true
+mockAdresseregisteretV1: true
 mockPartnerEmottak: true
 securitytokenservice.url: "https://e34jbsl01816.devillo.no:8443/SecurityTokenServiceProvider/"
 
@@ -25,7 +29,7 @@ security-token-service-token.url: "https://sts.url"
 no.nav.modig.security.sts.url: "https://e34jbsl01816.devillo.no:8443/SecurityTokenServiceProvider/"
 isso-host.url: "https://isso-t.adeo.no/isso/oauth2"
 
-tilgangskontrollapi.url: "https://app-t6.adeo.no/syfo-tilgangskontroll/api/tilgang"
+tilgangskontrollapi.url: "https://tilgangskontroll.url"
 
 local_mock: false
 

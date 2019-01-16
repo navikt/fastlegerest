@@ -4,10 +4,14 @@ package no.nav.syfo.mocks;
 import no.nhn.register.common.*;
 import no.nhn.schemas.reg.common.en.WSPeriod;
 import no.nhn.schemas.reg.flr.*;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
+@Service
+@ConditionalOnProperty(value = "mockEksternHelse", havingValue = "true")
 public class FastlegeV1Mock implements IFlrReadOperations {
 
     @Override

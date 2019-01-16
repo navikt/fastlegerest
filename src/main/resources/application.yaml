@@ -15,9 +15,9 @@ local_mock: false
 spring:
   profiles.active: remote
   main.banner-mode: 'off'
-    jta.atomikos.datasource:
-      max-pool-size: 32
-      min-pool-size: 8
+  jta.atomikos.datasource:
+    max-pool-size: 32
+    min-pool-size: 8
 
 management:
   endpoint.prometheus.enabled: true
