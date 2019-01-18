@@ -10,7 +10,6 @@ import static java.util.Arrays.asList;
 
 
 @Configuration
-@EnableAspectJAutoProxy
 @Import({
         AdresseregisterConfig.class,
         FastlegeInformasjonConfig.class,
