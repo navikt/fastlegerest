@@ -2,7 +2,7 @@ package no.nav.syfo.rest.ressurser;
 
 
 import io.swagger.annotations.Api;
-import no.nav.security.oidc.api.Unprotected;
+import no.nav.security.oidc.api.ProtectedWithClaims;
 import no.nav.syfo.services.TilgangService;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +21,9 @@ public class TilgangRessurs {
         this.tilgangService = tilgangService;
     }
 
-    @GetMapping(path = "/tilgang", produces = APPLICATION_JSON_VALUE) //TODO: Trenger consumes?
+    @GetMapping(path = "/tilgang", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
-    @Unprotected
+    @ProtectedWithClaims(issuer = "intern")
     public boolean harTilgang() {
         return tilgangService.harTilgangTilTjenesten();
     }

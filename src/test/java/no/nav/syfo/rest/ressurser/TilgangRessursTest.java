@@ -49,7 +49,7 @@ public class TilgangRessursTest {
 
 
     @Test
-    public void godkjennRiktigTilgng() throws Exception {
+    public void godkjennRiktigTilgang() throws Exception {
         MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
         this.mvc.perform(get("/tilgang")
                 .accept(MediaType.APPLICATION_JSON_VALUE)

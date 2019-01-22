@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.*;
+import javax.ws.rs.ForbiddenException;
+import javax.ws.rs.NotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class FastlegeRessurs {
     @GetMapping(path = "/fastlege/v1", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     @ProtectedWithClaims(issuer = "intern")
-    public Fastlege finnFastlege(@QueryParam("fnr") String fnr) {
+    public Fastlege finnFastlege(@RequestParam(value = "fnr", required = true) String fnr) {
         if (tilgangService.harIkkeTilgang(fnr)) {
             throw new ForbiddenException("Ikke tilgang");
         }
@@ -44,7 +45,7 @@ public class FastlegeRessurs {
     @GetMapping(path = "/fastleger", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     @ProtectedWithClaims(issuer = "intern")
-    public List<Fastlege> finnFastleger(@QueryParam("fnr") String fnr) {
+    public List<Fastlege> finnFastleger(@RequestParam(value = "fnr", required = true) String fnr) {
         if (tilgangService.harIkkeTilgang(fnr)) {
             throw new ForbiddenException("Ikke tilgang");
         }
