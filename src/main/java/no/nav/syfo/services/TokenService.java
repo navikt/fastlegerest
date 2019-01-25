@@ -19,15 +19,22 @@ public class TokenService {
 
     private RestTemplate basicAuthRestTemplate;
     private String url;
+    private final boolean HAR_LOCAL_MOCK;
 
     @Autowired
     public TokenService(@Qualifier("BasicAuth") RestTemplate basicAuthRestTemplate,
-                        @Value("${security-token-service-token.url}") String url) {
+                        @Value("${security-token-service-token.url}") String url,
+                        final @Value("${local_mock}") boolean erLokalMock) {
         this.basicAuthRestTemplate = basicAuthRestTemplate;
         this.url = url;
+        this.HAR_LOCAL_MOCK = erLokalMock;
     }
 
     String getToken() {
+        if(HAR_LOCAL_MOCK == true){
+            return "token";
+        }
+
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
