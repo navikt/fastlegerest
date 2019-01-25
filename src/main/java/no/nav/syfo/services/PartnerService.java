@@ -46,7 +46,7 @@ public class PartnerService {
 
         List<Partnerinformasjon> partnerinformasjonListe = hentPartnerinformasjon(orgnummer);
 
-        log.info("DIALOGMELDING-TRACE: Fant {} partnere for orgnummer {}: [{}]",
+        log.warn("DIALOGMELDING-TRACE: Fant {} partnere for orgnummer {}: [{}]",
                 partnerinformasjonListe.size(),
                 orgnummer,
                 partnerinformasjonListe
@@ -84,8 +84,8 @@ public class PartnerService {
 
             return valgtPartnerinformasjon;
         } catch (PartnerinformasjonIkkeFunnet e) {
-            log.info("DIALOGMELDING-TRACE: Fant {} partnere, men ingen ble valgt", partnerinformasjonListe.size());
-            log.info("DIALOGMELDING-TRACE: Partnerinformasjon.herid: {} - fastlegeForeldreEnhetHerId: {}",
+            log.warn("DIALOGMELDING-TRACE: Fant {} partnere, men ingen ble valgt", partnerinformasjonListe.size());
+            log.warn("DIALOGMELDING-TRACE: Partnerinformasjon.herid: {} - fastlegeForeldreEnhetHerId: {}",
                     partnerinformasjonListe
                             .stream()
                             .map(Partnerinformasjon::getHerId)
@@ -93,7 +93,7 @@ public class PartnerService {
                     fastlegeForeldreEnhetHerId.orElse(null));
             throw e;
         } catch (Exception e) {
-            log.info("DIALOGMELDING-TRACE: Annen feil oppstått", e);
+            log.warn("DIALOGMELDING-TRACE: Annen feil oppstått", e);
             throw e;
         }
     }

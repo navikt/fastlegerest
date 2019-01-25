@@ -1,6 +1,7 @@
 package no.nav.syfo.rest.ressurser;
 
 import io.swagger.annotations.Api;
+import lombok.extern.slf4j.Slf4j;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 import no.nav.syfo.domain.Fastlege;
 import no.nav.syfo.services.FastlegeService;
@@ -20,6 +21,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @Api(value = "fastlege", description = "Endepunkt for henting av fastlege")
+@Slf4j
 public class FastlegeRessurs {
 
     private FastlegeService fastlegeService;
@@ -36,10 +38,12 @@ public class FastlegeRessurs {
     @ProtectedWithClaims(issuer = "intern")
     public Fastlege finnFastlege(@RequestParam(value = "fnr", required = true) String fnr) {
         if (tilgangService.harIkkeTilgang(fnr)) {
+            log.warn("fnr {} har ikke tilgang", fnr);
             throw new ForbiddenException("Ikke tilgang");
         }
 
-        return fastlegeService.hentBrukersFastlege(fnr).orElseThrow(() -> new NotFoundException("Fant ikke aktiv fastlege"));
+        return fastlegeService.hentBrukersFastlege(fnr).orElseThrow(
+                () -> new NotFoundException("Fant ikke aktiv fastlege"));
     }
 
     @GetMapping(path = "/fastleger", produces = APPLICATION_JSON_VALUE)
@@ -47,6 +51,7 @@ public class FastlegeRessurs {
     @ProtectedWithClaims(issuer = "intern")
     public List<Fastlege> finnFastleger(@RequestParam(value = "fnr", required = true) String fnr) {
         if (tilgangService.harIkkeTilgang(fnr)) {
+            log.warn("fnr {} har ikke tilgang", fnr);
             throw new ForbiddenException("Ikke tilgang");
         }
 
