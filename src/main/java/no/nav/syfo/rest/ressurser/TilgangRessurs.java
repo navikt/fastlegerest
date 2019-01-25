@@ -21,7 +21,7 @@ public class TilgangRessurs {
         this.tilgangService = tilgangService;
     }
 
-    @GetMapping(path = "/tilgang", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/api/tilgang", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     @ProtectedWithClaims(issuer = "intern")
     public boolean harTilgang() {

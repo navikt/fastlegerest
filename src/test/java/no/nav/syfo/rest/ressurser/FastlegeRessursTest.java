@@ -60,7 +60,7 @@ public class FastlegeRessursTest {
 
     @Test
     public void finnFastlege() throws Exception {
-        this.mvc.perform(get("/fastlege/v1?fnr=" + FNR)
+        this.mvc.perform(get("/api/fastlege/v1?fnr=" + FNR)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isOk())
@@ -69,8 +69,7 @@ public class FastlegeRessursTest {
 
     @Test
     public void finnFastleger() throws Exception {
-
-        this.mvc.perform(get("/fastleger?fnr=" + FNR)
+        this.mvc.perform(get("/api/fastlege/v1/fastleger?fnr=" + FNR)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isOk())

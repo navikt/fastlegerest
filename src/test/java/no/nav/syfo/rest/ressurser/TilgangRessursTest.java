@@ -51,7 +51,7 @@ public class TilgangRessursTest {
     @Test
     public void godkjennRiktigTilgang() throws Exception {
         MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
-        this.mvc.perform(get("/tilgang")
+        this.mvc.perform(get("/api/tilgang")
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isOk())
@@ -61,7 +61,7 @@ public class TilgangRessursTest {
     @Test
     public void avslaFeilTilgang() throws Exception {
         MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.FORBIDDEN);
-        this.mvc.perform(get("/tilgang")
+        this.mvc.perform(get("/api/tilgang")
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isOk())

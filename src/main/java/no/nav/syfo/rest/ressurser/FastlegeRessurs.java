@@ -33,7 +33,7 @@ public class FastlegeRessurs {
         this.tilgangService = tilgangService;
     }
 
-    @GetMapping(path = "/fastlege/v1", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/api/fastlege/v1", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     @ProtectedWithClaims(issuer = "intern")
     public Fastlege finnFastlege(@RequestParam(value = "fnr", required = true) String fnr) {
@@ -46,7 +46,7 @@ public class FastlegeRessurs {
                 () -> new NotFoundException("Fant ikke aktiv fastlege"));
     }
 
-    @GetMapping(path = "/fastleger", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/api/fastlege/v1/fastleger", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     @ProtectedWithClaims(issuer = "intern")
     public List<Fastlege> finnFastleger(@RequestParam(value = "fnr", required = true) String fnr) {

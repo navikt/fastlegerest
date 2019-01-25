@@ -81,7 +81,7 @@ public class DialogRessursTest {
         byte[] oppfolgingsplanPDF = new byte[20];
         RSOppfolgingsplan oppfolgingsplan = new RSOppfolgingsplan("***REMOVED***", oppfolgingsplanPDF);
 
-        this.mvc.perform(post("/dialogmelding/v1/sendOppfolgingsplan")
+        this.mvc.perform(post("/api/dialogmelding/v1/sendOppfolgingsplan")
                 .header("Authorization", "Bearer " + VEILEDER_TOKEN)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)

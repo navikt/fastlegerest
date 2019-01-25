@@ -25,7 +25,7 @@ public class DialogRessurs {
     }
 
     @ResponseBody
-    @PostMapping(path = "/dialogmelding/v1/sendOppfolgingsplan", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/api/dialogmelding/v1/sendOppfolgingsplan", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ProtectedWithClaims(issuer = "intern")
     public void sendOppfolgingsplan(@RequestBody @Valid RSOppfolgingsplan oppfolgingsplan) {
         try {
