@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 @Service
-@ConditionalOnProperty(value = "mockBrukerprovil_V3", havingValue = "true")
+@ConditionalOnProperty(value = "mockBrukerprofil_V3", havingValue = "true")
 public class BrukerprofilMock implements BrukerprofilV3 {
     @Override
     public void ping() {
