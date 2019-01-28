@@ -12,7 +12,6 @@ import org.apache.cxf.ws.policy.attachment.reference.ReferenceResolver;
 import org.apache.cxf.ws.policy.attachment.reference.RemoteReferenceResolver;
 import org.apache.cxf.ws.security.trust.STSClient;
 import org.apache.neethi.Policy;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -20,30 +19,14 @@ import java.util.HashMap;
 @Component
 public class STSClientConfig {
 
-    public static String STS_URL;
-    public static String SERVICEUSER_USERNAME;
-    public static String SERVICEUSER_PASSWORD;
+    public static final String STS_URL_KEY = "SECURITYTOKENSERVICE_URL";
+    public static final String SERVICEUSER_USERNAME = "SRVFASTLEGEREST_USERNAME";
+    public static final String SERVICEUSER_PASSWORD = "SRVFASTLEGEREST_PASSWORD";
 
     // Only use no transportbinding on localhost, should use the requestSamlPolicy.xml with transport binding https
     // when in production.
     private static final String STS_REQUEST_SAML_POLICY = "classpath:policy/requestSamlPolicy.xml";
     private static final String STS_CLIENT_AUTHENTICATION_POLICY = "classpath:policy/untPolicy.xml";
-
-    @Value("${securitytokenservice.url}")
-    public void setStsUrlKey(String url){
-        STS_URL = url;
-    }
-
-    @Value("${srvfastlegerest.username}")
-    public void setServiceuserUsername(String username){
-        SERVICEUSER_USERNAME = username;
-    }
-
-    @Value("${srvfastlegesrest.password")
-    public void setServiceuserPassword(String password){
-        SERVICEUSER_PASSWORD = password;
-    }
-
 
     public static <T> T configureRequestSamlToken(T port) {
         Client client = ClientProxy.getClient(port);
@@ -73,7 +56,11 @@ public class STSClientConfig {
 
     protected static void configureStsWithPolicyForClient(STSClient stsClient, Client client, String policyReference,
                                                           boolean cacheTokenInEndpoint) {
-        configureSTSClient(stsClient, STS_URL, SERVICEUSER_USERNAME, SERVICEUSER_PASSWORD);
+        String location = requireProperty(STS_URL_KEY);
+        String username = requireProperty(SERVICEUSER_USERNAME);
+        String password = requireProperty(SERVICEUSER_PASSWORD);
+
+        configureSTSClient(stsClient, location, username, password);
 
         client.getRequestContext().put(org.apache.cxf.rt.security.SecurityConstants.STS_CLIENT, stsClient);
         client.getRequestContext().put(org.apache.cxf.rt.security.SecurityConstants.CACHE_ISSUED_TOKEN_IN_ENDPOINT,
@@ -99,8 +86,9 @@ public class STSClientConfig {
         stsClient.setEnableAppliesTo(false);
         stsClient.setAllowRenewing(false);
         stsClient.setLocation(location);
+
         // For debugging
-        // stsClient.setFeatures(new ArrayList<Feature>(Arrays.asList(new LoggingFeature())));
+        //stsClient.setFeatures(new ArrayList<Feature>(Arrays.asList(new LoggingFeature())));
 
         HashMap<String, Object> properties = new HashMap<>();
         properties.put(org.apache.cxf.rt.security.SecurityConstants.USERNAME, username);
@@ -116,6 +104,20 @@ public class STSClientConfig {
     protected static void setEndpointPolicyReference(Client client, String uri) {
         Policy policy = resolvePolicyReference(client, uri);
         setClientEndpointPolicy(client, policy);
+    }
+
+
+    private static String requireProperty(String key) {
+        String property = System.getenv(key);
+        return property != null ? property : systemProperty(key);
+    }
+
+    private static String systemProperty(String key) {
+        String property = System.getProperty(key);
+        if (property == null) {
+            throw new IllegalStateException("Required property " + key + " not available.");
+        }
+        return property;
     }
 
     private static Policy resolvePolicyReference(Client client, String uri) {

@@ -18,11 +18,10 @@ mockBrukerprofil_V3: true
 mockEksternHelse: true
 mockAdresseregisteretV1: true
 mockPartnerEmottak: true
-securitytokenservice.url: "https://e34jbsl01816.devillo.no:8443/SecurityTokenServiceProvider/"
+SECURITYTOKENSERVICE_URL: "https://sts.url"
 
-srvfastlegerest:
-  username: ***REMOVED***
-  password: ***REMOVED***
+SRVFASTLEGEREST_USERNAME: ***REMOVED***
+SRVFASTLEGEREST_PASSWORD: ***REMOVED***
 
 security-token-service-token.url: "https://sts.url"
 
