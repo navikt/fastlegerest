@@ -70,7 +70,7 @@ public class TilgangService {
         }
 
         ResponseEntity<String> response = restTemplate.exchange(
-                TILGANGSKONTROLLAPI_URL + "/tilgangtilbruker",
+                TILGANGSKONTROLLAPI_URL + "/tilgangtiltjenesten",
                 HttpMethod.GET,
                 lagRequest(),
                 String.class
