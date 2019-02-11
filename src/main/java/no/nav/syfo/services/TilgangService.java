@@ -82,7 +82,7 @@ public class TilgangService {
     private HttpEntity<String> lagRequest(){
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.set("Authorization", "Bearer" + OIDCUtil.tokenFraOIDC(contextHolder, OIDCIssuer.INTERN));
+        headers.set("Authorization", "Bearer " + OIDCUtil.tokenFraOIDC(contextHolder, OIDCIssuer.INTERN));
         return new HttpEntity<>(headers);
     }
 
