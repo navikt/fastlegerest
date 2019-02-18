@@ -31,7 +31,7 @@
         <prometheus.version>0.3.0</prometheus.version>
         <swagger.version>1.5.21</swagger.version>
         <lombok.version>1.18.2</lombok.version>
-        <dialogarena-common-cxf.version>2018.10.23.14.04</dialogarena-common-cxf.version>
+        <cxf.version>3.2.0</cxf.version>
         <oidc-spring-support.version>0.2.15</oidc-spring-support.version>
         <auth.version>2018.11.20.15.56</auth.version>
         <logstash-logback-encoder.version>4.10</logstash-logback-encoder.version>
@@ -92,6 +92,11 @@
             <artifactId>spring-boot-starter-cache</artifactId>
             <version>${spring-boot.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
 
         <!-- Services-->
         <dependency>
@@ -122,16 +127,6 @@
 
         <!-- Nav felles -->
         <dependency>
-            <groupId>no.nav.sbl.dialogarena</groupId>
-            <artifactId>common-cxf</artifactId>
-            <version>${dialogarena-common-cxf.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.sbl.dialogarena</groupId>
-            <artifactId>common-types</artifactId>
-            <version>${dialogarena-common-cxf.version}</version>
-        </dependency>
-        <dependency>
             <groupId>no.nav.sbl</groupId>
             <artifactId>java8-utils</artifactId>
             <version>1.1</version>
@@ -156,6 +151,29 @@
             <groupId>no.nav.common</groupId>
             <artifactId>auth</artifactId>
             <version>${auth.version}</version>
+        </dependency>
+
+
+        <!-- SOAP w/CXF -->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-features-logging</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-ws-security</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-ws-policy</artifactId>
+            <version>${cxf.version}</version>
         </dependency>
     </dependencies>
 
