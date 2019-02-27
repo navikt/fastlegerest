@@ -1,7 +1,7 @@
 package mappers;
 
 import no.nav.syfo.domain.Fastlegekontor;
-import no.nhn.register.common.*;
+import no.nhn.register.fastlegeinformasjon.common.*;
 import no.nhn.schemas.reg.flr.WSGPOffice;
 import org.junit.Test;
 

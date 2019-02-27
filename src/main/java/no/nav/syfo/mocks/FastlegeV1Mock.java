@@ -1,7 +1,7 @@
 package no.nav.syfo.mocks;
 
 
-import no.nhn.register.common.*;
+import no.nhn.register.fastlegeinformasjon.common.*;
 import no.nhn.schemas.reg.common.en.WSPeriod;
 import no.nhn.schemas.reg.flr.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

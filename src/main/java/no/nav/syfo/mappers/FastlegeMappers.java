@@ -3,7 +3,7 @@ package no.nav.syfo.mappers;
 import no.nav.syfo.domain.Adresse;
 import no.nav.syfo.domain.Fastlege;
 import no.nav.syfo.domain.Fastlegekontor;
-import no.nhn.register.common.WSElectronicAddress;
+import no.nhn.register.fastlegeinformasjon.common.WSElectronicAddress;
 import no.nhn.schemas.reg.flr.WSGPOffice;
 import no.nhn.schemas.reg.flr.WSGPOnContractAssociation;
 
