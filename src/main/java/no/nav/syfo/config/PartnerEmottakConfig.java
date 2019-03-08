@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.*;
 
 import static java.util.Collections.singletonList;
-import static no.nav.syfo.consumer.util.ws.STSClientConfig.configureRequestSamlToken;
 
 @Configuration
 public class PartnerEmottakConfig {
@@ -20,11 +19,15 @@ public class PartnerEmottakConfig {
                                            @Value("${srvfastlegerest.password}") String password,
                                            @Value("${partner.ws.endpointurl}") String serviceUrl ){
 
-        PartnerResource port = new WsClient<PartnerResource>().createPort(
+        PartnerResource port = new WsClient<PartnerResource>().createPortWithCredentials(
+                username,
+                password,
                 serviceUrl,
                 PartnerResource.class,
-                singletonList(new LogErrorHandler()));
-        configureRequestSamlToken(port);
+                singletonList(new LogErrorHandler())
+               );
+        
+        //configureRequestSamlToken(port);
         return port;
 
     }

@@ -15,12 +15,29 @@ import java.util.Objects;
 
 public class WsClient<T> {
 
+
     @SuppressWarnings("unchecked")
     public T createPort(String serviceUrl, Class<?> portType, List<Handler> handlers, PhaseInterceptor<? extends Message>... interceptors) {
         JaxWsProxyFactoryBean jaxWsProxyFactoryBean = new JaxWsProxyFactoryBean();
         jaxWsProxyFactoryBean.setServiceClass(portType);
         jaxWsProxyFactoryBean.setAddress(Objects.requireNonNull(serviceUrl));
         jaxWsProxyFactoryBean.getFeatures().add(new WSAddressingFeature());
+        T port = (T) jaxWsProxyFactoryBean.create();
+        ((BindingProvider) port).getBinding().setHandlerChain(handlers);
+        Client client = ClientProxy.getClient(port);
+        Arrays.stream(interceptors).forEach(client.getOutInterceptors()::add);
+        return port;
+    }
+
+    @SuppressWarnings("unchecked")
+    public T createPortWithCredentials(String username, String password, String serviceUrl, Class<?> portType, List<Handler> handlers,
+                                       PhaseInterceptor<? extends Message>... interceptors) {
+        JaxWsProxyFactoryBean jaxWsProxyFactoryBean = new JaxWsProxyFactoryBean();
+        jaxWsProxyFactoryBean.setServiceClass(portType);
+        jaxWsProxyFactoryBean.setAddress(Objects.requireNonNull(serviceUrl));
+        jaxWsProxyFactoryBean.getFeatures().add(new WSAddressingFeature());
+        jaxWsProxyFactoryBean.setUsername(username);
+        jaxWsProxyFactoryBean.setPassword(password);
         T port = (T) jaxWsProxyFactoryBean.create();
         ((BindingProvider) port).getBinding().setHandlerChain(handlers);
         Client client = ClientProxy.getClient(port);
