@@ -17,7 +17,7 @@ public class AdresseregisterConfig {
     @Primary
     @ConditionalOnProperty(value = "mockAdresseregisteretV1", havingValue = "false", matchIfMissing = true)
     public ICommunicationPartyService adresseregisterSoapClient(
-            @Value("{$ekstern.helse.adresseregisteret.v1.endpointurl}") String serviceUrl) {
+            @Value("${ekstern.helse.adresseregisteret.v1.endpointurl}") String serviceUrl) {
 
         ICommunicationPartyService port = new WsClient<ICommunicationPartyService>()
                 .createPort(serviceUrl, ICommunicationPartyService.class, singletonList(new LogErrorHandler()));
