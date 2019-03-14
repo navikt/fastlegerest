@@ -68,7 +68,7 @@ public class DialogService {
     private HttpHeaders lagHeaders(){
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(org.springframework.http.MediaType.APPLICATION_JSON));
-        headers.set("Authorization", "Basic " + tokenService.getToken());
+        headers.set("Authorization", "Bearer " + tokenService.getToken());
         return headers;
 
     }
