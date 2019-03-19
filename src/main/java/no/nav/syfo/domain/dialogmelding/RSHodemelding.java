@@ -1,30 +1,21 @@
 package no.nav.syfo.domain.dialogmelding;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import no.nav.syfo.domain.*;
 import no.nav.syfo.domain.oppfolgingsplan.RSOppfolgingsplan;
 
 import static java.util.Optional.ofNullable;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 public class RSHodemelding {
     private RSMeldingInfo meldingInfo;
     private RSVedlegg vedlegg;
 
     public RSHodemelding(Fastlege fastlege, Partnerinformasjon partnerinformasjon, RSOppfolgingsplan oppfolgingsplan){
-        tilHodemelding(
-                tilMeldingInfo(
-                        tilMottaker(fastlege, partnerinformasjon),
-                        tilPasient(fastlege.pasient())),
-                tilVedlegg(oppfolgingsplan));
-    }
-
-    private RSHodemelding tilHodemelding(RSMeldingInfo meldingInfo, RSVedlegg vedlegg) {
-        return new RSHodemelding(meldingInfo, vedlegg);
+        this.meldingInfo =  tilMeldingInfo(
+                tilMottaker(fastlege, partnerinformasjon),
+                tilPasient(fastlege.pasient()));
+        this.vedlegg = tilVedlegg(oppfolgingsplan);
     }
 
     private RSMeldingInfo tilMeldingInfo(RSMottaker mottaker, RSPasient pasient) {
