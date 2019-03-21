@@ -7,11 +7,11 @@ import no.nav.syfo.domain.Fastlege;
 import no.nav.syfo.services.FastlegeService;
 import no.nav.syfo.services.TilgangService;
 import no.nav.syfo.services.exceptions.FastlegeIkkeFunnet;
+import no.nav.syfo.services.exceptions.HarIkkeTilgang;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.ForbiddenException;
 import java.io.IOException;
 import java.util.List;
 
@@ -38,7 +38,7 @@ public class FastlegeRessurs {
     public Fastlege finnFastlege(@RequestParam(value = "fnr", required = true) String fnr) {
         if (tilgangService.harIkkeTilgang(fnr)) {
             log.warn("fnr {} har ikke tilgang", fnr);
-            throw new ForbiddenException("Ikke tilgang");
+            throw new HarIkkeTilgang("Ikke tilgang");
         }
 
         return fastlegeService.hentBrukersFastlege(fnr).orElseThrow(() -> new FastlegeIkkeFunnet("Fant ikke aktiv fastlege"));
@@ -50,7 +50,7 @@ public class FastlegeRessurs {
     public List<Fastlege> finnFastleger(@RequestParam(value = "fnr", required = true) String fnr) {
         if (tilgangService.harIkkeTilgang(fnr)) {
             log.warn("fnr {} har ikke tilgang", fnr);
-            throw new ForbiddenException("Ikke tilgang");
+            throw new HarIkkeTilgang("Ikke tilgang");
         }
 
         return fastlegeService.hentBrukersFastleger(fnr);
@@ -66,9 +66,9 @@ public class FastlegeRessurs {
         response.sendError(BAD_REQUEST.value(), exception.getMessage());
     }
 
-    @ExceptionHandler({ForbiddenException.class})
-    void handleForbiddenRequests(HttpServletResponse response, ForbiddenException exception) throws IOException {
-        response.sendError(FORBIDDEN.value(), exception.getMessage());
+    @ExceptionHandler({HarIkkeTilgang.class})
+    void handleHarIkkeTilgang(HttpServletResponse response, HarIkkeTilgang harIkkeTilgang) throws IOException {
+        response.sendError(FORBIDDEN.value(), harIkkeTilgang.getMessage());
     }
 
 }

@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.isEmptyString;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -89,6 +90,30 @@ public class FastlegeRessursTest {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isNotFound())
+                .andExpect(content().string(isEmptyString()));
+    }
+
+    @Test
+    public void brukerManglerAktivFastlege() throws Exception{
+        MockUtils.mockIngenFastleger(fastlegeSoapClient);
+        MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
+
+        this.mvc.perform(get("/api/fastlege/v1?fnr=" + FNR)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .header(AUTHORIZATION, "Bearer " + token))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(isEmptyString()));
+    }
+
+    @Test
+    public void brukerHarIkkeTilgang() throws Exception{
+        MockUtils.mockHarFastlege(fastlegeSoapClient);
+        MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.FORBIDDEN);
+
+        this.mvc.perform(get("/api/fastlege/v1?fnr=" + FNR)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .header(AUTHORIZATION, "Bearer " + token))
+                .andExpect(status().isForbidden())
                 .andExpect(content().string(isEmptyString()));
     }
 }
