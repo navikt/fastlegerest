@@ -54,12 +54,13 @@ public class FastlegeRessursTest {
     @Before
     public void setUp() throws Exception {
         MockUtils.mockBrukerProfil(brukerprofilV3);
-        MockUtils.mockFastLegeSoapClient(fastlegeSoapClient);
-        MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
     }
 
     @Test
-    public void finnFastlege() throws Exception {
+    public void finnAktivFastlege() throws Exception {
+        MockUtils.mockHarFastlege(fastlegeSoapClient);
+        MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
+
         this.mvc.perform(get("/api/fastlege/v1?fnr=" + FNR)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION, "Bearer " + token))
@@ -68,7 +69,10 @@ public class FastlegeRessursTest {
     }
 
     @Test
-    public void finnFastleger() throws Exception {
+    public void finnAlleFastleger() throws Exception {
+        MockUtils.mockHarFastlege(fastlegeSoapClient);
+        MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
+
         this.mvc.perform(get("/api/fastlege/v1/fastleger?fnr=" + FNR)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION, "Bearer " + token))
@@ -76,4 +80,15 @@ public class FastlegeRessursTest {
                 .andExpect(content().string(containsString(LEGEKONTOR)));
     }
 
+    @Test
+    public void brukerHarIngenFastleger() throws Exception{
+        MockUtils.mockIngenFastleger(fastlegeSoapClient);
+        MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
+
+        this.mvc.perform(get("/api/fastlege/v1/fastleger?fnr=" + FNR)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .header(AUTHORIZATION, "Bearer " + token))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string(isEmptyString()));
+    }
 }

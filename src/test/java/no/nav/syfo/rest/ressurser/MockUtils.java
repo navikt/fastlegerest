@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 public class MockUtils {
     public static final String LEGEKONTOR = "Pontypandy Legekontor";
 
-    static void mockFastLegeSoapClient(IFlrReadOperations fastlegeSoapClient) throws IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage {
+    static void mockHarFastlege(IFlrReadOperations fastlegeSoapClient) throws IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage {
         WSArrayOfGPOnContractAssociation fastlege = mockFastlege();
         WSGPOffice legeKontor = mockLegeKontor();
         WSGPContract fastlegeKontrakt = new WSGPContract().withGPOffice(legeKontor);
@@ -37,6 +37,9 @@ public class MockUtils {
         Mockito.when(fastlegeSoapClient.getPatientGPDetails(anyString())).thenReturn(fastlegeResponse);
     }
 
+    static void mockIngenFastleger(IFlrReadOperations fastlegeSoapClient) throws IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage {
+        Mockito.when(fastlegeSoapClient.getPatientGPDetails(anyString())).thenThrow(new IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage());
+    }
 
     private static WSArrayOfGPOnContractAssociation mockFastlege() {
         return new WSArrayOfGPOnContractAssociation()

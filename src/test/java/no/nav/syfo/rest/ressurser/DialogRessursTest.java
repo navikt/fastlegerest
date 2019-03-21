@@ -70,7 +70,7 @@ public class DialogRessursTest {
     public void setUp() throws Exception {
         mockAdresseRegisteret();
         MockUtils.mockBrukerProfil(brukerprofilV3);
-        MockUtils.mockFastLegeSoapClient(fastlegeSoapClient);
+        MockUtils.mockHarFastlege(fastlegeSoapClient);
         mockPartnerResource();
         mockDialogfordeler();
         mockTokenService();
