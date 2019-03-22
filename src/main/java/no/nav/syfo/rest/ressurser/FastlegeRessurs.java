@@ -33,7 +33,6 @@ public class FastlegeRessurs {
     }
 
     @GetMapping(path = "/api/fastlege/v1", produces = APPLICATION_JSON_VALUE)
-    @ResponseBody
     @ProtectedWithClaims(issuer = "intern")
     public Fastlege finnFastlege(@RequestParam(value = "fnr", required = true) String fnr) {
         if (tilgangService.harIkkeTilgang(fnr)) {
@@ -45,7 +44,6 @@ public class FastlegeRessurs {
     }
 
     @GetMapping(path = "/api/fastlege/v1/fastleger", produces = APPLICATION_JSON_VALUE)
-    @ResponseBody
     @ProtectedWithClaims(issuer = "intern")
     public List<Fastlege> finnFastleger(@RequestParam(value = "fnr", required = true) String fnr) {
         if (tilgangService.harIkkeTilgang(fnr)) {

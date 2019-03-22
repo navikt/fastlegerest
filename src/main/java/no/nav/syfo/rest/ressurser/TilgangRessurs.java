@@ -22,7 +22,6 @@ public class TilgangRessurs {
     }
 
     @GetMapping(path = "/api/tilgang", produces = APPLICATION_JSON_VALUE)
-    @ResponseBody
     @ProtectedWithClaims(issuer = "intern")
     public boolean harTilgang() {
         return tilgangService.harTilgangTilTjenesten();
