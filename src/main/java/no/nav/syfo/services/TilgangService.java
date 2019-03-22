@@ -19,7 +19,7 @@ import static org.springframework.web.util.UriComponentsBuilder.fromHttpUrl;
 public class TilgangService {
 
     private final String TILGANGSKONTROLLAPI_URL;
-    private final boolean HAR_LOCAL_MOCK;
+    private final boolean HAR_LOKAL_MOCK;
     private RestTemplate restTemplate;
     private OIDCRequestContextHolder contextHolder;
 
@@ -33,7 +33,7 @@ public class TilgangService {
             final OIDCRequestContextHolder contextHolder
     ){
         this.TILGANGSKONTROLLAPI_URL = url;
-        this.HAR_LOCAL_MOCK = erLokalMock;
+        this.HAR_LOKAL_MOCK = erLokalMock;
         this.restTemplate = restTemplate;
         this.contextHolder = contextHolder;
     }
@@ -41,7 +41,7 @@ public class TilgangService {
 
     @Cacheable(value = "tilgang")
     public boolean sjekkTilgang(String fnr) {
-        if (HAR_LOCAL_MOCK == true) {
+        if (HAR_LOKAL_MOCK) {
             return true;
         }
 
@@ -65,7 +65,7 @@ public class TilgangService {
 
     @Cacheable(value = "tilgang")
     public boolean harTilgangTilTjenesten() {
-        if (HAR_LOCAL_MOCK == true) {
+        if (HAR_LOKAL_MOCK) {
             return true;
         }
 

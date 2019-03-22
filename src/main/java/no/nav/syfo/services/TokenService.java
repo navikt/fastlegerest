@@ -19,7 +19,7 @@ public class TokenService {
 
     private RestTemplate basicAuthRestTemplate;
     private String url;
-    private final boolean HAR_LOCAL_MOCK;
+    private final boolean HAR_LOKAL_MOCK;
 
     @Autowired
     public TokenService(@Qualifier("BasicAuth") RestTemplate basicAuthRestTemplate,
@@ -27,11 +27,11 @@ public class TokenService {
                         final @Value("${local_mock}") boolean erLokalMock) {
         this.basicAuthRestTemplate = basicAuthRestTemplate;
         this.url = url;
-        this.HAR_LOCAL_MOCK = erLokalMock;
+        this.HAR_LOKAL_MOCK = erLokalMock;
     }
 
     String getToken() {
-        if(HAR_LOCAL_MOCK == true){
+        if(HAR_LOKAL_MOCK){
             return "token";
         }
 
