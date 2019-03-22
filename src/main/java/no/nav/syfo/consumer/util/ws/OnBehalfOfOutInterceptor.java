@@ -1,27 +1,24 @@
 package no.nav.syfo.consumer.util.ws;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
 import org.apache.cxf.rt.security.SecurityConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.*;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Base64;
 
+@Slf4j
 public class OnBehalfOfOutInterceptor extends AbstractPhaseInterceptor<Message> {
-    private static final Logger logger = LoggerFactory.getLogger(OnBehalfOfOutInterceptor.class);
 
     public static final String REQUEST_CONTEXT_ONBEHALFOF_TOKEN_TYPE = "request.onbehalfof.tokentype";
     public static final String REQUEST_CONTEXT_ONBEHALFOF_TOKEN = "request.onbehalfof.token";
@@ -44,7 +41,7 @@ public class OnBehalfOfOutInterceptor extends AbstractPhaseInterceptor<Message> 
 
     @Override
     public void handleMessage(Message message) throws Fault {
-        logger.debug("looking up OnBehalfOfToken from requestcontext with key:" + REQUEST_CONTEXT_ONBEHALFOF_TOKEN);
+        log.debug("looking up OnBehalfOfToken from requestcontext with key:" + REQUEST_CONTEXT_ONBEHALFOF_TOKEN);
         String token = (String) message.get(REQUEST_CONTEXT_ONBEHALFOF_TOKEN);
         TokenType tokenType = (TokenType) message.get(REQUEST_CONTEXT_ONBEHALFOF_TOKEN_TYPE);
 
@@ -55,7 +52,7 @@ public class OnBehalfOfOutInterceptor extends AbstractPhaseInterceptor<Message> 
             // This will make sure that the STS client puts the OnBehalfOf Element in the token issue request
             message.put(SecurityConstants.STS_TOKEN_ON_BEHALF_OF, createOnBehalfOfElement(wrappedToken));
         } else {
-            logger.info("could not find OnBehalfOfToken token in requestcontext. do nothing");
+            log.info("could not find OnBehalfOfToken token in requestcontext. do nothing");
             // TODO: there is choice here between failing or silently ignore adding of onbehalfof element which is up to
             // the user.
             // throw new RuntimeException("could not find OnBehalfOfToken token in requestcontext with key " +
