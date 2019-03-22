@@ -36,7 +36,7 @@ public class FastlegeRessurs {
     @ProtectedWithClaims(issuer = "intern")
     public Fastlege finnFastlege(@RequestParam(value = "fnr", required = true) String fnr) {
         if (tilgangService.harIkkeTilgang(fnr)) {
-            log.warn("fnr {} har ikke tilgang", fnr);
+            log.info("Har ikke tilgang til å se fastlegeinformasjon om brukeren.");
             throw new HarIkkeTilgang("Ikke tilgang");
         }
 
@@ -47,7 +47,7 @@ public class FastlegeRessurs {
     @ProtectedWithClaims(issuer = "intern")
     public List<Fastlege> finnFastleger(@RequestParam(value = "fnr", required = true) String fnr) {
         if (tilgangService.harIkkeTilgang(fnr)) {
-            log.warn("fnr {} har ikke tilgang", fnr);
+            log.info("Har ikke tilgang til å se fastlegeinformasjon om brukeren.");
             throw new HarIkkeTilgang("Ikke tilgang");
         }
 
