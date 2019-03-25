@@ -11,9 +11,12 @@ import no.nhn.register.common.WSCode;
 import no.nhn.register.common.WSPeriod;
 import no.nhn.register.communicationparty.*;
 import org.datacontract.schemas._2004._07.system_collections.WSArrayOfKeyValuePairOfintArrayOfCodeUO9UWExd;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Service;
 
 import javax.xml.datatype.XMLGregorianCalendar;
-
+@Service
+@ConditionalOnProperty(value = "mockAdresseregisteretV1", havingValue = "true")
 public class AdresseregisterV1Mock implements ICommunicationPartyService {
 
 

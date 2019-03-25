@@ -1,50 +1,37 @@
 package no.nav.syfo.config;
 
-import no.nav.apiapp.ApiApplication;
-import no.nav.apiapp.config.ApiAppConfigurator;
-import no.nav.metrics.aspects.CountAspect;
-import no.nav.metrics.aspects.TimerAspect;
-import no.nav.syfo.config.caching.CacheConfig;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.*;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.web.client.RestTemplate;
+
+import static java.util.Arrays.asList;
 
 
 @Configuration
-@EnableAspectJAutoProxy
 @Import({
-        CacheConfig.class,
-        ServiceConfig.class,
         AdresseregisterConfig.class,
         FastlegeInformasjonConfig.class,
         BrukerprofilConfig.class,
         PartnerEmottakConfig.class
+
 })
-@ComponentScan(basePackages = "no.nav.syfo.rest")
-public class ApplicationConfig implements ApiApplication.NaisApiApplication {
+@Profile("remote")
+public class ApplicationConfig{
 
-    @Bean
-    public TimerAspect timerAspect() {
-        return new TimerAspect();
+    @Bean(name = "Oidc")
+    public RestTemplate restTemplate(ClientHttpRequestInterceptor... interceptors) {
+        RestTemplate template = new RestTemplate();
+        template.setInterceptors(asList(interceptors));
+        return template;
     }
 
-    @Bean
-    public CountAspect countAspect() {
-        return new CountAspect();
-    }
-
-    @Override
-    public String getApplicationName() {
-        return "fastlegerest";
-    }
-
-    @Override
-    public Sone getSone() {
-        return Sone.FSS;
-    }
-
-    @Override
-    public void configure(ApiAppConfigurator apiAppConfigurator) {
-        apiAppConfigurator
-                .issoLogin()
-                .sts();
+    @Bean(name = "BasicAuth")
+    public RestTemplate basicAuthRestTemplate(@Value("${srvfastlegerest.username}") String username,
+    @Value("${srvfastlegerest.password}") String password) {
+        return new RestTemplateBuilder()
+                .basicAuthorization(username, password)
+                .build();
     }
 }

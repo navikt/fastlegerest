@@ -1,42 +1,89 @@
 package no.nav.syfo.services;
 
+import no.nav.security.oidc.context.OIDCRequestContextHolder;
+import no.nav.syfo.OIDCIssuer;
+import no.nav.syfo.util.OIDCUtil;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import javax.ws.rs.client.Client;
+import javax.inject.Inject;
+import java.util.Collections;
 
-import static java.lang.System.getProperty;
-import static javax.ws.rs.client.ClientBuilder.newClient;
-import static javax.ws.rs.core.HttpHeaders.AUTHORIZATION;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static no.nav.brukerdialog.security.context.SubjectHandler.getSubjectHandler;
+import static org.springframework.web.util.UriComponentsBuilder.fromHttpUrl;
 
+@Service
 public class TilgangService {
 
-    private Client client = newClient();
+    private final String TILGANGSKONTROLLAPI_URL;
+    private final boolean HAR_LOKAL_MOCK;
+    private RestTemplate restTemplate;
+    private OIDCRequestContextHolder contextHolder;
 
-    @Cacheable(value = "tilgang", keyGenerator = "userkeygenerator")
-    public boolean sjekkTilgang(String fnr) {
-        if ("true".equals(getProperty("LOCAL_MOCK"))) {
-            return true;
-        }
-        String ssoToken = getSubjectHandler().getInternSsoToken();
-        return client.target(getProperty("TILGANGSKONTROLLAPI_URL") + "/tilgangtilbruker")
-                .queryParam("fnr", fnr)
-                .request(APPLICATION_JSON)
-                .header(AUTHORIZATION, "Bearer " + ssoToken)
-                .get().getStatus() == 200;
+
+
+    @Inject
+    public TilgangService(
+            final @Value("${tilgangskontrollapi.url}") String url,
+            final @Value("${local_mock}") boolean erLokalMock,
+            final @Qualifier("Oidc") RestTemplate restTemplate,
+            final OIDCRequestContextHolder contextHolder
+    ){
+        this.TILGANGSKONTROLLAPI_URL = url;
+        this.HAR_LOKAL_MOCK = erLokalMock;
+        this.restTemplate = restTemplate;
+        this.contextHolder = contextHolder;
     }
 
-    @Cacheable(value = "tilgang", keyGenerator = "userkeygenerator")
-    public boolean harTilgangTilTjenesten() {
-        if ("true".equals(getProperty("LOCAL_MOCK"))) {
+
+    @Cacheable(value = "tilgang")
+    public boolean sjekkTilgang(String fnr) {
+        if (HAR_LOKAL_MOCK) {
             return true;
         }
-        String ssoToken = getSubjectHandler().getInternSsoToken();
-        return client.target(getProperty("TILGANGSKONTROLLAPI_URL") + "/tilgangtiltjenesten")
-                .request(APPLICATION_JSON)
-                .header(AUTHORIZATION, "Bearer " + ssoToken)
-                .get().getStatus() == 200;
+
+        final String url = fromHttpUrl(TILGANGSKONTROLLAPI_URL + "/tilgangtilbruker")
+                .queryParam("fnr", fnr)
+                .toUriString();
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                lagRequest(),
+                String.class
+                );
+
+        return response.getStatusCode().is2xxSuccessful();
+    }
+
+    public boolean harIkkeTilgang(String fnr) {
+        return !sjekkTilgang(fnr);
+    }
+
+    @Cacheable(value = "tilgang")
+    public boolean harTilgangTilTjenesten() {
+        if (HAR_LOKAL_MOCK) {
+            return true;
+        }
+
+        ResponseEntity<String> response = restTemplate.exchange(
+                TILGANGSKONTROLLAPI_URL + "/tilgangtiltjenesten",
+                HttpMethod.GET,
+                lagRequest(),
+                String.class
+        );
+
+        return response.getStatusCode().is2xxSuccessful();
+    }
+
+    private HttpEntity<String> lagRequest(){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.set("Authorization", "Bearer " + OIDCUtil.tokenFraOIDC(contextHolder, OIDCIssuer.INTERN));
+        return new HttpEntity<>(headers);
     }
 
 }

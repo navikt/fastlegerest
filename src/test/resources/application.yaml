@@ -1,0 +1,43 @@
+server:
+  port: 8899
+  servlet:
+    context-path: /fastlegerest
+
+spring:
+  profiles.active: local
+  main.banner-mode: 'off'
+  jta.atomikos.datasource:
+    min-pool-size: 8
+    max-pool-size: 32
+
+virksomhet.brukerprofil.v3.endpointurl: "https://brukerprofil_v3.url"
+ekstern.helse.fastlegeinformasjon.endpointurl: "https://fastlegeinformasjon.url"
+ekstern.helse.adresseregisteret.v1.endpointurl: "https://adresseregisteret.url"
+partner.ws.endpointurl: "https://emottak.url"
+mockBrukerprofil_V3: true
+mockEksternHelse: true
+mockAdresseregisteretV1: true
+mockPartnerEmottak: true
+SECURITYTOKENSERVICE_URL: "https://sts.url"
+
+SRVFASTLEGEREST_USERNAME: ***REMOVED***
+SRVFASTLEGEREST_PASSWORD: ***REMOVED***
+
+security-token-service-token.url: "https://sts.url"
+
+no.nav.modig.security.sts.url: "https://e34jbsl01816.devillo.no:8443/SecurityTokenServiceProvider/"
+isso-host.url: "https://isso-t.adeo.no/isso/oauth2"
+
+tilgangskontrollapi.url: "https://tilgangskontroll.url"
+
+local_mock: false
+
+fasit.environment.name: local
+
+no.nav.security.oidc:
+  issuers: intern
+  issuer:
+    intern:
+      discoveryurl: http:://metadata
+      accepted_audience: aud-localhost
+      cookie_name: localhost-idtoken

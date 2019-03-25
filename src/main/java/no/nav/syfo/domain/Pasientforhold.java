@@ -11,6 +11,6 @@ import java.time.LocalDate;
 @Accessors(fluent = true)
 @EqualsAndHashCode
 public class Pasientforhold {
-    private LocalDate fom;
-    private LocalDate tom;
+    public LocalDate fom;
+    public LocalDate tom;
 }

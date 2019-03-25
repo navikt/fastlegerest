@@ -1,9 +1,13 @@
 package no.nav.syfo.mocks;
 
 import no.nav.emottak.schemas.*;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Service;
 
 import static java.util.Arrays.*;
 
+@Service
+@ConditionalOnProperty(value = "mockPartnerEmottak", havingValue = "true")
 public class PartnerResourceMock implements PartnerResource {
     @Override
     public EbrevAbonnementResponse opprettEbrevAbonnement(OpprettEbrevAbonnementRequest opprettEbrevAbonnementRequest) {

@@ -1,6 +1,6 @@
 # ref https://raw.githubusercontent.com/nais/naisd/master/nais_example.yaml
 image: docker.adeo.no:5000/digisyfo/fastlegerest
-team: sykefravaer-veden
+team: teamsykefravr
 replicas:
   min: 1
   max: 2
@@ -11,11 +11,11 @@ healthcheck:
     path: fastlegerest/internal/isAlive
     initialDelay: 120
   readiness:
-    path: fastlegerest/internal/selftest
+    path: fastlegerest/internal/isReady
     initialDelay: 120
 prometheus:
   enabled: true
-  path: fastlegerest/internal/metrics
+  path: fastlegerest/internal/prometheus
 resources:
   limits:
     cpu: 3000m
@@ -55,6 +55,12 @@ fasitResources:
     resourceType: restservice
   - alias: tilgangskontrollapi
     resourceType: restservice
+  - alias: security-token-service-token
+    resourceType: restservice
+  - alias: opam_oidc_discovery
+    resourceType: baseurl
+    propertyMap:
+      url: NO_NAV_SECURITY_OIDC_ISSUER_INTERN_DISCOVERYURL
   exposed:
   - alias: fastlegeapi
     resourceType: restservice

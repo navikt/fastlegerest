@@ -1,64 +1,72 @@
 package no.nav.syfo.rest.ressurser;
 
 import io.swagger.annotations.Api;
-import no.nav.metrics.aspects.Count;
-import no.nav.metrics.aspects.Timed;
+import lombok.extern.slf4j.Slf4j;
+import no.nav.security.oidc.api.ProtectedWithClaims;
+import no.nav.syfo.domain.Fastlege;
 import no.nav.syfo.services.FastlegeService;
 import no.nav.syfo.services.TilgangService;
 import no.nav.syfo.services.exceptions.FastlegeIkkeFunnet;
-import org.springframework.stereotype.Controller;
+import no.nav.syfo.services.exceptions.HarIkkeTilgang;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static javax.ws.rs.core.Response.ok;
-import static javax.ws.rs.core.Response.status;
+import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@Path("/fastlege/v1")
-@Consumes(APPLICATION_JSON)
-@Produces(APPLICATION_JSON)
+@RestController
 @Api(value = "fastlege", description = "Endepunkt for henting av fastlege")
-@Controller
+@Slf4j
 public class FastlegeRessurs {
 
-    @Inject
     private FastlegeService fastlegeService;
-    @Inject
     private TilgangService tilgangService;
 
-    @GET
-    @Timed(name = "finnFastlege")
-    @Count(name = "finnFastlege")
-    public Response finnFastlege(@QueryParam("fnr") String fnr) {
-        if (tilgangService.sjekkTilgang(fnr)) {
-            return ok(fastlegeService.hentBrukersFastlege(fnr)
-                    .orElseThrow(() -> new NotFoundException("Fant ikke aktiv fastlege"))).build();
-        } else {
-            return status(403).build();
-        }
+    @Inject
+    public FastlegeRessurs(final FastlegeService fastlegeService, final TilgangService tilgangService) {
+        this.fastlegeService = fastlegeService;
+        this.tilgangService = tilgangService;
     }
 
-    @GET
-    @Timed(name = "finnFastleger")
-    @Count(name = "finnFastleger")
-    @Path("/fastleger")
-    public Response finnFastleger(@QueryParam("fnr") String fnr) {
-        if (tilgangService.sjekkTilgang(fnr)) {
-            try {
-                return ok(fastlegeService.hentBrukersFastleger(fnr)).build();
-            } catch (FastlegeIkkeFunnet e) {
-                throw new NotFoundException();
-            }
-        } else {
-            return status(403).build();
+    @GetMapping(path = "/api/fastlege/v1", produces = APPLICATION_JSON_VALUE)
+    @ProtectedWithClaims(issuer = "intern")
+    public Fastlege finnFastlege(@RequestParam(value = "fnr", required = true) String fnr) {
+        if (tilgangService.harIkkeTilgang(fnr)) {
+            log.info("Har ikke tilgang til å se fastlegeinformasjon om brukeren.");
+            throw new HarIkkeTilgang("Ikke tilgang");
         }
+
+        return fastlegeService.hentBrukersFastlege(fnr).orElseThrow(() -> new FastlegeIkkeFunnet("Fant ikke aktiv fastlege"));
     }
 
-    @GET
-    @Path("/ping")
-    public Response ping() {
-        return ok().build();
+    @GetMapping(path = "/api/fastlege/v1/fastleger", produces = APPLICATION_JSON_VALUE)
+    @ProtectedWithClaims(issuer = "intern")
+    public List<Fastlege> finnFastleger(@RequestParam(value = "fnr", required = true) String fnr) {
+        if (tilgangService.harIkkeTilgang(fnr)) {
+            log.info("Har ikke tilgang til å se fastlegeinformasjon om brukeren.");
+            throw new HarIkkeTilgang("Ikke tilgang");
+        }
+
+        return fastlegeService.hentBrukersFastleger(fnr);
     }
+
+    @ExceptionHandler({FastlegeIkkeFunnet.class})
+    void handleFastlegeIkkeFunnet(HttpServletResponse response, FastlegeIkkeFunnet fastlegeIkkeFunnet) throws IOException {
+        response.sendError(NOT_FOUND.value(), fastlegeIkkeFunnet.getMessage());
+    }
+
+    @ExceptionHandler({RuntimeException.class})
+    void handleBadRequests(HttpServletResponse response, RuntimeException exception) throws IOException {
+        response.sendError(BAD_REQUEST.value(), exception.getMessage());
+    }
+
+    @ExceptionHandler({HarIkkeTilgang.class})
+    void handleHarIkkeTilgang(HttpServletResponse response, HarIkkeTilgang harIkkeTilgang) throws IOException {
+        response.sendError(FORBIDDEN.value(), harIkkeTilgang.getMessage());
+    }
+
 }

@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 @EqualsAndHashCode
 public class Adresse {
-    private String adresse;
-    private String postnummer;
-    private String poststed;
+    public String adresse;
+    public String postnummer;
+    public String poststed;
 }

@@ -9,13 +9,13 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true)
 @EqualsAndHashCode
 public class Fastlege {
-    private String fornavn;
-    private String mellomnavn;
-    private String etternavn;
-    private String fnr;
-    private Integer herId;
-    private String helsepersonellregisterId;
-    private Pasient pasient;
-    private Fastlegekontor fastlegekontor;
-    private Pasientforhold pasientforhold;
+    public String fornavn;
+    public String mellomnavn;
+    public String etternavn;
+    public String fnr;
+    public Integer herId;
+    public String helsepersonellregisterId;
+    public Pasient pasient;
+    public Fastlegekontor fastlegekontor;
+    public Pasientforhold pasientforhold;
 }

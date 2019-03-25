@@ -2,28 +2,27 @@ package no.nav.syfo.rest.ressurser;
 
 
 import io.swagger.annotations.Api;
+import no.nav.security.oidc.api.ProtectedWithClaims;
 import no.nav.syfo.services.TilgangService;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@Path("/tilgang")
-@Consumes(APPLICATION_JSON)
-@Produces(APPLICATION_JSON)
 @Api(value = "tilgang", description = "Endepunkt for sjekking av tilgang til fastlegeoppslag")
-@Controller
+@RestController
 public class TilgangRessurs {
 
-    @Inject
     private TilgangService tilgangService;
 
-    @GET
+    @Inject
+    public TilgangRessurs(final TilgangService tilgangService){
+        this.tilgangService = tilgangService;
+    }
+
+    @GetMapping(path = "/api/tilgang", produces = APPLICATION_JSON_VALUE)
+    @ProtectedWithClaims(issuer = "intern")
     public boolean harTilgang() {
         return tilgangService.harTilgangTilTjenesten();
     }
