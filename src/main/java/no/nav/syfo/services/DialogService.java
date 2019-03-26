@@ -41,7 +41,7 @@ public class DialogService {
 
     public void sendOppfolgingsplan(final RSOppfolgingsplan oppfolgingsplan) {
         Fastlege fastlege = fastlegeService.hentBrukersFastlege(oppfolgingsplan.getSykmeldtFnr())
-                .orElseThrow(() -> new FastlegeIkkeFunnet("Fant ikke aktiv fastlege"));
+                .orElseThrow(FastlegeIkkeFunnet::new);
 
         Partnerinformasjon partnerinformasjon = partnerService.getPartnerinformasjon(fastlege);
 
