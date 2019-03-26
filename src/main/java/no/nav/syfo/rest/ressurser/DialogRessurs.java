@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import static no.nav.syfo.OIDCIssuer.INTERN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -25,7 +26,7 @@ public class DialogRessurs {
     }
 
     @PostMapping(path = "/api/dialogmelding/v1/sendOppfolgingsplan", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    @ProtectedWithClaims(issuer = "intern")
+    @ProtectedWithClaims(issuer = INTERN)
     public void sendOppfolgingsplan(@RequestBody @Valid RSOppfolgingsplan oppfolgingsplan) {
         try {
             log.info("Sender oppfølgingsplan");

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+import static no.nav.syfo.OIDCIssuer.INTERN;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -33,8 +34,8 @@ public class FastlegeRessurs {
     }
 
     @GetMapping(path = "/api/fastlege/v1", produces = APPLICATION_JSON_VALUE)
-    @ProtectedWithClaims(issuer = "intern")
-    public Fastlege finnFastlege(@RequestParam(value = "fnr", required = true) String fnr) {
+    @ProtectedWithClaims(issuer = INTERN)
+    public Fastlege finnFastlege(@RequestParam(value = "fnr") String fnr) {
         if (tilgangService.harIkkeTilgang(fnr)) {
             log.info("Har ikke tilgang til å se fastlegeinformasjon om brukeren.");
             throw new HarIkkeTilgang("Ikke tilgang");
@@ -44,8 +45,8 @@ public class FastlegeRessurs {
     }
 
     @GetMapping(path = "/api/fastlege/v1/fastleger", produces = APPLICATION_JSON_VALUE)
-    @ProtectedWithClaims(issuer = "intern")
-    public List<Fastlege> finnFastleger(@RequestParam(value = "fnr", required = true) String fnr) {
+    @ProtectedWithClaims(issuer = INTERN)
+    public List<Fastlege> finnFastleger(@RequestParam(value = "fnr") String fnr) {
         if (tilgangService.harIkkeTilgang(fnr)) {
             log.info("Har ikke tilgang til å se fastlegeinformasjon om brukeren.");
             throw new HarIkkeTilgang("Ikke tilgang");

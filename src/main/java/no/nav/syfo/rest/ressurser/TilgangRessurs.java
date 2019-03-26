@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 
+import static no.nav.syfo.OIDCIssuer.INTERN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Api(value = "tilgang", description = "Endepunkt for sjekking av tilgang til fastlegeoppslag")
@@ -22,7 +23,7 @@ public class TilgangRessurs {
     }
 
     @GetMapping(path = "/api/tilgang", produces = APPLICATION_JSON_VALUE)
-    @ProtectedWithClaims(issuer = "intern")
+    @ProtectedWithClaims(issuer = INTERN)
     public boolean harTilgang() {
         return tilgangService.harTilgangTilTjenesten();
     }
