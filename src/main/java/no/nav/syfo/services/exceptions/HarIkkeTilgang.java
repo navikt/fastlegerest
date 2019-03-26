@@ -1,9 +1,11 @@
 package no.nav.syfo.services.exceptions;
 
-public class HarIkkeTilgang extends RuntimeException {
+import javax.ws.rs.ForbiddenException;
 
-    public HarIkkeTilgang(String message) {
-        super(message);
+public class HarIkkeTilgang extends ForbiddenException {
+
+    public HarIkkeTilgang() {
+        super();
     }
 }
 

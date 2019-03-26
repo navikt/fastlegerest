@@ -4,6 +4,8 @@ import no.nav.security.spring.oidc.test.JwtTokenGenerator;
 import no.nav.syfo.LocalApplication;
 import no.nav.tjeneste.virksomhet.brukerprofil.v3.BrukerprofilV3;
 import no.nhn.schemas.reg.flr.IFlrReadOperations;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,8 +21,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 
+import static no.nav.syfo.exception.ControllerExceptionHandler.FORBIDDEN_MSG;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.isEmptyString;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -82,19 +84,23 @@ public class FastlegeRessursTest {
     }
 
     @Test
-    public void brukerHarIngenFastleger() throws Exception{
+    public void brukerHarIngenFastleger() throws Exception {
         MockUtils.mockIngenFastleger(fastlegeSoapClient);
         MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("status", 404);
+        jsonObject.put("message", "Feil ved oppslag av fastlege");
 
         this.mvc.perform(get("/api/fastlege/v1/fastleger?fnr=" + FNR)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(isEmptyString()));
+                .andExpect(content().json(mockApiError404()));
     }
 
     @Test
-    public void brukerManglerAktivFastlege() throws Exception{
+    public void brukerManglerAktivFastlege() throws Exception {
         MockUtils.mockIngenFastleger(fastlegeSoapClient);
         MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
 
@@ -102,11 +108,11 @@ public class FastlegeRessursTest {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(isEmptyString()));
+                .andExpect(content().json(mockApiError404()));
     }
 
     @Test
-    public void brukerHarIkkeTilgang() throws Exception{
+    public void brukerHarIkkeTilgang() throws Exception {
         MockUtils.mockHarFastlege(fastlegeSoapClient);
         MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.FORBIDDEN);
 
@@ -114,6 +120,21 @@ public class FastlegeRessursTest {
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isForbidden())
-                .andExpect(content().string(isEmptyString()));
+                .andExpect(content().json(mockApiError403()));
+    }
+
+    private String mockApiError403() throws JSONException {
+        return mockApiErrorAsJson(403, FORBIDDEN_MSG);
+    }
+
+    private String mockApiError404() throws JSONException {
+        return mockApiErrorAsJson(404, "Feil ved oppslag av fastlege");
+    }
+
+    private String mockApiErrorAsJson(int status, String message) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("status", status);
+        jsonObject.put("message", message);
+        return jsonObject.toString();
     }
 }

@@ -11,12 +11,9 @@ import no.nav.syfo.services.exceptions.HarIkkeTilgang;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 import static no.nav.syfo.OIDCIssuer.INTERN;
-import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -36,38 +33,23 @@ public class FastlegeRessurs {
     @GetMapping(path = "/api/fastlege/v1", produces = APPLICATION_JSON_VALUE)
     @ProtectedWithClaims(issuer = INTERN)
     public Fastlege finnFastlege(@RequestParam(value = "fnr") String fnr) {
-        if (tilgangService.harIkkeTilgang(fnr)) {
-            log.info("Har ikke tilgang til å se fastlegeinformasjon om brukeren.");
-            throw new HarIkkeTilgang("Ikke tilgang");
-        }
+        kastExceptionHvisIkkeTilgang(fnr);
 
-        return fastlegeService.hentBrukersFastlege(fnr).orElseThrow(() -> new FastlegeIkkeFunnet("Fant ikke aktiv fastlege"));
+        return fastlegeService.hentBrukersFastlege(fnr).orElseThrow(FastlegeIkkeFunnet::new);
     }
 
     @GetMapping(path = "/api/fastlege/v1/fastleger", produces = APPLICATION_JSON_VALUE)
     @ProtectedWithClaims(issuer = INTERN)
     public List<Fastlege> finnFastleger(@RequestParam(value = "fnr") String fnr) {
-        if (tilgangService.harIkkeTilgang(fnr)) {
-            log.info("Har ikke tilgang til å se fastlegeinformasjon om brukeren.");
-            throw new HarIkkeTilgang("Ikke tilgang");
-        }
+        kastExceptionHvisIkkeTilgang(fnr);
 
         return fastlegeService.hentBrukersFastleger(fnr);
     }
 
-    @ExceptionHandler({FastlegeIkkeFunnet.class})
-    void handleFastlegeIkkeFunnet(HttpServletResponse response, FastlegeIkkeFunnet fastlegeIkkeFunnet) throws IOException {
-        response.sendError(NOT_FOUND.value(), fastlegeIkkeFunnet.getMessage());
+    private void kastExceptionHvisIkkeTilgang(String fnr) {
+        if (tilgangService.harIkkeTilgang(fnr)) {
+            log.info("Har ikke tilgang til å se fastlegeinformasjon om brukeren.");
+            throw new HarIkkeTilgang();
+        }
     }
-
-    @ExceptionHandler({RuntimeException.class})
-    void handleBadRequests(HttpServletResponse response, RuntimeException exception) throws IOException {
-        response.sendError(BAD_REQUEST.value(), exception.getMessage());
-    }
-
-    @ExceptionHandler({HarIkkeTilgang.class})
-    void handleHarIkkeTilgang(HttpServletResponse response, HarIkkeTilgang harIkkeTilgang) throws IOException {
-        response.sendError(FORBIDDEN.value(), harIkkeTilgang.getMessage());
-    }
-
 }
