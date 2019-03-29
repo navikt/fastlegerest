@@ -14,6 +14,7 @@ import java.util.Optional;
 import static java.util.Optional.of;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
+import static no.nav.syfo.mappers.FastlegeMappers.ws2partnerinformasjon;
 
 @Service
 @Slf4j
@@ -28,61 +29,17 @@ public class PartnerService {
         this.adresseregisterService = adresseregisterService;
     }
 
-    public List<Partnerinformasjon> hentPartnerinformasjon(String orgnummer) {
-        return partnerResource.hentPartnerIDViaOrgnummer(
-                new HentPartnerIDViaOrgnummerRequest()
-                        .withOrgnr(orgnummer))
-                .getPartnerInformasjon()
-                .stream()
-                .map(pi -> new Partnerinformasjon(pi.getPartnerID(), pi.getHERid()))
-                .collect(toList());
-    }
-
     Partnerinformasjon getPartnerinformasjon(Fastlege fastlege) {
-        //TODO: Loggmeldinger med DIALOGMELDING-TRACE skal fjernes når sending til fastlege er verifisert at fungerer
-
         String orgnummer = fastlege.fastlegekontor().orgnummer();
         Optional<String> fastlegeForeldreEnhetHerId = hentForeldreEnhetHerId(fastlege);
-
-        List<Partnerinformasjon> partnerinformasjonListe = hentPartnerinformasjon(orgnummer);
-
-        log.warn("DIALOGMELDING-TRACE: Fant {} partnere for orgnummer {}: [{}]",
-                partnerinformasjonListe.size(),
-                orgnummer,
-                partnerinformasjonListe
-                        .stream()
-                        .map(partnerinformasjon -> "(index=" + partnerinformasjonListe.indexOf(partnerinformasjon)
-                                + ", partner=" + partnerinformasjon.getPartnerId()
-                                + ", her=" + partnerinformasjon.getHerId() + ")")
-                        .collect(joining(", ")));
+        List<Partnerinformasjon> partnerinformasjonListe = hentPartnerinformasjonListe(orgnummer);
 
         try {
             if (partnerinformasjonListe.isEmpty()) {
                 log.warn("Fant ikke partnerinformasjon for orgnummer {} fordi partnerregister returnerte tom liste", orgnummer);
                 throw new PartnerinformasjonIkkeFunnet("Fant ikke partnerinformasjon for orgnummer " + orgnummer);
             }
-            Partnerinformasjon valgtPartnerinformasjon = partnerinformasjonListe
-                    .stream()
-                    .filter(partner -> partner.getHerId() != null)
-                    .filter(partnerinfo -> {
-                        boolean harHerIdLikFastlegeForeldreHerID = fastlegeForeldreEnhetHerId.map(partnerinfo.getHerId()::equals).orElse(false);
-                        log.info("DIALOGMELDING-TRACE: Er Parterinformasjon sin HerId({}) lik Fastlege sin HerId({}): {}",
-                                partnerinfo.getHerId(),
-                                fastlegeForeldreEnhetHerId.orElse(null),
-                                harHerIdLikFastlegeForeldreHerID);
-                        return harHerIdLikFastlegeForeldreHerID;
-                    })
-                    .findFirst()
-                    .orElseThrow(() -> {
-                        log.warn("Fant ikke partnerinformasjon for orgnummer {} fordi HerId ikke var lik fasteleges ForeldreHerId", orgnummer);
-                        return new PartnerinformasjonIkkeFunnet("Fant ikke partnerinformasjon for orgnummer " + orgnummer);
-                    });
-
-            log.info("DIALOGMELDING-TRACE: Av {} mulige partnere er index {} valgt",
-                    partnerinformasjonListe.size(),
-                    partnerinformasjonListe.indexOf(valgtPartnerinformasjon));
-
-            return valgtPartnerinformasjon;
+            return velgPartner(orgnummer, fastlegeForeldreEnhetHerId, partnerinformasjonListe);
         } catch (PartnerinformasjonIkkeFunnet e) {
             log.warn("DIALOGMELDING-TRACE: Fant {} partnere, men ingen ble valgt", partnerinformasjonListe.size());
             log.warn("DIALOGMELDING-TRACE: Partnerinformasjon.herid: {} - fastlegeForeldreEnhetHerId: {}",
@@ -109,5 +66,54 @@ public class PartnerService {
 
         return fastlegeForeldreEnhetHerId;
     }
+
+    private List<Partnerinformasjon> hentPartnerinformasjonListe(String orgnummer) {
+        List<Partnerinformasjon> partnerinformasjonListe = partnerResource.hentPartnerIDViaOrgnummer(
+                new HentPartnerIDViaOrgnummerRequest()
+                        .withOrgnr(orgnummer))
+                .getPartnerInformasjon()
+                .stream()
+                .map(ws2partnerinformasjon)
+                .collect(toList());
+
+        log.warn("DIALOGMELDING-TRACE: Fant {} partnere for orgnummer {}: [{}]",
+                partnerinformasjonListe.size(),
+                orgnummer,
+                partnerinformasjonListe
+                        .stream()
+                        .map(partnerinformasjon -> "(index=" + partnerinformasjonListe.indexOf(partnerinformasjon)
+                                + ", partner=" + partnerinformasjon.getPartnerId()
+                                + ", her=" + partnerinformasjon.getHerId() + ")")
+                        .collect(joining(", ")));
+
+        return partnerinformasjonListe;
+    }
+
+
+    private Partnerinformasjon velgPartner(String orgnummer, Optional<String> fastlegeForeldreEnhetHerId, List<Partnerinformasjon> partnerinformasjonListe) {
+        Partnerinformasjon valgtPartnerinformasjon = partnerinformasjonListe
+                .stream()
+                .filter(partner -> partner.getHerId() != null)
+                .filter(partnerinfo -> {
+                    boolean harHerIdLikFastlegeForeldreHerID = fastlegeForeldreEnhetHerId.map(partnerinfo.getHerId()::equals).orElse(false);
+                    log.info("DIALOGMELDING-TRACE: Er Parterinformasjon sin HerId({}) lik Fastlege sin HerId({}): {}",
+                            partnerinfo.getHerId(),
+                            fastlegeForeldreEnhetHerId.orElse(null),
+                            harHerIdLikFastlegeForeldreHerID);
+                    return harHerIdLikFastlegeForeldreHerID;
+                })
+                .findFirst()
+                .orElseThrow(() -> {
+                    log.warn("Fant ikke partnerinformasjon for orgnummer {} fordi HerId ikke var lik fasteleges ForeldreHerId", orgnummer);
+                    return new PartnerinformasjonIkkeFunnet("Fant ikke partnerinformasjon for orgnummer " + orgnummer);
+                });
+
+        log.info("DIALOGMELDING-TRACE: Av {} mulige partnere er index {} valgt",
+                partnerinformasjonListe.size(),
+                partnerinformasjonListe.indexOf(valgtPartnerinformasjon));
+
+        return valgtPartnerinformasjon;
+    }
+
 
 }

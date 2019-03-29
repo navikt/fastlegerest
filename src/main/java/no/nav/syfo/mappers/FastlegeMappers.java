@@ -1,8 +1,7 @@
 package no.nav.syfo.mappers;
 
-import no.nav.syfo.domain.Adresse;
-import no.nav.syfo.domain.Fastlege;
-import no.nav.syfo.domain.Fastlegekontor;
+import no.nav.emottak.schemas.WSPartnerInformasjon;
+import no.nav.syfo.domain.*;
 import no.nhn.register.fastlegeinformasjon.common.WSElectronicAddress;
 import no.nhn.schemas.reg.flr.WSGPOffice;
 import no.nhn.schemas.reg.flr.WSGPOnContractAssociation;
@@ -58,6 +57,16 @@ public class FastlegeMappers {
         }
         return postnummer.toString();
     }
+
+    public static Function<WSPartnerInformasjon, Partnerinformasjon> ws2partnerinformasjon =  wsPartnerInformasjon ->
+    {
+        String herId = wsPartnerInformasjon.getHERid();
+        herId = herId == null ? null : herId.replaceAll("\t", "").trim();
+
+        Partnerinformasjon partnerinformasjon = new Partnerinformasjon(wsPartnerInformasjon.getPartnerID(), herId);
+
+        return partnerinformasjon;
+    };
 
     public static Function<WSGPOnContractAssociation, Fastlege> ws2fastlege = wsPatientToGPContractAssociation ->
             new Fastlege()
