@@ -106,7 +106,7 @@ public class PartnerServiceTest {
         HentPartnerIDViaOrgnummerRequest anyRequest = any();
         HentPartnerIDViaOrgnummerResponse partnerInformasjonResponse = new HentPartnerIDViaOrgnummerResponse()
                 .withPartnerInformasjon(new WSPartnerInformasjon()
-                        .withHERid("11")
+                        .withHERid("11\t\t")
                         .withPartnerID("partnerId1"))
                 .withPartnerInformasjon(new WSPartnerInformasjon()
                         .withHERid("12")
@@ -114,4 +114,5 @@ public class PartnerServiceTest {
 
         when(partnerResource.hentPartnerIDViaOrgnummer(anyRequest)).thenReturn(partnerInformasjonResponse);
     }
+
 }

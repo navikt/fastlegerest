@@ -14,6 +14,7 @@ import java.util.Optional;
 import static java.util.Optional.of;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
+import static no.nav.syfo.mappers.FastlegeMappers.ws2partnerinformasjon;
 
 @Service
 @Slf4j
@@ -72,7 +73,7 @@ public class PartnerService {
                         .withOrgnr(orgnummer))
                 .getPartnerInformasjon()
                 .stream()
-                .map(pi -> new Partnerinformasjon(pi.getPartnerID(), pi.getHERid()))
+                .map(ws2partnerinformasjon)
                 .collect(toList());
 
         log.warn("DIALOGMELDING-TRACE: Fant {} partnere for orgnummer {}: [{}]",
