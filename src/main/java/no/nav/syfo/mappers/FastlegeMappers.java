@@ -8,7 +8,7 @@ import no.nhn.schemas.reg.flr.WSGPOnContractAssociation;
 
 import java.util.function.Function;
 
-import static no.nav.sbl.java8utils.MapUtil.mapNullable;
+import static no.nav.syfo.util.MapUtil.mapNullable;
 
 public class FastlegeMappers {
 

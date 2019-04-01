@@ -14,10 +14,10 @@ import java.util.Optional;
 
 import static java.time.LocalDate.now;
 import static java.util.stream.Collectors.toList;
-import static no.nav.sbl.java8utils.MapUtil.map;
-import static no.nav.sbl.java8utils.MapUtil.mapListe;
 import static no.nav.syfo.mappers.FastlegeMappers.ws2fastlege;
 import static no.nav.syfo.mappers.FastlegeMappers.ws2fastlegekontor;
+import static no.nav.syfo.util.MapUtil.map;
+import static no.nav.syfo.util.MapUtil.mapListe;
 
 @Slf4j
 @Service
