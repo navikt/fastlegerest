@@ -20,8 +20,8 @@ mockAdresseregisteretV1: true
 mockPartnerEmottak: true
 SECURITYTOKENSERVICE_URL: "https://sts.url"
 
-SRVFASTLEGEREST_USERNAME: ***REMOVED***
-SRVFASTLEGEREST_PASSWORD: ***REMOVED***
+SRVFASTLEGEREST_USERNAME:
+SRVFASTLEGEREST_PASSWORD:
 
 security-token-service-token.url: "https://sts.url"
 

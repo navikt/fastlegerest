@@ -6,7 +6,7 @@
             <a:Active>true</a:Active>
             <a:CodeText>Ordin&#230;rt bytte</a:CodeText>
             <a:CodeValue>OTOB</a:CodeValue>
-            <a:OID>***REMOVED***</a:OID>
+            <a:OID>7777</a:OID>
             <a:SimpleType>flrv2_beginreason</a:SimpleType>
         </BeginCode>
         <DoctorCycles>
@@ -14,29 +14,29 @@
                 <GP>
                     <DateOfBirth>1981-02-25T00:00:00</DateOfBirth>
                     <DateOfDeath i:nil="true"/>
-                    <FirstName>***REMOVED***</FirstName>
-                    <LastName>***REMOVED***</LastName>
-                    <MiddleName>***REMOVED***</MiddleName>
-                    <NIN>***REMOVED***</NIN>
+                    <FirstName>TESTNAVN</FirstName>
+                    <LastName>MELLOMNAVN</LastName>
+                    <MiddleName>TESTTERNAVN</MiddleName>
+                    <NIN>99999900000</NIN>
                     <PhysicalAddresses i:nil="true" xmlns:a="http://register.nhn.no/Common"/>
                     <Sex xmlns:a="http://register.nhn.no/Common">
                         <a:Active>true</a:Active>
                         <a:CodeText>Kvinne</a:CodeText>
                         <a:CodeValue>2</a:CodeValue>
-                        <a:OID>***REMOVED***</a:OID>
+                        <a:OID>1234</a:OID>
                         <a:SimpleType>kjonn</a:SimpleType>
                     </Sex>
                     <Status i:nil="true" xmlns:a="http://register.nhn.no/Common"/>
                 </GP>
                 <GPContract i:nil="true"/>
-                <GPContractId>***REMOVED***</GPContractId>
-                <HprNumber>***REMOVED***</HprNumber>
+                <GPContractId>9999</GPContractId>
+                <HprNumber>9900123</HprNumber>
                 <Id>2727</Id>
                 <Relationship xmlns:a="http://register.nhn.no/Common">
                     <a:Active>true</a:Active>
                     <a:CodeText>Fastlege</a:CodeText>
                     <a:CodeValue>LPFL</a:CodeValue>
-                    <a:OID>***REMOVED***</a:OID>
+                    <a:OID>4321</a:OID>
                     <a:SimpleType>flrv2_relationship</a:SimpleType>
                 </Relationship>
                 <SubstituteForHprNumber i:nil="true"/>
@@ -61,27 +61,27 @@
                 <ElectronicAddresses xmlns:a="http://register.nhn.no/Common"
                                      xmlns="http://register.nhn.no/Corporate">
                     <a:ElectronicAddress>
-                        <a:Address>***REMOVED***</a:Address>
+                        <a:Address>00099911</a:Address>
                         <a:Inherited>false</a:Inherited>
                         <a:LastChanged>2016-05-26T15:50:30.823</a:LastChanged>
                         <a:Type>
                             <a:Active>true</a:Active>
                             <a:CodeText>Telefonnummer</a:CodeText>
                             <a:CodeValue>E_TLF</a:CodeValue>
-                            <a:OID>***REMOVED***</a:OID>
+                            <a:OID>9876</a:OID>
                             <a:SimpleType>type_adressekomponeneter</a:SimpleType>
                         </a:Type>
                         <a:TypeCodeValue>E_TLF</a:TypeCodeValue>
                     </a:ElectronicAddress>
                     <a:ElectronicAddress>
-                        <a:Address>***REMOVED***</a:Address>
+                        <a:Address>00099911</a:Address>
                         <a:Inherited>false</a:Inherited>
                         <a:LastChanged>2016-05-26T15:50:30.823</a:LastChanged>
                         <a:Type>
                             <a:Active>true</a:Active>
                             <a:CodeText>Sentralbordnummer</a:CodeText>
                             <a:CodeValue>E_CEN</a:CodeValue>
-                            <a:OID>***REMOVED***</a:OID>
+                            <a:OID>9876</a:OID>
                             <a:SimpleType>type_adressekomponeneter</a:SimpleType>
                         </a:Type>
                         <a:TypeCodeValue>E_CEN</a:TypeCodeValue>
@@ -96,7 +96,7 @@
                             <a:Active>true</a:Active>
                             <a:CodeText>Digital sertifikat</a:CodeText>
                             <a:CodeValue>E_DS</a:CodeValue>
-                            <a:OID>***REMOVED***</a:OID>
+                            <a:OID>9876</a:OID>
                             <a:SimpleType>type_adressekomponeneter</a:SimpleType>
                         </a:Type>
                         <a:TypeCodeValue>E_DS</a:TypeCodeValue>
@@ -109,7 +109,7 @@
                             <a:Active>true</a:Active>
                             <a:CodeText>EDI (Standardisert elektronisk melding)</a:CodeText>
                             <a:CodeValue>E_EDI</a:CodeValue>
-                            <a:OID>***REMOVED***</a:OID>
+                            <a:OID>9876</a:OID>
                             <a:SimpleType>type_adressekomponeneter</a:SimpleType>
                         </a:Type>
                         <a:TypeCodeValue>E_EDI</a:TypeCodeValue>
@@ -128,10 +128,10 @@
                     <a:OID>3402</a:OID>
                     <a:SimpleType>kommune</a:SimpleType>
                 </Municipality>
-                <Name xmlns="http://register.nhn.no/Corporate">***REMOVED***</Name>
+                <Name xmlns="http://register.nhn.no/Corporate">TEST LEGESENTER AS</Name>
                 <OpeningHours i:nil="true" xmlns:a="http://register.nhn.no/Common"
                               xmlns="http://register.nhn.no/Corporate"/>
-                <OrganizationNumber xmlns="http://register.nhn.no/Corporate">***REMOVED***</OrganizationNumber>
+                <OrganizationNumber xmlns="http://register.nhn.no/Corporate">999000999</OrganizationNumber>
                 <ParentOrganizationName i:nil="true" xmlns="http://register.nhn.no/Corporate"/>
                 <ParentOrganizationNumber i:nil="true" xmlns="http://register.nhn.no/Corporate"/>
                 <PhysicalAddresses xmlns:a="http://register.nhn.no/Common"
@@ -150,7 +150,7 @@
                             <a:Active>true</a:Active>
                             <a:CodeText>Postadresse</a:CodeText>
                             <a:CodeValue>PST</a:CodeValue>
-                            <a:OID>***REMOVED***</a:OID>
+                            <a:OID>3456</a:OID>
                             <a:SimpleType>adressetype</a:SimpleType>
                         </a:Type>
                     </a:PhysicalAddress>
@@ -163,12 +163,12 @@
                         <a:Municipality i:nil="true"/>
                         <a:PostalCode>3032</a:PostalCode>
                         <a:Postbox/>
-                        <a:StreetAddress>***REMOVED*** 3</a:StreetAddress>
+                        <a:StreetAddress>Testgata 3</a:StreetAddress>
                         <a:Type>
                             <a:Active>true</a:Active>
                             <a:CodeText>Bes&#248;ksadresse</a:CodeText>
                             <a:CodeValue>RES</a:CodeValue>
-                            <a:OID>***REMOVED***</a:OID>
+                            <a:OID>3456</a:OID>
                             <a:SimpleType>adressetype</a:SimpleType>
                         </a:Type>
                     </a:PhysicalAddress>
@@ -196,7 +196,7 @@
                         <a:SimpleType>institusjonell_sektorkode</a:SimpleType>
                     </a:Code>
                 </Properties>
-                <ResponsiblePerson xmlns="http://register.nhn.no/Corporate">***REMOVED***
+                <ResponsiblePerson xmlns="http://register.nhn.no/Corporate">Responsible Test Person
                 </ResponsiblePerson>
                 <SectorCode xmlns:a="http://register.nhn.no/Common" xmlns="http://register.nhn.no/Corporate">
                     <a:Active>true</a:Active>
@@ -213,8 +213,8 @@
                 <District i:nil="true" xmlns:a="http://register.nhn.no/Common"/>
                 <IsGroupOffice>true</IsGroupOffice>
             </GPOffice>
-            <GPOfficeOrganizationNumber>***REMOVED***</GPOfficeOrganizationNumber>
-            <Id>***REMOVED***</Id>
+            <GPOfficeOrganizationNumber>999000999</GPOfficeOrganizationNumber>
+            <Id>9999</Id>
             <IsFixedSalary>false</IsFixedSalary>
             <MaxPatients>1000</MaxPatients>
             <Municipality xmlns:a="http://register.nhn.no/Common">
@@ -235,7 +235,7 @@
                 <a:Active>true</a:Active>
                 <a:CodeText>Lukket</a:CodeText>
                 <a:CodeValue>FALU</a:CodeValue>
-                <a:OID>***REMOVED***</a:OID>
+                <a:OID>7777</a:OID>
                 <a:SimpleType>flrv2_statuscode</a:SimpleType>
             </Status>
             <UpdatedOn>2017-10-26T01:09:49.46</UpdatedOn>
@@ -244,10 +244,10 @@
                 <a:To>9999-12-31T00:00:00</a:To>
             </Valid>
         </GPContract>
-        <GPContractId>***REMOVED***</GPContractId>
+        <GPContractId>9999</GPContractId>
         <Id>***REMOVED***</Id>
         <Patient i:nil="true"/>
-        <PatientNIN>***REMOVED***</PatientNIN>
+        <PatientNIN>12345678910</PatientNIN>
         <Period xmlns:a="http://schemas.nhn.no/reg/Common/en">
             <a:From>2017-04-01T00:00:00</a:From>
             <a:To>9999-12-31T00:00:00</a:To>

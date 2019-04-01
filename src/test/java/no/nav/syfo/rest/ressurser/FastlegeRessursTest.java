@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class FastlegeRessursTest {
 
-    private static final String FNR = "***REMOVED***";
+    private static final String FNR = "99999900000";
     private static final String VEILEDER_ID = "veilederID";
     private static final String LEGEKONTOR = "Pontypandy Legekontor";
     private static final String token = JwtTokenGenerator.createSignedJWT(VEILEDER_ID).serialize();
