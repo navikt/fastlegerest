@@ -16,6 +16,13 @@ public class Metrikk {
         this.registry = registry;
     }
 
+    public void tellHendelse(String navn) {
+        registry.counter(
+                addPrefix(navn),
+                Tags.of("type", "info")
+        ).increment();
+    }
+
     public void tellHttpKall(int kode) {
         registry.counter(
                 addPrefix("httpstatus"),
