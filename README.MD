@@ -25,4 +25,4 @@ Applikasjonen pakkes til en stor jar vha spring-boot-maven-plugin, og bygges med
 ### Deploy
 
 Deploy til preprod med fasitressurser fra q1 gjøres av alle brancher pushet til stash. Dette er satt opp på en 
-[Jenkins-server](https://ci.adeo.no/job/digisyfo/job/fastlegerest/).
+[Jenkins-server](https://jenkins-digisyfo.adeo.no/job/digisyfo/job/fastlegerest/).
