@@ -79,7 +79,7 @@ public class DialogRessursTest {
     @Test
     public void sendOppfolgingsplan() throws Exception {
         byte[] oppfolgingsplanPDF = new byte[20];
-        RSOppfolgingsplan oppfolgingsplan = new RSOppfolgingsplan("***REMOVED***", oppfolgingsplanPDF);
+        RSOppfolgingsplan oppfolgingsplan = new RSOppfolgingsplan("99999900000", oppfolgingsplanPDF);
 
         this.mvc.perform(post("/api/dialogmelding/v1/sendOppfolgingsplan")
                 .header("Authorization", "Bearer " + VEILEDER_TOKEN)
