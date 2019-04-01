@@ -15,8 +15,8 @@
                     <DateOfBirth>1981-02-25T00:00:00</DateOfBirth>
                     <DateOfDeath i:nil="true"/>
                     <FirstName>TESTNAVN</FirstName>
-                    <LastName>MELLOMNAVN</LastName>
-                    <MiddleName>TESTTERNAVN</MiddleName>
+                    <LastName>TESTTERNAVN</LastName>
+                    <MiddleName>MELLOMNAVN</MiddleName>
                     <NIN>99999900000</NIN>
                     <PhysicalAddresses i:nil="true" xmlns:a="http://register.nhn.no/Common"/>
                     <Sex xmlns:a="http://register.nhn.no/Common">
@@ -245,7 +245,7 @@
             </Valid>
         </GPContract>
         <GPContractId>9999</GPContractId>
-        <Id>***REMOVED***</Id>
+        <Id>100793403</Id>
         <Patient i:nil="true"/>
         <PatientNIN>12345678910</PatientNIN>
         <Period xmlns:a="http://schemas.nhn.no/reg/Common/en">
