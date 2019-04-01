@@ -25,7 +25,7 @@
         <javax.ws.rs.version>2.0.1</javax.ws.rs.version>
         <adresseregisteretV1-tjenestespesifikasjon.version>1.0.2</adresseregisteretV1-tjenestespesifikasjon.version>
         <fastlegeinformasjonV1-tjenestespesifikasjon.version>2.1.8</fastlegeinformasjonV1-tjenestespesifikasjon.version>
-        <brukerprofil-v3-tjenestespesifikasjon.version>3.0.3</brukerprofil-v3-tjenestespesifikasjon.version>
+        <brukerprofil-v3-tjenestespesifikasjon.version>3.0.1</brukerprofil-v3-tjenestespesifikasjon.version>
         <partner-emottak.version>1.0</partner-emottak.version>
         <micrometer-registry-prometheus.version>1.0.6</micrometer-registry-prometheus.version>
         <prometheus.version>0.3.0</prometheus.version>
@@ -119,7 +119,7 @@
             <version>${fastlegeinformasjonV1-tjenestespesifikasjon.version}</version>
         </dependency>
         <dependency>
-            <groupId>no.nav.sbl</groupId>
+            <groupId>no.nav.syfo.tjenester</groupId>
             <artifactId>brukerprofil-v3-tjenestespesifikasjon</artifactId>
             <version>${brukerprofil-v3-tjenestespesifikasjon.version}</version>
         </dependency>
