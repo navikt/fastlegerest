@@ -1,5 +1,6 @@
 package no.nav.syfo.config;
 
+import no.nav.syfo.exception.RestTemplateErrorHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.*;
@@ -18,18 +19,19 @@ import static java.util.Arrays.asList;
 
 })
 @Profile("remote")
-public class ApplicationConfig{
+public class ApplicationConfig {
 
     @Bean(name = "Oidc")
     public RestTemplate restTemplate(ClientHttpRequestInterceptor... interceptors) {
         RestTemplate template = new RestTemplate();
         template.setInterceptors(asList(interceptors));
+        template.setErrorHandler(new RestTemplateErrorHandler());
         return template;
     }
 
     @Bean(name = "BasicAuth")
     public RestTemplate basicAuthRestTemplate(@Value("${srvfastlegerest.username}") String username,
-    @Value("${srvfastlegerest.password}") String password) {
+                                              @Value("${srvfastlegerest.password}") String password) {
         return new RestTemplateBuilder()
                 .basicAuthorization(username, password)
                 .build();
