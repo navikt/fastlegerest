@@ -1,5 +1,6 @@
 package no.nav.syfo.services;
 
+import lombok.extern.slf4j.Slf4j;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.syfo.OIDCIssuer;
 import no.nav.syfo.util.OIDCUtil;
@@ -16,6 +17,7 @@ import java.util.Collections;
 import static org.springframework.web.util.UriComponentsBuilder.fromHttpUrl;
 
 @Service
+@Slf4j
 public class TilgangService {
 
     private final String TILGANGSKONTROLLAPI_URL;
@@ -49,13 +51,21 @@ public class TilgangService {
                 .queryParam("fnr", fnr)
                 .toUriString();
 
-        ResponseEntity<String> response = restTemplate.exchange(
+        ResponseEntity<String> response;
+        // TODO Denne får 500 når syfo-tilgangskontroll returnerer tilgang nektet Geografisk
+//        try {
+        response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 lagRequest(),
                 String.class
-                );
+        );
+//        } catch (Exception e) {
+//            log.warn("Fikk en exception ved henting av tilgang fra syfo-tilgangskontroll!", e);
+//            throw e;
+//        }
 
+        log.warn("Fikk respons fra syfo-tilgangskontroll med kode {}, toString: {}", response.getStatusCode(), response.toString());
         return response.getStatusCode().is2xxSuccessful();
     }
 
