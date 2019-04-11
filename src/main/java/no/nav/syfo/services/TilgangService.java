@@ -26,14 +26,13 @@ public class TilgangService {
     private OIDCRequestContextHolder contextHolder;
 
 
-
     @Inject
     public TilgangService(
             final @Value("${tilgangskontrollapi.url}") String url,
             final @Value("${local_mock}") boolean erLokalMock,
             final @Qualifier("Oidc") RestTemplate restTemplate,
             final OIDCRequestContextHolder contextHolder
-    ){
+    ) {
         this.TILGANGSKONTROLLAPI_URL = url;
         this.HAR_LOKAL_MOCK = erLokalMock;
         this.restTemplate = restTemplate;
@@ -51,21 +50,14 @@ public class TilgangService {
                 .queryParam("fnr", fnr)
                 .toUriString();
 
-        ResponseEntity<String> response;
-        // TODO Denne får 500 når syfo-tilgangskontroll returnerer tilgang nektet Geografisk
-//        try {
-        response = restTemplate.exchange(
+        ResponseEntity<String> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 lagRequest(),
                 String.class
         );
-//        } catch (Exception e) {
-//            log.warn("Fikk en exception ved henting av tilgang fra syfo-tilgangskontroll!", e);
-//            throw e;
-//        }
 
-        log.warn("Fikk respons fra syfo-tilgangskontroll med kode {}, toString: {}", response.getStatusCode(), response.toString());
+        log.info("Fikk responskode: {} fra syfo-tilgangskontroll, med body: {}", response.getStatusCode(), response.getBody());
         return response.getStatusCode().is2xxSuccessful();
     }
 
@@ -89,7 +81,7 @@ public class TilgangService {
         return response.getStatusCode().is2xxSuccessful();
     }
 
-    private HttpEntity<String> lagRequest(){
+    private HttpEntity<String> lagRequest() {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.set("Authorization", "Bearer " + OIDCUtil.tokenFraOIDC(contextHolder, OIDCIssuer.INTERN));
