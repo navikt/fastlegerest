@@ -77,12 +77,21 @@ public class MockUtils {
     }
 
     static void mockResponseFraTilgangskontroll(RestTemplate restTemplate, HttpStatus httpStatus) {
-        ResponseEntity<Object> responseEntity200 = new ResponseEntity<>(httpStatus);
+        String okJson = "{\"harTilgang\":true, \"begrunnelse\":\"\"}";
+        String forbiddenJson = "{\"harTilgang\":false, \"begrunnelse\":\"GEOGRAFISK\"}";
+
+        ResponseEntity<Object> responseEntity;
+        if (httpStatus == HttpStatus.FORBIDDEN) {
+            responseEntity = new ResponseEntity<>(forbiddenJson, httpStatus);
+        } else {
+            responseEntity = new ResponseEntity<>(okJson, httpStatus);
+        }
+
         when(restTemplate.exchange(
                 Mockito.anyString(),
                 Mockito.<HttpMethod>eq(HttpMethod.GET),
                 Mockito.<HttpEntity<?>>any(),
                 Mockito.<Class<Object>>any()
-        )).thenReturn(responseEntity200);
+        )).thenReturn(responseEntity);
     }
 }

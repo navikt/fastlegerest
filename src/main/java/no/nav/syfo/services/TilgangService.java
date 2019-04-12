@@ -1,8 +1,10 @@
 package no.nav.syfo.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.syfo.OIDCIssuer;
+import no.nav.syfo.domain.Tilgang;
 import no.nav.syfo.util.OIDCUtil;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,9 +43,11 @@ public class TilgangService {
 
 
     @Cacheable(value = "tilgang")
-    public boolean sjekkTilgang(String fnr) {
+    public Tilgang sjekkTilgang(String fnr) {
         if (HAR_LOKAL_MOCK) {
-            return true;
+            return new Tilgang()
+                    .harTilgang(true)
+                    .begrunnelse("");
         }
 
         final String url = fromHttpUrl(TILGANGSKONTROLLAPI_URL + "/tilgangtilbruker")
@@ -58,11 +62,16 @@ public class TilgangService {
         );
 
         log.info("Fikk responskode: {} fra syfo-tilgangskontroll, med body: {}", response.getStatusCode(), response.getBody());
-        return response.getStatusCode().is2xxSuccessful();
-    }
+        ObjectMapper mapper = new ObjectMapper();
+        Tilgang tilgang;
+        try {
+            tilgang = mapper.readValue(response.getBody(), Tilgang.class);
+        } catch (Exception e) {
+            log.error("Fikk en exception ved lesing av json fra syfo-tilgangskontroll", e);
+            throw new RuntimeException("Lesing av json fra syfo-tilgangskontroll feilet", e);
+        }
 
-    public boolean harIkkeTilgang(String fnr) {
-        return !sjekkTilgang(fnr);
+        return tilgang;
     }
 
     @Cacheable(value = "tilgang")

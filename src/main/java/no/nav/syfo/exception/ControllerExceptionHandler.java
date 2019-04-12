@@ -20,7 +20,6 @@ import javax.ws.rs.ForbiddenException;
 public class ControllerExceptionHandler {
 
     private final static String BAD_REQUEST_MSG = "Vi kunne ikke tolke inndataene";
-    public final static String FORBIDDEN_MSG = "Har ikke tilgang";
     private final static String INTERNAL_MSG = "Det skjedde en uventet feil";
     private final static String UNAUTHORIZED_MSG = "Autorisasjonsfeil";
 
@@ -77,7 +76,7 @@ public class ControllerExceptionHandler {
 
     private ResponseEntity<ApiError> handleForbiddenException(ForbiddenException ex, HttpHeaders headers, WebRequest request) {
         HttpStatus status = HttpStatus.FORBIDDEN;
-        return handleExceptionInternal(ex, new ApiError(status.value(), FORBIDDEN_MSG), headers, status, request);
+        return handleExceptionInternal(ex, new ApiError(status.value(), ex.getMessage()), headers, status, request);
     }
 
     private ResponseEntity<ApiError> handleIllegalArgumentException(IllegalArgumentException ex, HttpHeaders headers, WebRequest request) {

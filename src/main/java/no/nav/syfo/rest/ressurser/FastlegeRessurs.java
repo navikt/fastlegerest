@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 import no.nav.syfo.domain.Fastlege;
+import no.nav.syfo.domain.Tilgang;
 import no.nav.syfo.metric.Metrikk;
 import no.nav.syfo.services.FastlegeService;
 import no.nav.syfo.services.TilgangService;
@@ -58,9 +59,10 @@ public class FastlegeRessurs {
     }
 
     private void kastExceptionHvisIkkeTilgang(String fnr) {
-        if (tilgangService.harIkkeTilgang(fnr)) {
-            log.info("Har ikke tilgang til å se fastlegeinformasjon om brukeren.");
-            throw new HarIkkeTilgang();
+        Tilgang tilgang = tilgangService.sjekkTilgang(fnr);
+        if (!tilgang.harTilgang) {
+            log.info("Har ikke tilgang til å se fastlegeinformasjon om brukeren");
+            throw new HarIkkeTilgang(tilgang.begrunnelse);
         }
     }
 }
