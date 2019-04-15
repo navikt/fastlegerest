@@ -80,12 +80,9 @@ public class MockUtils {
         String okJson = "{\"harTilgang\":true, \"begrunnelse\":\"\"}";
         String forbiddenJson = "{\"harTilgang\":false, \"begrunnelse\":\"GEOGRAFISK\"}";
 
-        ResponseEntity<Object> responseEntity;
-        if (httpStatus == HttpStatus.FORBIDDEN) {
-            responseEntity = new ResponseEntity<>(forbiddenJson, httpStatus);
-        } else {
-            responseEntity = new ResponseEntity<>(okJson, httpStatus);
-        }
+        ResponseEntity<Object> responseEntity = httpStatus == HttpStatus.FORBIDDEN
+                ? new ResponseEntity<>(forbiddenJson, httpStatus)
+                : new ResponseEntity<>(okJson, httpStatus);
 
         when(restTemplate.exchange(
                 Mockito.anyString(),
