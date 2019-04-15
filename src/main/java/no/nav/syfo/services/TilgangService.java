@@ -1,7 +1,9 @@
 package no.nav.syfo.services;
 
+import lombok.extern.slf4j.Slf4j;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.syfo.OIDCIssuer;
+import no.nav.syfo.domain.Tilgang;
 import no.nav.syfo.util.OIDCUtil;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,9 +15,11 @@ import org.springframework.web.client.RestTemplate;
 import javax.inject.Inject;
 import java.util.Collections;
 
+import static no.nav.syfo.mappers.TilgangMappers.rs2Tilgang;
 import static org.springframework.web.util.UriComponentsBuilder.fromHttpUrl;
 
 @Service
+@Slf4j
 public class TilgangService {
 
     private final String TILGANGSKONTROLLAPI_URL;
@@ -24,14 +28,13 @@ public class TilgangService {
     private OIDCRequestContextHolder contextHolder;
 
 
-
     @Inject
     public TilgangService(
             final @Value("${tilgangskontrollapi.url}") String url,
             final @Value("${local_mock}") boolean erLokalMock,
             final @Qualifier("Oidc") RestTemplate restTemplate,
             final OIDCRequestContextHolder contextHolder
-    ){
+    ) {
         this.TILGANGSKONTROLLAPI_URL = url;
         this.HAR_LOKAL_MOCK = erLokalMock;
         this.restTemplate = restTemplate;
@@ -40,9 +43,11 @@ public class TilgangService {
 
 
     @Cacheable(value = "tilgang")
-    public boolean sjekkTilgang(String fnr) {
+    public Tilgang sjekkTilgang(String fnr) {
         if (HAR_LOKAL_MOCK) {
-            return true;
+            return new Tilgang()
+                    .harTilgang(true)
+                    .begrunnelse("");
         }
 
         final String url = fromHttpUrl(TILGANGSKONTROLLAPI_URL + "/tilgangtilbruker")
@@ -54,13 +59,10 @@ public class TilgangService {
                 HttpMethod.GET,
                 lagRequest(),
                 String.class
-                );
+        );
 
-        return response.getStatusCode().is2xxSuccessful();
-    }
-
-    public boolean harIkkeTilgang(String fnr) {
-        return !sjekkTilgang(fnr);
+        log.info("Fikk responskode: {} fra syfo-tilgangskontroll, med body: {}", response.getStatusCode(), response.getBody());
+        return rs2Tilgang(response);
     }
 
     @Cacheable(value = "tilgang")
@@ -79,7 +81,7 @@ public class TilgangService {
         return response.getStatusCode().is2xxSuccessful();
     }
 
-    private HttpEntity<String> lagRequest(){
+    private HttpEntity<String> lagRequest() {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.set("Authorization", "Bearer " + OIDCUtil.tokenFraOIDC(contextHolder, OIDCIssuer.INTERN));

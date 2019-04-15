@@ -28,7 +28,7 @@ public class TilgangServiceTest {
     public void godkjennMocketTilgang() {
         tilgangService = new TilgangService(TILGANGSKONTROLL_URL, HAR_LOCAL_MOCK, restTemplate, contextHolder);
 
-        Boolean tilgang = tilgangService.sjekkTilgang(FNR);
+        Boolean tilgang = tilgangService.sjekkTilgang(FNR).harTilgang;
 
         assertThat(tilgang).isTrue();
     }

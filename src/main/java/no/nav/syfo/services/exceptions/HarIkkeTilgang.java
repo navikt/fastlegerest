@@ -4,8 +4,8 @@ import javax.ws.rs.ForbiddenException;
 
 public class HarIkkeTilgang extends ForbiddenException {
 
-    public HarIkkeTilgang() {
-        super();
+    public HarIkkeTilgang(String message) {
+        super(message);
     }
 }
 

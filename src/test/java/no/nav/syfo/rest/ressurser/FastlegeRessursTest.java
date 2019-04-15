@@ -21,7 +21,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 
-import static no.nav.syfo.exception.ControllerExceptionHandler.FORBIDDEN_MSG;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -124,7 +123,7 @@ public class FastlegeRessursTest {
     }
 
     private String mockApiError403() throws JSONException {
-        return mockApiErrorAsJson(403, FORBIDDEN_MSG);
+        return mockApiErrorAsJson(403, "GEOGRAFISK");
     }
 
     private String mockApiError404() throws JSONException {
