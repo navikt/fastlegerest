@@ -1,22 +1,17 @@
 package no.nav.syfo.util;
 
+import lombok.extern.slf4j.Slf4j;
 import no.nav.security.oidc.OIDCConstants;
 import no.nav.security.oidc.context.*;
 
-import javax.ws.rs.ForbiddenException;
-
-
+@Slf4j
 public class OIDCUtil {
 
     public static String tokenFraOIDC(OIDCRequestContextHolder contextHolder, String issuer) {
         OIDCValidationContext context = (OIDCValidationContext) contextHolder
                 .getRequestAttribute(OIDCConstants.OIDC_VALIDATION_CONTEXT);
 
-        TokenContext tokenContext = context.getToken(issuer);
-        if (tokenContext == null){
-            throw new ForbiddenException("Finner ikke token.");
-        }
-        return tokenContext.getIdToken();
+        return  context.getToken(issuer).getIdToken();
     }
 
 }

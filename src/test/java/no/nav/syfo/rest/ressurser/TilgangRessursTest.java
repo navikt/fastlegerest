@@ -2,7 +2,6 @@ package no.nav.syfo.rest.ressurser;
 
 import no.nav.security.spring.oidc.test.JwtTokenGenerator;
 import no.nav.syfo.LocalApplication;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,12 +41,6 @@ public class TilgangRessursTest {
     private MockMvc mvc;
 
 
-    @Before
-    public void setUp() throws Exception {
-        MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
-    }
-
-
     @Test
     public void godkjennRiktigTilgang() throws Exception {
         MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
@@ -66,6 +59,25 @@ public class TilgangRessursTest {
                 .header(AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("false")));
+    }
+
+    @Test
+    public void svarMed401NarTokenMangler() throws Exception{
+        this.mvc.perform(get("/api/tilgang")
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .header(AUTHORIZATION, "Bearer "))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().string(containsString("Autorisasjonsfeil")));
+
+    }
+
+    @Test
+    public void svarMed401NarAuthorizationHeaderMangler() throws Exception{
+        this.mvc.perform(get("/api/tilgang")
+                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().string(containsString("Autorisasjonsfeil")));
+
     }
 
 }
