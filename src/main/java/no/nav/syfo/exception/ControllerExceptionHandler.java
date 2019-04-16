@@ -65,7 +65,7 @@ public class ControllerExceptionHandler {
         } else {
             HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
-            log.warn("Fikk RuntimeException i én av controllerene");
+            log.error("Fikk RuntimeException i én av controllerene", ex);
             return handleExceptionInternal(ex, new ApiError(status.value(), INTERNAL_MSG), headers, status, request);
         }
     }
