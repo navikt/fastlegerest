@@ -61,6 +61,15 @@ fasitResources:
     resourceType: baseurl
     propertyMap:
       url: NO_NAV_SECURITY_OIDC_ISSUER_INTERN_DISCOVERYURL
+    # OIDC med AzureAD B2C
+  - alias: aad_b2c_clientid
+    resourceType: credential
+    propertyMap:
+      username: NO_NAV_SECURITY_OIDC_ISSUER_SELVBETJENING_ACCEPTEDAUDIENCE
+  - alias: aad_b2c_discovery
+    resourceType: baseurl
+    propertyMap:
+      url: NO_NAV_SECURITY_OIDC_ISSUER_SELVBETJENING_DISCOVERYURL
   exposed:
   - alias: fastlegeapi
     resourceType: restservice

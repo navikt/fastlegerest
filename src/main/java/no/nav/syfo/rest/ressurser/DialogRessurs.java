@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 import static no.nav.syfo.OIDCIssuer.INTERN;
+import static no.nav.syfo.OIDCIssuer.EKSTERN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -28,6 +29,21 @@ public class DialogRessurs {
     @PostMapping(path = "/api/dialogmelding/v1/sendOppfolgingsplan", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ProtectedWithClaims(issuer = INTERN)
     public void sendOppfolgingsplan(@RequestBody @Valid RSOppfolgingsplan oppfolgingsplan) {
+        try {
+            log.info("Sender oppfølgingsplan");
+            dialogService.sendOppfolgingsplan(oppfolgingsplan);
+        } catch (PartnerinformasjonIkkeFunnet e) {
+            log.warn("Feil ved sending av oppfølgingsplan", e);
+            throw e;
+        } catch (Exception e) {
+            log.error("Feil ved sending av oppfølgingsplan", e);
+            throw e;
+        }
+    }
+
+    @PostMapping(path = "/api/dialogmelding/v1/sendOppfolgingsplanFraSelvbetjening", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @ProtectedWithClaims(issuer = EKSTERN)
+    public void sendOppfolgingsplanFraSBS(@RequestBody @Valid RSOppfolgingsplan oppfolgingsplan) {
         try {
             log.info("Sender oppfølgingsplan");
             dialogService.sendOppfolgingsplan(oppfolgingsplan);
