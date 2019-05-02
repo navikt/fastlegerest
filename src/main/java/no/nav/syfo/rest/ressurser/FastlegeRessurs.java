@@ -55,7 +55,11 @@ public class FastlegeRessurs {
 
         kastExceptionHvisIkkeTilgang(fnr);
 
-        return fastlegeService.hentBrukersFastleger(fnr);
+        List<Fastlege> fastleger = fastlegeService.hentBrukersFastleger(fnr);
+        if (fastleger.isEmpty()) {
+            throw new FastlegeIkkeFunnet("Fant ingen fastleger på brukeren");
+        }
+        return fastleger;
     }
 
     private void kastExceptionHvisIkkeTilgang(String fnr) {
