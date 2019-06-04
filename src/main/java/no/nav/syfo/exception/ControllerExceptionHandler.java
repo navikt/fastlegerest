@@ -65,7 +65,6 @@ public class ControllerExceptionHandler {
         } else {
             HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
-            log.error("Fikk RuntimeException i én av controllerene", ex);
             return handleExceptionInternal(ex, new ApiError(status.value(), INTERNAL_MSG), headers, status, request);
         }
     }
@@ -98,6 +97,7 @@ public class ControllerExceptionHandler {
         metrikk.tellHttpKall(status.value());
 
         if (HttpStatus.INTERNAL_SERVER_ERROR.equals(status)) {
+            log.error("Uventet feil: {} : {}", ex.getClass().toString(), ex.getMessage(), ex);
             request.setAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE, ex, WebRequest.SCOPE_REQUEST);
         }
 
