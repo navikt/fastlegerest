@@ -87,15 +87,11 @@ public class FastlegeRessursTest {
         MockUtils.mockIngenFastleger(fastlegeSoapClient);
         MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
 
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("status", 404);
-        jsonObject.put("message", "Feil ved oppslag av fastlege");
-
         this.mvc.perform(get("/api/fastlege/v1/fastleger?fnr=" + FNR)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION, "Bearer " + token))
-                .andExpect(status().isNotFound())
-                .andExpect(content().json(mockApiError404()));
+                .andExpect(status().isOk())
+                .andExpect(content().string("[]"));
     }
 
     @Test

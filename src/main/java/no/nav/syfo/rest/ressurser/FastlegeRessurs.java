@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static no.nav.syfo.OIDCIssuer.INTERN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -55,11 +56,11 @@ public class FastlegeRessurs {
 
         kastExceptionHvisIkkeTilgang(fnr);
 
-        List<Fastlege> fastleger = fastlegeService.hentBrukersFastleger(fnr);
-        if (fastleger.isEmpty()) {
-            throw new FastlegeIkkeFunnet("Fant ingen fastleger på brukeren");
+        try {
+            return fastlegeService.hentBrukersFastleger(fnr);
+        } catch (FastlegeIkkeFunnet e) {
+            return emptyList();
         }
-        return fastleger;
     }
 
     private void kastExceptionHvisIkkeTilgang(String fnr) {
