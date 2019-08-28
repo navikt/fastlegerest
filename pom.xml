@@ -31,7 +31,7 @@
         <prometheus.version>0.3.0</prometheus.version>
         <swagger.version>1.5.21</swagger.version>
         <lombok.version>1.18.2</lombok.version>
-        <cxf.version>3.2.0</cxf.version>
+        <cxf.version>3.3.3</cxf.version>
         <oidc-spring-support.version>0.2.15</oidc-spring-support.version>
         <auth.version>2018.11.20.15.56</auth.version>
         <logstash-logback-encoder.version>4.10</logstash-logback-encoder.version>
