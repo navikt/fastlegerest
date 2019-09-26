@@ -36,12 +36,11 @@ public class LogErrorHandler implements SOAPHandler<SOAPMessageContext> {
 
             Throwable exception = message.getContent(Exception.class);
 
-
             if (exception instanceof Fault && exception.getCause() != null) {
                 exception = exception.getCause();
             }
 
-            LOG.error(beskrivelse(message).toString(), exception);
+            LOG.warn(beskrivelse(message).toString(), exception);
         }
         return true;
     }
