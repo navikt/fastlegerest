@@ -41,18 +41,6 @@ fasitResources:
     resourceType: webserviceendpoint
   - alias: securityTokenService
     resourceType: baseUrl
-  - alias: isso-host
-    resourceType: baseurl
-  - alias: isso-jwks
-    resourceType: baseurl
-  - alias: isso.isalive
-    resourceType: baseurl
-  - alias: isso-issuer
-    resourceType: baseurl
-  - alias: isso-rp-user
-    resourceType: credential
-  - alias: veilarblogin.redirect-url
-    resourceType: restservice
   - alias: tilgangskontrollapi
     resourceType: restservice
   - alias: security-token-service-token
