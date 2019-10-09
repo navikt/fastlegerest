@@ -18,11 +18,6 @@ import java.util.HashMap;
 
 @Component
 public class STSClientConfig {
-
-    public static final String STS_URL_KEY = "SECURITYTOKENSERVICE_URL";
-    public static final String SERVICEUSER_USERNAME = "SRVFASTLEGEREST_USERNAME";
-    public static final String SERVICEUSER_PASSWORD = "SRVFASTLEGEREST_PASSWORD";
-
     // Only use no transportbinding on localhost, should use the requestSamlPolicy.xml with transport binding https
     // when in production.
     private static final String STS_REQUEST_SAML_POLICY = "classpath:policy/requestSamlPolicy.xml";
@@ -56,9 +51,10 @@ public class STSClientConfig {
 
     protected static void configureStsWithPolicyForClient(STSClient stsClient, Client client, String policyReference,
                                                           boolean cacheTokenInEndpoint) {
-        String location = requireProperty(STS_URL_KEY);
-        String username = requireProperty(SERVICEUSER_USERNAME);
-        String password = requireProperty(SERVICEUSER_PASSWORD);
+
+        String location = System.getenv("SECURITYTOKENSERVICE_URL");
+        String username = System.getenv("srv_username"); 
+        String password = System.getenv("srv_password"); 
 
         configureSTSClient(stsClient, location, username, password);
 

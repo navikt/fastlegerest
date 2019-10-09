@@ -18,7 +18,7 @@ mockBrukerprofil_V3: true
 mockEksternHelse: true
 mockAdresseregisteretV1: true
 mockPartnerEmottak: true
-SECURITYTOKENSERVICE_URL: "https://sts.url"
+: "https://sts.url"
 
 SRVFASTLEGEREST_USERNAME:
 SRVFASTLEGEREST_PASSWORD:
