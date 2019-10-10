@@ -18,10 +18,13 @@ mockBrukerprofil_V3: true
 mockEksternHelse: true
 mockAdresseregisteretV1: true
 mockPartnerEmottak: true
-: "https://sts.url"
 
-srv_fastlegerest_username:
-srv_fastlegerest_password:
+srv.username: admin
+srv.password: admin
+
+SECURITYTOKENSERVICE_URL: sts.url
+SRV_USERNAME: admin
+SRV_PASSWORD: admin
 
 security-token-service-token.url: "https://sts.url"
 
