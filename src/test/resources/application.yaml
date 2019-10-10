@@ -20,8 +20,8 @@ mockAdresseregisteretV1: true
 mockPartnerEmottak: true
 : "https://sts.url"
 
-SRVFASTLEGEREST_USERNAME:
-SRVFASTLEGEREST_PASSWORD:
+srv_fastlegerest_username:
+srv_fastlegerest_password:
 
 security-token-service-token.url: "https://sts.url"
 
