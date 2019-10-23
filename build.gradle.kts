@@ -25,6 +25,8 @@ allOpen {
     annotation("org.springframework.stereotype.Service")
     annotation("org.springframework.stereotype.Component")
     annotation("org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc")
+    annotation("lombok.extern.slf4j.Slf4j")
+    annotation("org.springframework.boot.autoconfigure.SpringBootApplication")
 }
 
 repositories {
@@ -41,7 +43,7 @@ dependencies {
     implementation( "javax.inject:javax.inject:1")
     implementation( "javax.ws.rs:javax.ws.rs-api:2.0.1")
     implementation( "io.swagger:swagger-annotations:1.5.21")
-    implementation( "org.projectlombok:lombok:1.18.2")
+    compileOnly( "org.projectlombok:lombok:1.18.2")
     implementation( "io.micrometer:micrometer-registry-prometheus:1.0.6")
     implementation( "org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     implementation( "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion")
