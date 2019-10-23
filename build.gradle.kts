@@ -73,6 +73,10 @@ tasks {
         options.encoding = "UTF-8"
     }
 
+    withType<Jar> {
+        manifest.attributes["Main-Class"] = "no.nav.syfo.Application"
+    }
+
     create("printVersion") {
         doLast {
             println(project.version)
