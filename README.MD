@@ -2,7 +2,8 @@
 
 Fastlegerest er en backendapp som tilbyr integrasjon mot pasient- og helsejournalsystemene via dialogfordeler. 
 
-Fastlegerest er en Spring boot-applikasjon i Nais.
+Fastlegerest er en Spring boot-applikasjon i Nais, med hemmeligheter i vault og ressurser fra
+naiserator.yaml i syfonais.
 
 ## Lokal utvikling
 
@@ -17,12 +18,12 @@ Appen kjører da på localhost:8899/
 
 Appen har komponenttester fra kant til kant for alle sine endepunkter.
 
-
 ### Bygging
 
-Applikasjonen pakkes til en stor jar vha spring-boot-maven-plugin, og bygges med docker.
+Applikasjonen pakkes til en stor jar i gradle, og bygges med docker.
 
 ### Deploy
 
-Deploy til preprod med fasitressurser fra q1 gjøres av alle brancher pushet til stash. Dette er satt opp på en 
-[Jenkins-server](https://jenkins-digisyfo.adeo.no/job/digisyfo/job/fastlegerest/).
+Deploy til preprod og prod gjøres på en [Jenkins-server](https://jenkins-digisyfo.adeo.no/job/digisyfo/job/fastlegerest/).
+Alle brancher bygges. Deploy av branch gjøres i egen jenkins oppgave kalt deploy, merge til master deployes automatisk
+til preprod.
