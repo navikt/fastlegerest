@@ -1,32 +1,20 @@
+import com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer
+import com.github.jengelman.gradle.plugins.shadow.transformers.PropertiesFileTransformer
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 group = "no.nav.syfo"
 version = "1.0-SNAPSHOT"
 description = "fastlegerest"
 
 val sourceCompatibility = "1.8"
 val springBootVersion = "2.1.1.RELEASE"
+val cxfVersion = "3.2.7"
 
 plugins {
     kotlin("jvm") version "1.3.31"
     id("java")
-    id("maven-publish")
     id("com.diffplug.gradle.spotless") version "3.18.0"
     id("com.github.johnrengelman.shadow") version "4.0.3"
-    id("org.jetbrains.kotlin.plugin.allopen") version "1.3.50"
-}
-
-buildscript {
-    dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-allopen:1.3.50")
-    }
-}
-
-allOpen {
-    annotation("org.springframework.context.annotation.Configuration")
-    annotation("org.springframework.stereotype.Service")
-    annotation("org.springframework.stereotype.Component")
-    annotation("org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc")
-    annotation("lombok.extern.slf4j.Slf4j")
-    annotation("org.springframework.boot.autoconfigure.SpringBootApplication")
 }
 
 repositories {
@@ -59,10 +47,11 @@ dependencies {
     implementation( "no.nav.security:oidc-spring-support:0.2.15")
     implementation( "no.nav.security:oidc-support:0.2.15")
     implementation( "no.nav.common:auth:2018.11.20.15.56")
-    implementation( "org.apache.cxf:cxf-spring-boot-starter-jaxws:3.3.3")
-    implementation( "org.apache.cxf:cxf-rt-features-logging:3.3.3")
-    implementation( "org.apache.cxf:cxf-rt-ws-security:3.3.3")
-    implementation( "org.apache.cxf:cxf-rt-ws-policy:3.3.3")
+    implementation("org.apache.cxf:cxf-rt-features-logging:$cxfVersion")
+    implementation("org.apache.cxf:cxf-rt-ws-security:$cxfVersion")
+    implementation("org.apache.cxf:cxf-rt-ws-policy:$cxfVersion")
+    implementation("org.apache.cxf:cxf-rt-transports-http:$cxfVersion")
+    implementation("org.apache.cxf:cxf-rt-frontend-jaxws:$cxfVersion")
     annotationProcessor("org.projectlombok:lombok:1.18.6")
     testCompile( "org.springframework.boot:spring-boot-starter-test:$springBootVersion")
     testCompile( "no.nav.security:oidc-spring-test:0.2.5")
@@ -83,5 +72,17 @@ tasks {
         doLast {
             println(project.version)
         }
+    }
+
+    withType<ShadowJar> {
+        transform(ServiceFileTransformer::class.java) {
+            setPath("META-INF/cxf")
+            include("bus-extensions.txt")
+        }
+        transform(PropertiesFileTransformer::class.java) {
+            paths = listOf("META-INF/spring.factories")
+            mergeStrategy = "append"
+        }
+        mergeServiceFiles()
     }
 }
