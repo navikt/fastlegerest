@@ -17,7 +17,7 @@ public class PartnerEmottakConfig {
     @ConditionalOnProperty(value="mockPartnerEmottak", havingValue = "false", matchIfMissing = true)
     public PartnerResource partnerResource(@Value("${srvfastlegerest.username}") String username,
                                            @Value("${srvfastlegerest.password}") String password,
-                                           @Value("${partner.ws.endpointurl}") String serviceUrl ){
+                                           @Value("${partner.ws.url}") String serviceUrl ){
 
         PartnerResource port = new WsClient<PartnerResource>().createPortWithCredentials(
                 username,
@@ -26,7 +26,7 @@ public class PartnerEmottakConfig {
                 PartnerResource.class,
                 singletonList(new LogErrorHandler())
                );
-        
+
         //configureRequestSamlToken(port);
         return port;
 
