@@ -31,7 +31,7 @@ public class DialogService {
             final PartnerService partnerService,
             final TokenService tokenService,
             final @Qualifier("Oidc") RestTemplate restTemplate,
-            final @Value("${fasit.environment.name}") String host ) {
+            final @Value("${environment.name:dialogfordeler}") String host ) {
         this.fastlegeService = fastlegeService;
         this.partnerService = partnerService;
         this.restTemplate = restTemplate;

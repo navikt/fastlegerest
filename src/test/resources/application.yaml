@@ -35,7 +35,7 @@ tilgangskontrollapi.url: "https://tilgangskontroll.url"
 
 local_mock: false
 
-fasit.environment.name: local
+environment.name: local
 
 no.nav.security.oidc:
   issuers: intern
