@@ -30,8 +30,8 @@ public class ApplicationConfig {
     }
 
     @Bean(name = "BasicAuth")
-    public RestTemplate basicAuthRestTemplate(@Value("${srvfastlegerest.username}") String username,
-                                              @Value("${srvfastlegerest.password}") String password) {
+    public RestTemplate basicAuthRestTemplate(@Value("${srv.username}") String username,
+                                              @Value("${srv.password}") String password) {
         return new RestTemplateBuilder()
                 .basicAuthorization(username, password)
                 .build();
