@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.common.auth.SubjectHandler;
 import no.nav.syfo.domain.*;
 import no.nav.syfo.services.exceptions.FastlegeIkkeFunnet;
+import no.nhn.schemas.reg.common.en.WSPeriod;
 import no.nhn.schemas.reg.flr.*;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -64,16 +65,25 @@ public class FastlegeService {
     private List<Fastlege> hentFastleger(WSPatientToGPContractAssociation patientGPDetails) {
         return mapListe(patientGPDetails.getDoctorCycles().getGPOnContractAssociations(), ws2fastlege).stream()
                 .map(fastlege -> fastlege
-                        .pasientforhold(new Pasientforhold()
-                                .fom(patientGPDetails.getPeriod().getFrom().toLocalDate())
-                                .tom(patientGPDetails.getPeriod().getTo().toLocalDate()))
+                        .pasientforhold(getPasientForhold(patientGPDetails.getPeriod()))
                         .herId(patientGPDetails.getGPHerId()))
                 .collect(toList());
     }
 
+    private Pasientforhold getPasientForhold(WSPeriod period) {
+        Pasientforhold pasientforhold = new Pasientforhold();
+        pasientforhold.fom(period.getFrom().toLocalDate());
+        if (period.getTo() != null) {
+            pasientforhold.tom(period.getTo().toLocalDate());
+        }
+        return pasientforhold;
+    }
+
     private static Optional<Fastlege> finnAktivFastlege(List<Fastlege> fastleger) {
         return fastleger.stream()
-                .filter(fastlege -> fastlege.pasientforhold().fom().isBefore(now()) && fastlege.pasientforhold().tom().isAfter(now()))
+                .filter(fastlege -> fastlege.pasientforhold().fom().isBefore(now())
+                        && (fastlege.pasientforhold.tom() == null || fastlege.pasientforhold().tom().isAfter(now()))
+                )
                 .findFirst();
     }
 }
