@@ -23,7 +23,7 @@ public class DialogService {
     private PartnerService partnerService;
     private TokenService tokenService;
     private RestTemplate restTemplate;
-    private String HOST;
+    private String dialogfordelerDomain;
 
     @Inject
     public DialogService (
@@ -31,12 +31,12 @@ public class DialogService {
             final PartnerService partnerService,
             final TokenService tokenService,
             final @Qualifier("Oidc") RestTemplate restTemplate,
-            final @Value("${environment.name:dialogfordeler}") String host ) {
+            final @Value("${environment.name:nonlocal}") String environmenName ) {
         this.fastlegeService = fastlegeService;
         this.partnerService = partnerService;
         this.restTemplate = restTemplate;
         this.tokenService = tokenService;
-        this.HOST = "local".equalsIgnoreCase(host) ? "localhost:8080" : "dialogfordeler";
+        this.dialogfordelerDomain = "local".equalsIgnoreCase(environmenName) ? "localhost:8080" : "dialogfordeler";
     }
 
     public void sendOppfolgingsplan(final RSOppfolgingsplan oppfolgingsplan) {
@@ -53,7 +53,7 @@ public class DialogService {
 
     private void send(RSHodemelding hodemelding) {
         ResponseEntity<String> response = restTemplate.exchange(
-                "http://" + HOST + "/api/dialogmelding/sendOppfolgingsplan",
+                "http://" + dialogfordelerDomain + "/api/dialogmelding/sendOppfolgingsplan",
                 HttpMethod.POST,
                 new HttpEntity<>(hodemelding, lagHeaders()),
                 String.class
