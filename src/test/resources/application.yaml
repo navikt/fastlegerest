@@ -10,20 +10,23 @@ spring:
     min-pool-size: 8
     max-pool-size: 32
 
-virksomhet.brukerprofil.v3.endpointurl: "https://brukerprofil_v3.url"
-ekstern.helse.fastlegeinformasjon.endpointurl: "https://fastlegeinformasjon.url"
-ekstern.helse.adresseregisteret.v1.endpointurl: "https://adresseregisteret.url"
-partner.ws.endpointurl: "https://emottak.url"
+virksomhet.brukerprofil.v3.url: "https://brukerprofil_v3.url"
+ekstern.helse.fastlegeinformasjon.url: "https://fastlegeinformasjon.url"
+ekstern.helse.adresseregisteret.v1.url: "https://adresseregisteret.url"
+partner.ws.url: "https://emottak.url"
 mockBrukerprofil_V3: true
 mockEksternHelse: true
 mockAdresseregisteretV1: true
 mockPartnerEmottak: true
-SECURITYTOKENSERVICE_URL: "https://sts.url"
 
-SRVFASTLEGEREST_USERNAME:
-SRVFASTLEGEREST_PASSWORD:
+srv.username: admin
+srv.password: admin
 
-security-token-service-token.url: "https://sts.url"
+SECURITYTOKENSERVICE_URL: sts.url
+SRV_USERNAME: admin
+SRV_PASSWORD: admin
+
+security.token.service.token.url: "https://sts.url"
 
 no.nav.modig.security.sts.url: "https://e34jbsl01816.devillo.no:8443/SecurityTokenServiceProvider/"
 isso-host.url: "https://isso-t.adeo.no/isso/oauth2"
@@ -32,7 +35,7 @@ tilgangskontrollapi.url: "https://tilgangskontroll.url"
 
 local_mock: false
 
-fasit.environment.name: local
+environment.name: local
 
 no.nav.security.oidc:
   issuers: intern

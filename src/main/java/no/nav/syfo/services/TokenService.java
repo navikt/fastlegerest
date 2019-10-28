@@ -23,7 +23,7 @@ public class TokenService {
 
     @Autowired
     public TokenService(@Qualifier("BasicAuth") RestTemplate basicAuthRestTemplate,
-                        @Value("${security-token-service-token.url}") String url,
+                        @Value("${security.token.service.token.url}") String url,
                         final @Value("${local_mock}") boolean erLokalMock) {
         this.basicAuthRestTemplate = basicAuthRestTemplate;
         this.url = url;

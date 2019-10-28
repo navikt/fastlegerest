@@ -4,11 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.common.auth.SubjectHandler;
 import no.nav.syfo.domain.*;
 import no.nav.syfo.services.exceptions.FastlegeIkkeFunnet;
+import no.nhn.schemas.reg.common.en.WSPeriod;
 import no.nhn.schemas.reg.flr.*;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,11 +66,15 @@ public class FastlegeService {
     private List<Fastlege> hentFastleger(WSPatientToGPContractAssociation patientGPDetails) {
         return mapListe(patientGPDetails.getDoctorCycles().getGPOnContractAssociations(), ws2fastlege).stream()
                 .map(fastlege -> fastlege
-                        .pasientforhold(new Pasientforhold()
-                                .fom(patientGPDetails.getPeriod().getFrom().toLocalDate())
-                                .tom(patientGPDetails.getPeriod().getTo().toLocalDate()))
+                        .pasientforhold(getPasientForhold(patientGPDetails.getPeriod()))
                         .herId(patientGPDetails.getGPHerId()))
                 .collect(toList());
+    }
+
+    private Pasientforhold getPasientForhold(WSPeriod period) {
+        return new Pasientforhold()
+                .fom(period.getFrom().toLocalDate())
+                .tom(period.getTo() == null ? LocalDate.parse("9999-12-31") : period.getTo().toLocalDate());
     }
 
     private static Optional<Fastlege> finnAktivFastlege(List<Fastlege> fastleger) {

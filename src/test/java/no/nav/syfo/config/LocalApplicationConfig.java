@@ -29,8 +29,8 @@ public class LocalApplicationConfig {
     }
 
     @Bean(name = "BasicAuth")
-    public RestTemplate basicAuthRestTemplate(@Value("${SRVFASTLEGEREST_USERNAME}") String username,
-                                              @Value("${SRVFASTLEGEREST_PASSWORD}") String password) {
+    public RestTemplate basicAuthRestTemplate(@Value("${srv.username}") String username,
+                                              @Value("${srv.password}") String password) {
         return new RestTemplateBuilder()
                 .basicAuthorization(username, password)
                 .build();

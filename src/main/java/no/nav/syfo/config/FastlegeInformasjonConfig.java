@@ -18,7 +18,7 @@ public class FastlegeInformasjonConfig {
     @Primary
     @ConditionalOnProperty(value="mockEksternHelse", havingValue = "false", matchIfMissing = true)
     public IFlrReadOperations fastlegeSoapClient(
-            @Value("${ekstern.helse.fastlegeinformasjon.endpointurl}") String serviceUrl) {
+            @Value("${ekstern.helse.fastlegeinformasjon.url}") String serviceUrl) {
 
         IFlrReadOperations port = new WsClient<IFlrReadOperations>().createPort(
                 serviceUrl,

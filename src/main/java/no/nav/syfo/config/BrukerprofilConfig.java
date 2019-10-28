@@ -15,7 +15,7 @@ public class BrukerprofilConfig {
     @Bean
     @Primary
     @ConditionalOnProperty(value="mockBrukerprofil_V3", havingValue = "false", matchIfMissing = true)
-    public BrukerprofilV3 brukerprofilV3(@Value("${virksomhet.brukerprofil.v3.endpointurl}") String serviceUrl) {
+    public BrukerprofilV3 brukerprofilV3(@Value("${virksomhet.brukerprofil.v3.url}") String serviceUrl) {
         BrukerprofilV3 port = new WsClient<BrukerprofilV3>()
                 .createPort(serviceUrl, BrukerprofilV3.class, singletonList(new LogErrorHandler()));
         configureRequestSamlToken(port);
