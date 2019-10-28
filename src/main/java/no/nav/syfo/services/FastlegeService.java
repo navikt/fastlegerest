@@ -10,6 +10,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,12 +72,9 @@ public class FastlegeService {
     }
 
     private Pasientforhold getPasientForhold(WSPeriod period) {
-        Pasientforhold pasientforhold = new Pasientforhold();
-        pasientforhold.fom(period.getFrom().toLocalDate());
-        if (period.getTo() != null) {
-            pasientforhold.tom(period.getTo().toLocalDate());
-        }
-        return pasientforhold;
+        return new Pasientforhold()
+                .fom(period.getFrom().toLocalDate())
+                .tom(period.getTo() == null ? LocalDate.parse("9999-12-31") : period.getTo().toLocalDate());
     }
 
     private static Optional<Fastlege> finnAktivFastlege(List<Fastlege> fastleger) {
