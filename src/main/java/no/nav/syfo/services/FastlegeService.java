@@ -79,9 +79,7 @@ public class FastlegeService {
 
     private static Optional<Fastlege> finnAktivFastlege(List<Fastlege> fastleger) {
         return fastleger.stream()
-                .filter(fastlege -> fastlege.pasientforhold().fom().isBefore(now())
-                        && (fastlege.pasientforhold.tom() == null || fastlege.pasientforhold().tom().isAfter(now()))
-                )
+                .filter(fastlege -> fastlege.pasientforhold().fom().isBefore(now()) && fastlege.pasientforhold().tom().isAfter(now()))
                 .findFirst();
     }
 }
