@@ -27,6 +27,9 @@ public class TilgangService {
     private RestTemplate restTemplate;
     private OIDCRequestContextHolder contextHolder;
 
+    private static final String TILGANG_TIL_BRUKER_PATH = "/tilgangtilbruker";
+    private static final String TILGANG_TIL_BRUKER_VIA_AZURE_PATH = "/bruker";
+
 
     @Inject
     public TilgangService(
@@ -43,14 +46,13 @@ public class TilgangService {
 
 
     @Cacheable(value = "tilgang")
-    public Tilgang sjekkTilgang(String fnr) {
+    public Tilgang sjekkTilgang(String fnr, boolean callWithInterAzureAD) {
         if (HAR_LOKAL_MOCK) {
             return new Tilgang()
                     .harTilgang(true)
                     .begrunnelse("");
         }
-
-        final String url = fromHttpUrl(TILGANGSKONTROLLAPI_URL + "/tilgangtilbruker")
+        final String url = fromHttpUrl(getTilgangTilBrukerUrl(callWithInterAzureAD))
                 .queryParam("fnr", fnr)
                 .toUriString();
 
@@ -88,4 +90,10 @@ public class TilgangService {
         return new HttpEntity<>(headers);
     }
 
+    private String getTilgangTilBrukerUrl(boolean callWithInterAzureAd) {
+        String endUrl = callWithInterAzureAd
+                ? TILGANG_TIL_BRUKER_VIA_AZURE_PATH
+                : TILGANG_TIL_BRUKER_PATH;
+        return TILGANGSKONTROLLAPI_URL + endUrl;
+    }
 }

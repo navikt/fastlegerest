@@ -13,23 +13,23 @@ import no.nav.syfo.services.exceptions.HarIkkeTilgang;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import java.util.List;
 
-import static java.util.Collections.emptyList;
-import static no.nav.syfo.OIDCIssuer.INTERN;
+import static no.nav.syfo.OIDCIssuer.AZURE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @Api(value = "fastlege", description = "Endepunkt for henting av fastlege")
 @Slf4j
-public class FastlegeRessurs {
+@ProtectedWithClaims(issuer = AZURE)
+@RequestMapping(value = "/api/internad/fastlege/v1")
+public class FastlegeAzureADRessurs {
 
     private final FastlegeService fastlegeService;
     private final Metrikk metrikk;
     private final TilgangService tilgangService;
 
     @Inject
-    public FastlegeRessurs(
+    public FastlegeAzureADRessurs(
             FastlegeService fastlegeService,
             Metrikk metrikk,
             TilgangService tilgangService
@@ -39,9 +39,8 @@ public class FastlegeRessurs {
         this.tilgangService = tilgangService;
     }
 
-    @GetMapping(path = "/api/fastlege/v1", produces = APPLICATION_JSON_VALUE)
-    @ProtectedWithClaims(issuer = INTERN)
-    public Fastlege finnFastlege(@RequestParam(value = "fnr") String fnr) {
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    public Fastlege finnFastlegeAazure(@RequestParam(value = "fnr") String fnr) {
         metrikk.tellHendelse("finn_fastlege");
 
         kastExceptionHvisIkkeTilgang(fnr);
@@ -49,22 +48,8 @@ public class FastlegeRessurs {
         return fastlegeService.hentBrukersFastlege(fnr).orElseThrow(FastlegeIkkeFunnet::new);
     }
 
-    @GetMapping(path = "/api/fastlege/v1/fastleger", produces = APPLICATION_JSON_VALUE)
-    @ProtectedWithClaims(issuer = INTERN)
-    public List<Fastlege> finnFastleger(@RequestParam(value = "fnr") String fnr) {
-        metrikk.tellHendelse("finn_fastleger");
-
-        kastExceptionHvisIkkeTilgang(fnr);
-
-        try {
-            return fastlegeService.hentBrukersFastleger(fnr);
-        } catch (FastlegeIkkeFunnet e) {
-            return emptyList();
-        }
-    }
-
     private void kastExceptionHvisIkkeTilgang(String fnr) {
-        Tilgang tilgang = tilgangService.sjekkTilgang(fnr, false);
+        Tilgang tilgang = tilgangService.sjekkTilgang(fnr, true);
         if (!tilgang.harTilgang) {
             log.info("Har ikke tilgang til å se fastlegeinformasjon om brukeren");
             throw new HarIkkeTilgang(tilgang.begrunnelse);
