@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 
+import java.util.List;
+
+import static java.util.Collections.emptyList;
 import static no.nav.syfo.OIDCIssuer.AZURE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -46,6 +49,19 @@ public class FastlegeAzureADRessurs {
         kastExceptionHvisIkkeTilgang(fnr);
 
         return fastlegeService.hentBrukersFastlege(fnr).orElseThrow(FastlegeIkkeFunnet::new);
+    }
+
+    @GetMapping(path = "/fastleger", produces = APPLICATION_JSON_VALUE)
+    public List<Fastlege> getFastleger(@RequestParam(value = "fnr") String fnr) {
+        metrikk.tellHendelse("get_fastleger");
+
+        kastExceptionHvisIkkeTilgang(fnr);
+
+        try {
+            return fastlegeService.hentBrukersFastleger(fnr);
+        } catch (FastlegeIkkeFunnet e) {
+            return emptyList();
+        }
     }
 
     private void kastExceptionHvisIkkeTilgang(String fnr) {
