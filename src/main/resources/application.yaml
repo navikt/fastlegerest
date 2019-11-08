@@ -3,7 +3,7 @@ server:
     context-path: /fastlegerest
 
 no.nav.security.oidc:
-  issuers: intern,selvbetjening
+  issuers: intern,selvbetjening,veileder
   issuer:
     intern:
       discoveryurl: <SETTES FRA FASIT>
@@ -13,6 +13,10 @@ no.nav.security.oidc:
     discoveryurl: <SETTES FRA FASIT>
     accepted_audience: <SETTES FRA FASIT>
     cookie_name: selvbetjening-idtoken
+  veileder:
+    discoveryurl: <syfonais>
+    accepted_audience: <syfonais>
+    cookie_name: isso-idtoken
 
 local_mock: false
 
