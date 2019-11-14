@@ -83,6 +83,16 @@ public class TilgangService {
         return response.getStatusCode().is2xxSuccessful();
     }
 
+    public boolean isVeilederGrantedAccessToSYFOWithAD() {
+        ResponseEntity<String> response = restTemplate.exchange(
+                TILGANGSKONTROLLAPI_URL + "/syfo",
+                HttpMethod.GET,
+                lagRequest(),
+                String.class
+        );
+        return response.getStatusCode().is2xxSuccessful();
+    }
+
     private HttpEntity<String> lagRequest() {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
