@@ -9,14 +9,14 @@ no.nav.security.oidc:
       discoveryurl: <SETTES FRA FASIT>
       accepted_audience: modiabrukerdialog-p,modiabrukerdialog-q1,veilarblogin-p,veilarblogin-q1,fpsak-frontend-p,fpsak-frontend-q1,fplos-p,fplos-q1
       cookie_name: ID_token
-  selvbetjening:
-    discoveryurl: <SETTES FRA FASIT>
-    accepted_audience: <SETTES FRA FASIT>
-    cookie_name: selvbetjening-idtoken
-  veileder:
-    discoveryurl: <syfonais>
-    accepted_audience: <syfonais>
-    cookie_name: isso-idtoken
+    selvbetjening:
+      discoveryurl: <SETTES FRA FASIT>
+      accepted_audience: <SETTES FRA FASIT>
+      cookie_name: selvbetjening-idtoken
+    veileder:
+      discoveryurl: <syfonais>
+      accepted_audience: <syfonais>
+      cookie_name: isso-idtoken
 
 local_mock: false
 
