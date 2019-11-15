@@ -1,7 +1,6 @@
 package no.nav.syfo.services;
 
 import lombok.extern.slf4j.Slf4j;
-import no.nav.common.auth.SubjectHandler;
 import no.nav.syfo.domain.Pasient;
 import no.nav.tjeneste.virksomhet.brukerprofil.v3.*;
 import no.nav.tjeneste.virksomhet.brukerprofil.v3.informasjon.*;
@@ -19,7 +18,7 @@ public class BrukerprofilService {
     private BrukerprofilV3 brukerprofilV3;
 
     @Inject
-    public BrukerprofilService(final BrukerprofilV3 brukerprofilV3){
+    public BrukerprofilService(final BrukerprofilV3 brukerprofilV3) {
         this.brukerprofilV3 = brukerprofilV3;
     }
 
@@ -41,20 +40,16 @@ public class BrukerprofilService {
                     .mellomnavn(wsPerson.getPersonnavn().getMellomnavn())
                     .etternavn(wsPerson.getPersonnavn().getEtternavn());
         } catch (HentKontaktinformasjonOgPreferanserPersonIdentErUtgaatt e) {
-            log.error("HentKontaktinformasjonOgPreferanserPersonIdentErUtgaatt for {} med FNR {}",
-                    SubjectHandler.getIdent().orElse("-"), fnr);
+            log.error("HentKontaktinformasjonOgPreferanserPersonIdentErUtgaatt med FNR");
             throw new RuntimeException();
         } catch (HentKontaktinformasjonOgPreferanserSikkerhetsbegrensning e) {
-            log.error("Sikkerhetsbegrensning for {} med FNR {}",
-                    SubjectHandler.getIdent().orElse("-"), fnr);
+            log.error("Sikkerhetsbegrensning for med FNR");
             throw new ForbiddenException();
         } catch (HentKontaktinformasjonOgPreferanserPersonIkkeFunnet e) {
-            log.error("HentKontaktinformasjonOgPreferanserPersonIkkeFunnet for {} med FNR {}",
-                    SubjectHandler.getIdent().orElse("-"), fnr);
+            log.error("HentKontaktinformasjonOgPreferanserPersonIkkeFunnet for med FNR");
             throw new ForbiddenException();
         } catch (RuntimeException e) {
-            log.error("{} fikk RuntimeException mot TPS med ved oppslag av {}",
-                    SubjectHandler.getIdent().orElse("-"), fnr, e);
+            log.error("{} fikk RuntimeException mot TPS med ved oppslag av {}");
             throw e;
         }
     }

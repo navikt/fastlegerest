@@ -1,7 +1,6 @@
 package no.nav.syfo.services;
 
 import lombok.extern.slf4j.Slf4j;
-import no.nav.common.auth.SubjectHandler;
 import no.nav.syfo.domain.*;
 import no.nav.syfo.services.exceptions.FastlegeIkkeFunnet;
 import no.nhn.schemas.reg.common.en.WSPeriod;
@@ -53,12 +52,10 @@ public class FastlegeService {
                             .fastlegekontor(map(patientGPDetails.getGPContract().getGPOffice(), ws2fastlegekontor))
                     ).collect(toList());
         } catch (IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage e) {
-            log.warn("{} Søkte opp {} og fikk en feil fra fastlegetjenesten. Dette skjer trolig fordi FNRet ikke finnes",
-                    SubjectHandler.getIdent().orElse("-"), brukersFnr, e);
+            log.warn("Søkte opp og fikk en feil fra fastlegetjenesten. Dette skjer trolig fordi FNRet ikke finnes", e);
             throw new FastlegeIkkeFunnet("Feil ved oppslag av fastlege");
         } catch (RuntimeException e) {
-            log.error("{} Søkte opp {} og fikk en feil fra fastlegetjenesten fordi tjenesten er nede",
-                    SubjectHandler.getIdent().orElse("-"), brukersFnr, e);
+            log.error("Søkte opp og fikk en feil fra fastlegetjenesten fordi tjenesten er nede", e);
             throw e;
         }
     }

@@ -46,7 +46,6 @@ dependencies {
     implementation( "net.logstash.logback:logstash-logback-encoder:4.10")
     implementation( "no.nav.security:oidc-spring-support:0.2.15")
     implementation( "no.nav.security:oidc-support:0.2.15")
-    implementation( "no.nav.common:auth:2018.11.20.15.56")
     implementation("org.apache.cxf:cxf-rt-features-logging:$cxfVersion")
     implementation("org.apache.cxf:cxf-rt-ws-security:$cxfVersion")
     implementation("org.apache.cxf:cxf-rt-ws-policy:$cxfVersion")
