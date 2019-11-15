@@ -59,7 +59,7 @@ public class TilgangService {
         ResponseEntity<String> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
-                lagRequest(),
+                lagRequest(callWithInterAzureAD ? OIDCIssuer.AZURE : OIDCIssuer.INTERN),
                 String.class
         );
 
@@ -76,7 +76,7 @@ public class TilgangService {
         ResponseEntity<String> response = restTemplate.exchange(
                 TILGANGSKONTROLLAPI_URL + "/tilgangtiltjenesten",
                 HttpMethod.GET,
-                lagRequest(),
+                lagRequest(OIDCIssuer.INTERN),
                 String.class
         );
 
@@ -87,16 +87,16 @@ public class TilgangService {
         ResponseEntity<String> response = restTemplate.exchange(
                 TILGANGSKONTROLLAPI_URL + "/syfo",
                 HttpMethod.GET,
-                lagRequest(),
+                lagRequest(OIDCIssuer.AZURE),
                 String.class
         );
         return response.getStatusCode().is2xxSuccessful();
     }
 
-    private HttpEntity<String> lagRequest() {
+    private HttpEntity<String> lagRequest(String issuer) {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.set("Authorization", "Bearer " + OIDCUtil.tokenFraOIDC(contextHolder, OIDCIssuer.INTERN));
+        headers.set("Authorization", "Bearer " + OIDCUtil.tokenFraOIDC(contextHolder, issuer));
         return new HttpEntity<>(headers);
     }
 
