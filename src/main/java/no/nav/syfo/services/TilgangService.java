@@ -29,8 +29,7 @@ public class TilgangService {
 
     private static final String TILGANG_TIL_BRUKER_PATH = "/tilgangtilbruker";
     private static final String TILGANG_TIL_BRUKER_VIA_AZURE_PATH = "/bruker";
-
-
+    
     @Inject
     public TilgangService(
             final @Value("${tilgangskontrollapi.url}") String url,
