@@ -1,61 +1,100 @@
 import com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer
 import com.github.jengelman.gradle.plugins.shadow.transformers.PropertiesFileTransformer
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 group = "no.nav.syfo"
-version = "1.0-SNAPSHOT"
-description = "fastlegerest"
+version = "1.0.0"
 
 val sourceCompatibility = "1.8"
 val springBootVersion = "2.1.1.RELEASE"
 val cxfVersion = "3.3.3"
+val kotlinLibVersion = "1.3.50"
+val kotlinJacksonVersion = "2.9.8"
+val navOidcVersion = "0.2.15"
 
 plugins {
-    kotlin("jvm") version "1.3.31"
+    kotlin("jvm") version "1.3.50"
     id("java")
-    id("com.diffplug.gradle.spotless") version "3.18.0"
+    id("org.jetbrains.kotlin.plugin.allopen") version "1.3.50"
     id("com.github.johnrengelman.shadow") version "4.0.3"
+    id("org.springframework.boot") version "2.1.1.RELEASE"
+}
+
+buildscript {
+    dependencies {
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.0")
+        classpath("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
+        classpath("org.glassfish.jaxb:jaxb-runtime:2.4.0-b180830.0438")
+        classpath("com.sun.activation:javax.activation:1.2.0")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.4.RELEASE")
+        classpath("com.sun.xml.ws:jaxws-tools:2.3.1") {
+            exclude(group = "com.sun.xml.ws", module = "policy")
+        }
+    }
+}
+
+allOpen {
+    annotation("org.springframework.context.annotation.Configuration")
+    annotation("org.springframework.stereotype.Service")
+    annotation("org.springframework.stereotype.Component")
+    annotation("lombok.extern.slf4j.Slf4j")
+    annotation("org.springframework.boot.autoconfigure.SpringBootApplication")
+    annotation("org.springframework.boot.autoconfigure.SpringBootApplication")
+    annotation("lombok.AllArgsConstructor")
 }
 
 repositories {
-    mavenLocal()
     mavenCentral()
     jcenter()
-    maven(url = "https://repo.adeo.no/repository/maven-releases")
+    maven(url = "https://repo.adeo.no/repository/maven-releases/")
     maven(url = "https://repo.adeo.no/repository/maven-snapshots/")
     maven(url = "http://packages.confluent.io/maven/")
+    maven(url = "https://dl.bintray.com/kotlin/kotlinx/")
 }
 
 dependencies {
-    implementation( "javax.inject:javax.inject:1")
-    implementation( "javax.ws.rs:javax.ws.rs-api:2.0.1")
     implementation( "io.swagger:swagger-annotations:1.5.21")
-    implementation( "org.projectlombok:lombok:1.18.2")
-    implementation( "io.micrometer:micrometer-registry-prometheus:1.0.6")
-    implementation( "org.springframework.boot:spring-boot-starter-web:$springBootVersion")
-    implementation( "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinLibVersion")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinLibVersion")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$kotlinJacksonVersion")
+
+    implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-actuator:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-logging:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-aop:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-jersey:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-cache:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-jta-atomikos:$springBootVersion")
     implementation( "org.springframework:spring-context-support:5.1.2.RELEASE")
-    implementation( "org.springframework.boot:spring-boot-starter-cache:$springBootVersion")
-    implementation( "org.springframework.boot:spring-boot-starter-aop:$springBootVersion")
-    implementation( "org.springframework.boot:spring-boot-starter-jersey:$springBootVersion")
+
+    implementation("io.micrometer:micrometer-registry-prometheus:1.0.6")
+
+    implementation("no.nav.security:oidc-spring-support:$navOidcVersion")
+    implementation("no.nav.security:oidc-support:$navOidcVersion")
     implementation( "no.nav.syfo.tjenester:adresseregisteretV1-tjenestespesifikasjon:1.0.2")
     implementation( "no.nav.syfo.tjenester:partner-emottak:1.0")
     implementation( "no.nav.syfo.tjenester:fastlegeinformasjonV1-tjenestespesifikasjon:2.1.8")
     implementation( "no.nav.syfo.tjenester:brukerprofil-v3-tjenestespesifikasjon:3.0.1")
-    implementation( "net.logstash.logback:logstash-logback-encoder:4.10")
-    implementation( "no.nav.security:oidc-spring-support:0.2.15")
-    implementation( "no.nav.security:oidc-support:0.2.15")
+
     implementation("org.apache.cxf:cxf-rt-features-logging:$cxfVersion")
     implementation("org.apache.cxf:cxf-rt-ws-security:$cxfVersion")
     implementation("org.apache.cxf:cxf-rt-ws-policy:$cxfVersion")
     implementation("org.apache.cxf:cxf-rt-transports-http:$cxfVersion")
     implementation("org.apache.cxf:cxf-rt-frontend-jaxws:$cxfVersion")
+
+    implementation("javax.inject:javax.inject:1")
+    implementation("javax.ws.rs:javax.ws.rs-api:2.0.1")
+    implementation("org.slf4j:slf4j-api:1.7.25")
+    implementation("net.logstash.logback:logstash-logback-encoder:4.10")
+    implementation("org.apache.commons:commons-lang3:3.5")
+    implementation("com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20171016.1")
+    compileOnly("org.projectlombok:lombok:1.18.6")
     annotationProcessor("org.projectlombok:lombok:1.18.6")
-    testCompile( "org.springframework.boot:spring-boot-starter-test:$springBootVersion")
-    testCompile( "no.nav.security:oidc-spring-test:0.2.5")
+
+    testCompile("no.nav.security:oidc-spring-test:0.2.5")
+    testCompile("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
 }
-
-
 
 tasks {
     withType<JavaCompile> {
@@ -82,5 +121,13 @@ tasks {
             mergeStrategy = "append"
         }
         mergeServiceFiles()
+    }
+
+    named<KotlinCompile>("compileKotlin") {
+        kotlinOptions.jvmTarget = "1.8"
+    }
+
+    named<KotlinCompile>("compileTestKotlin") {
+        kotlinOptions.jvmTarget = "1.8"
     }
 }
