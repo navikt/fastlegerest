@@ -8,7 +8,7 @@ description = "fastlegerest"
 
 val sourceCompatibility = "1.8"
 val springBootVersion = "2.1.1.RELEASE"
-val cxfVersion = "3.2.7"
+val cxfVersion = "3.3.3"
 
 plugins {
     kotlin("jvm") version "1.3.31"
