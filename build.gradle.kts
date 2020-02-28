@@ -24,7 +24,6 @@ repositories {
     maven(url = "https://repo.adeo.no/repository/maven-releases")
     maven(url = "https://repo.adeo.no/repository/maven-snapshots/")
     maven(url = "http://packages.confluent.io/maven/")
-    maven(url = "http://repo.maven.apache.org/maven2")
 }
 
 dependencies {
