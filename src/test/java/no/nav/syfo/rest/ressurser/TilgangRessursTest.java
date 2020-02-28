@@ -44,7 +44,7 @@ public class TilgangRessursTest {
     @Test
     public void godkjennRiktigTilgang() throws Exception {
         MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
-        this.mvc.perform(get("/api/tilgang")
+        this.mvc.perform(get("/api/internad/tilgang")
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isOk())
@@ -54,7 +54,7 @@ public class TilgangRessursTest {
     @Test
     public void avslaFeilTilgang() throws Exception {
         MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.FORBIDDEN);
-        this.mvc.perform(get("/api/tilgang")
+        this.mvc.perform(get("/api/internad/tilgang")
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isOk())
@@ -63,7 +63,7 @@ public class TilgangRessursTest {
 
     @Test
     public void svarMed401NarTokenMangler() throws Exception{
-        this.mvc.perform(get("/api/tilgang")
+        this.mvc.perform(get("/api/internad/tilgang")
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION, "Bearer "))
                 .andExpect(status().isUnauthorized())
@@ -73,7 +73,7 @@ public class TilgangRessursTest {
 
     @Test
     public void svarMed401NarAuthorizationHeaderMangler() throws Exception{
-        this.mvc.perform(get("/api/tilgang")
+        this.mvc.perform(get("/api/internad/tilgang")
                 .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().string(containsString("Autorisasjonsfeil")));

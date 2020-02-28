@@ -63,7 +63,7 @@ public class FastlegeRessursTest {
         MockUtils.mockHarFastlege(fastlegeSoapClient);
         MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
 
-        this.mvc.perform(get("/api/fastlege/v1?fnr=" + FNR)
+        this.mvc.perform(get("/api/internad/fastlege/v1?fnr=" + FNR)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isOk())
@@ -75,7 +75,7 @@ public class FastlegeRessursTest {
         MockUtils.mockHarFastlege(fastlegeSoapClient);
         MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
 
-        this.mvc.perform(get("/api/fastlege/v1/fastleger?fnr=" + FNR)
+        this.mvc.perform(get("/api/internad/fastlege/v1/fastleger?fnr=" + FNR)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isOk())
@@ -87,7 +87,7 @@ public class FastlegeRessursTest {
         MockUtils.mockIngenFastleger(fastlegeSoapClient);
         MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
 
-        this.mvc.perform(get("/api/fastlege/v1/fastleger?fnr=" + FNR)
+        this.mvc.perform(get("/api/internad/fastlege/v1/fastleger?fnr=" + FNR)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isOk())
@@ -99,7 +99,7 @@ public class FastlegeRessursTest {
         MockUtils.mockIngenFastleger(fastlegeSoapClient);
         MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
 
-        this.mvc.perform(get("/api/fastlege/v1?fnr=" + FNR)
+        this.mvc.perform(get("/api/internad/fastlege/v1?fnr=" + FNR)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isNotFound())
@@ -111,7 +111,7 @@ public class FastlegeRessursTest {
         MockUtils.mockHarFastlege(fastlegeSoapClient);
         MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.FORBIDDEN);
 
-        this.mvc.perform(get("/api/fastlege/v1?fnr=" + FNR)
+        this.mvc.perform(get("/api/internad/fastlege/v1?fnr=" + FNR)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION, "Bearer " + token))
                 .andExpect(status().isForbidden())
