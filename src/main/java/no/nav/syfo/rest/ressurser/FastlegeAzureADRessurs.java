@@ -13,7 +13,6 @@ import no.nav.syfo.services.exceptions.HarIkkeTilgang;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-
 import java.util.List;
 
 import static java.util.Collections.emptyList;
@@ -65,7 +64,7 @@ public class FastlegeAzureADRessurs {
     }
 
     private void kastExceptionHvisIkkeTilgang(String fnr) {
-        Tilgang tilgang = tilgangService.sjekkTilgang(fnr, true);
+        Tilgang tilgang = tilgangService.sjekkTilgang(fnr);
         if (!tilgang.harTilgang) {
             log.info("Har ikke tilgang til å se fastlegeinformasjon om brukeren");
             throw new HarIkkeTilgang(tilgang.begrunnelse);
