@@ -9,7 +9,6 @@ import org.springframework.web.client.RestTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 @RunWith(MockitoJUnitRunner.class)
 public class TilgangServiceTest {
 
@@ -25,21 +24,11 @@ public class TilgangServiceTest {
     private OIDCRequestContextHolder contextHolder;
 
     @Test
-    public void godkjennMocketTilgang() {
-        tilgangService = new TilgangService(TILGANGSKONTROLL_URL, HAR_LOCAL_MOCK, restTemplate, contextHolder);
-
-        Boolean tilgang = tilgangService.sjekkTilgang(FNR, false).harTilgang;
-
-        assertThat(tilgang).isTrue();
-    }
-
-    @Test
     public void godkjennMocketTilgangMedInternAzureAD() {
         tilgangService = new TilgangService(TILGANGSKONTROLL_URL, HAR_LOCAL_MOCK, restTemplate, contextHolder);
 
-        Boolean tilgang = tilgangService.sjekkTilgang(FNR, true).harTilgang;
+        Boolean tilgang = tilgangService.sjekkTilgang(FNR).harTilgang;
 
         assertThat(tilgang).isTrue();
     }
-
 }

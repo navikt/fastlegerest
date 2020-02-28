@@ -29,7 +29,7 @@ public class TilgangService {
 
     private static final String TILGANG_TIL_BRUKER_PATH = "/tilgangtilbruker";
     private static final String TILGANG_TIL_BRUKER_VIA_AZURE_PATH = "/bruker";
-    
+
     @Inject
     public TilgangService(
             final @Value("${tilgangskontrollapi.url}") String url,
@@ -45,41 +45,25 @@ public class TilgangService {
 
 
     @Cacheable(value = "tilgang")
-    public Tilgang sjekkTilgang(String fnr, boolean callWithInterAzureAD) {
+    public Tilgang sjekkTilgang(String fnr) {
         if (HAR_LOKAL_MOCK) {
             return new Tilgang()
                     .harTilgang(true)
                     .begrunnelse("");
         }
-        final String url = fromHttpUrl(getTilgangTilBrukerUrl(callWithInterAzureAD))
+        final String url = fromHttpUrl(getTilgangTilBrukerUrl())
                 .queryParam("fnr", fnr)
                 .toUriString();
 
         ResponseEntity<String> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
-                lagRequest(callWithInterAzureAD ? OIDCIssuer.AZURE : OIDCIssuer.INTERN),
+                lagRequest(OIDCIssuer.AZURE),
                 String.class
         );
 
         log.info("Fikk responskode: {} fra syfo-tilgangskontroll, med body: {}", response.getStatusCode(), response.getBody());
         return rs2Tilgang(response);
-    }
-
-    @Cacheable(value = "tilgang")
-    public boolean harTilgangTilTjenesten() {
-        if (HAR_LOKAL_MOCK) {
-            return true;
-        }
-
-        ResponseEntity<String> response = restTemplate.exchange(
-                TILGANGSKONTROLLAPI_URL + "/tilgangtiltjenesten",
-                HttpMethod.GET,
-                lagRequest(OIDCIssuer.INTERN),
-                String.class
-        );
-
-        return response.getStatusCode().is2xxSuccessful();
     }
 
     public boolean isVeilederGrantedAccessToSYFOWithAD() {
@@ -99,10 +83,7 @@ public class TilgangService {
         return new HttpEntity<>(headers);
     }
 
-    private String getTilgangTilBrukerUrl(boolean callWithInterAzureAd) {
-        String endUrl = callWithInterAzureAd
-                ? TILGANG_TIL_BRUKER_VIA_AZURE_PATH
-                : TILGANG_TIL_BRUKER_PATH;
-        return TILGANGSKONTROLLAPI_URL + endUrl;
+    private String getTilgangTilBrukerUrl() {
+        return TILGANGSKONTROLLAPI_URL + TILGANG_TIL_BRUKER_VIA_AZURE_PATH;
     }
 }
