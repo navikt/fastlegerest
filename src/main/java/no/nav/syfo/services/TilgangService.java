@@ -62,8 +62,9 @@ public class TilgangService {
                 String.class
         );
         HttpStatus responseStatusCode = response.getStatusCode();
-        if (responseStatusCode != HttpStatus.OK)
+        if (responseStatusCode != HttpStatus.OK) {
             log.info("Fikk responskode: {} fra syfo-tilgangskontroll, med body: {}", responseStatusCode, response.getBody());
+        }
         return rs2Tilgang(response);
     }
 
