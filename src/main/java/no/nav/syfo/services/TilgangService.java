@@ -17,6 +17,7 @@ import java.util.Collections;
 
 import static no.nav.syfo.mappers.TilgangMappers.rs2Tilgang;
 import static org.springframework.web.util.UriComponentsBuilder.fromHttpUrl;
+import static org.springframework.http.HttpStatus.OK;
 
 @Service
 @Slf4j
@@ -61,8 +62,10 @@ public class TilgangService {
                 lagRequest(OIDCIssuer.AZURE),
                 String.class
         );
-
-        log.info("Fikk responskode: {} fra syfo-tilgangskontroll, med body: {}", response.getStatusCode(), response.getBody());
+        HttpStatus responseStatusCode = response.getStatusCode();
+        if (responseStatusCode != OK) {
+            log.info("Fikk responskode: {} fra syfo-tilgangskontroll, med body: {}", responseStatusCode, response.getBody());
+        }
         return rs2Tilgang(response);
     }
 
