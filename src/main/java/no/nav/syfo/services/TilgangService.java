@@ -61,8 +61,9 @@ public class TilgangService {
                 lagRequest(OIDCIssuer.AZURE),
                 String.class
         );
-
-        log.info("Fikk responskode: {} fra syfo-tilgangskontroll, med body: {}", response.getStatusCode(), response.getBody());
+        HttpStatus responseStatusCode = response.getStatusCode();
+        if (responseStatusCode != HttpStatus.OK)
+            log.info("Fikk responskode: {} fra syfo-tilgangskontroll, med body: {}", responseStatusCode, response.getBody());
         return rs2Tilgang(response);
     }
 
