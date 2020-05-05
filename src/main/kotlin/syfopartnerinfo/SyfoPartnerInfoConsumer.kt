@@ -2,6 +2,7 @@ package syfopartnerinfo
 
 import azuread.AzureAdTokenConsumer
 import org.slf4j.LoggerFactory
+import com.atomikos.logging.LoggerFactory
 import no.nav.syfo.metric.Metrikk
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -14,6 +15,10 @@ import org.springframework.stereotype.Component
 import org.springframework.util.MultiValueMap
 import org.springframework.web.client.RestClientResponseException
 import org.springframework.web.client.RestTemplate
+import org.springframework.http.HttpMethod
+import org.springframework.stereotype.Component
+import org.springframework.web.client.RestTemplate
+import javax.ws.rs.client.Entity.entity
 
 @Component
 class SyfoPartnerInfoConsumer @Autowired constructor(
