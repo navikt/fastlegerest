@@ -13,5 +13,6 @@ class AADTokenConfig {
     fun authenticationContext( @Value("\${aadauthority.url}") authority: String): AuthenticationContext {
         val service = Executors.newFixedThreadPool(1)
         return AuthenticationContext(authority,true, service) // Authority er url til Azure
+        val test = ""
     }
 }
