@@ -1,4 +1,4 @@
-package azuread
+package no.nav.syfo.azuread
 
 import no.nav.syfo.metric.Metrikk
 import org.slf4j.LoggerFactory
@@ -19,12 +19,12 @@ import java.time.Instant
 import java.util.*
 
 @Component
-class AzureAdTokenConsumer @Autowired constructor(
+class AzureAdTokenConsumer(
         private val metrikk: Metrikk,
-        @param:Qualifier("restTemplateWithProxy") private val restTemplateWithProxy: RestTemplate,
-        @param:Value("\${ad.accesstoken.url}") private val url: String,
-        @param:Value("\${client.id}") private val clientId: String,
-        @param:Value("\${client.secret}") private val clientSecret: String
+        @Qualifier("restTemplateWithProxy") private val restTemplateWithProxy: RestTemplate,
+        @Value("\${ad.accesstoken.url}") private val url: String,
+        @Value("\${client.id}") private val clientId: String,
+        @Value("\${client.secret}") private val clientSecret: String
 ) {
     private val azureAdTokenMap: MutableMap<String, AzureAdResponse> = HashMap()
 

@@ -1,40 +1,35 @@
-package syfopartnerinfo
+package no.nav.syfo.syfopartnerinfo
 
-import azuread.AzureAdTokenConsumer
-import org.slf4j.LoggerFactory
-import com.atomikos.logging.LoggerFactory
+import no.nav.syfo.azuread.AzureAdTokenConsumer
 import no.nav.syfo.metric.Metrikk
-import org.springframework.beans.factory.annotation.Autowired
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 import org.springframework.util.MultiValueMap
 import org.springframework.web.client.RestClientResponseException
 import org.springframework.web.client.RestTemplate
-import org.springframework.http.HttpMethod
-import org.springframework.stereotype.Component
-import org.springframework.web.client.RestTemplate
-import javax.ws.rs.client.Entity.entity
 
-@Component
-class SyfoPartnerInfoConsumer @Autowired constructor(
+@Service
+class SyfoPartnerInfoConsumer(
         private val azureAdTokenConsumer: AzureAdTokenConsumer,
         private val metrikk: Metrikk,
-        private val restTemplate: RestTemplate,
-        @param:Value("\${syfopartnerinfo.appid}") private val syfoPartnerInfoAppId: String
+        @Qualifier("Oidc") private val restTemplate: RestTemplate,
+        @Value("\${syfopartnerinfo.appid}") private val syfoPartnerInfoAppId: String
 ) {
 
-    fun getPartnerId(herId: String): List<PartnerInformasjon> {
+    fun getPartnerId(herId: String): List<PartnerInfoResponse> {
         try {
             val response = restTemplate.exchange(
                     "$SYFOPARTNERINFO_BASEURL/api/v1/behandler?herid=$herId",
                     HttpMethod.GET,
                     entity(syfoPartnerInfoAppId),
-                    object : ParameterizedTypeReference<List<PartnerInformasjon>>() {}
+                    object: ParameterizedTypeReference<List<PartnerInfoResponse>>() {}
             )
 
             metrikk.countEvent(CALL_SYFOPARTNERINFO_BEHANDLER_SUCCESS)

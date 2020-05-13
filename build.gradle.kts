@@ -11,7 +11,7 @@ val springBootVersion = "2.1.1.RELEASE"
 val cxfVersion = "3.3.3"
 val kotlinLibVersion = "1.3.50"
 val kotlinJacksonVersion = "2.9.8"
-val navOidcVersion = "0.2.15"
+val navOidcVersion = "0.2.18"
 
 plugins {
     kotlin("jvm") version "1.3.50"

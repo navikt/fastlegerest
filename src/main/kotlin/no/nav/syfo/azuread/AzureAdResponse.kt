@@ -1,4 +1,4 @@
-package azuread
+package no.nav.syfo.azuread
 
 import java.time.Instant
 
