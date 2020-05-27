@@ -150,11 +150,6 @@ public class AdresseregisterV1Mock implements ICommunicationPartyService {
     }
 
     @Override
-    public WSCommunicationParty getGPCommunicationParty(String ssn) throws ICommunicationPartyServiceGetGPCommunicationPartyGenericFaultFaultFaultMessage {
-        return null;
-    }
-
-    @Override
     public String ping() {
         return null;
     }
@@ -226,6 +221,11 @@ public class AdresseregisterV1Mock implements ICommunicationPartyService {
 
     @Override
     public WSOrganizationPerson createOrganizationPerson(WSOrganizationPersonCreate p) throws ICommunicationPartyServiceCreateOrganizationPersonValidationFaultFaultFaultMessage, ICommunicationPartyServiceCreateOrganizationPersonGenericFaultFaultFaultMessage {
+        return null;
+    }
+
+    @Override
+    public WSArrayOfCommunicationPartyLastChangedInfo getChangedCommunicationPartiesInfo(WSArrayOfint herIds) throws ICommunicationPartyServiceGetChangedCommunicationPartiesInfoGenericFaultFaultFaultMessage {
         return null;
     }
 
