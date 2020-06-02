@@ -9,7 +9,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -69,17 +68,10 @@ public class FastlegeService {
                 .collect(toList());
     }
 
-    private  LocalDate toLocalDate(XMLGregorianCalendar xmlGregorianCalendar){
-      return  LocalDate.of(
-                xmlGregorianCalendar.getYear(),
-                xmlGregorianCalendar.getMonth(),
-                xmlGregorianCalendar.getDay());
-    }
-
     private Pasientforhold getPasientForhold(WSPeriod period) {
         return new Pasientforhold()
-                .fom(toLocalDate(period.getFrom()))
-                .tom(period.getTo() == null ? LocalDate.parse("9999-12-31") : toLocalDate(period.getTo()));
+                .fom(period.getFrom().toLocalDate())
+                .tom(period.getTo() == null ? LocalDate.parse("9999-12-31") : period.getTo().toLocalDate());
     }
 
     private static Optional<Fastlege> finnAktivFastlege(List<Fastlege> fastleger) {

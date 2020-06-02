@@ -7,13 +7,8 @@ import no.nhn.schemas.reg.flr.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-
-import static javax.xml.datatype.DatatypeFactory.newInstance;
 
 @Service
 @ConditionalOnProperty(value = "mockEksternHelse", havingValue = "true")
@@ -58,9 +53,7 @@ public class FastlegeV1Mock implements IFlrReadOperations {
                                 )))
                         )
                 )
-                .withPeriod(new WSPeriod()
-                        .withFrom(TimeUtils.toXMLGregorianCalendar(LocalDateTime.now().minusYears(4)))
-                        .withTo(TimeUtils.toXMLGregorianCalendar(LocalDateTime.now().plusYears(2))))
+                .withPeriod(new WSPeriod().withFrom(LocalDateTime.now().minusYears(4)).withTo(LocalDateTime.now().plusYears(2)))
                 .withPatient(new WSPerson()
                         .withFirstName("MOCKDATA: Sygve Sykmeldt"))
                 .withDoctorCycles(new WSArrayOfGPOnContractAssociation()
@@ -71,9 +64,7 @@ public class FastlegeV1Mock implements IFlrReadOperations {
                                                 .withFirstName("MOCKDATA: Lege")
                                                 .withLastName("MOCKDATA: Legesen")
                                                 .withNIN("MOCKDATA: 12312312312"))
-                                        .withValid(new WSPeriod()
-                                                .withFrom(TimeUtils.toXMLGregorianCalendar(LocalDateTime.now().minusYears(4)))
-                                                .withTo(TimeUtils.toXMLGregorianCalendar(LocalDateTime.now().plusYears(2))))
+                                        .withValid(new WSPeriod().withFrom(LocalDateTime.now().minusYears(4)).withTo(LocalDateTime.now().plusYears(2)))
                         ))
                 ;
     }
