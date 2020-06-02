@@ -72,8 +72,8 @@ dependencies {
 
     implementation("no.nav.security:oidc-spring-support:$navOidcVersion")
     implementation("no.nav.security:oidc-support:$navOidcVersion")
-    implementation( "no.nav.syfo.tjenester:adresseregisteretV1-tjenestespesifikasjon:1.0.3")
     implementation("com.microsoft.azure:adal4j:1.6.4")
+    implementation( "no.nav.syfo.tjenester:adresseregisteretV1-tjenestespesifikasjon:1.0.2")
     implementation( "no.nav.syfo.tjenester:partner-emottak:1.0")
     implementation( "no.nav.syfo.tjenester:fastlegeinformasjonV1-tjenestespesifikasjon:2.1.8")
     implementation( "no.nav.syfo.tjenester:brukerprofil-v3-tjenestespesifikasjon:3.0.1")
