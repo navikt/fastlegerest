@@ -46,7 +46,7 @@ environment.name: local
 
 no.nav.security.oidc:
   issuer:
-    veileder:
+    selvbetjening:
       discoveryurl: http://metadata
       accepted_audience: aud-localhost
       cookie_name: localhost-idtoken

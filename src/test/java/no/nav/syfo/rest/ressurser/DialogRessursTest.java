@@ -17,7 +17,6 @@ import no.nhn.register.communicationparty.ICommunicationPartyServiceGetOrganizat
 import no.nhn.register.communicationparty.WSOrganizationPerson;
 import no.nhn.schemas.reg.flr.IFlrReadOperations;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -26,6 +25,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -33,7 +33,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -96,7 +97,6 @@ public class DialogRessursTest {
 
 
     @Test
-    @Ignore // Ignored because of issues with oidc-test-support (https://github.com/navikt/token-support/issues/29)
     public void sendOppfolgingsplan() throws Exception {
         byte[] oppfolgingsplanPDF = new byte[20];
         RSOppfolgingsplan oppfolgingsplan = new RSOppfolgingsplan("99999900000", oppfolgingsplanPDF);
@@ -147,13 +147,15 @@ public class DialogRessursTest {
     private void mockSyfopartnerinfo() {
         final String URL = "http://syfopartnerinfo/api/v1/behandler?herid=123";
         PartnerInfoResponse partnerInfoResponse = new PartnerInfoResponse(123);
-        ResponseEntity<Object> response = new ResponseEntity<>(Arrays.asList(partnerInfoResponse), HttpStatus.OK);
+        List<PartnerInfoResponse> infoResponse = new ArrayList<>();
+        infoResponse.add(partnerInfoResponse);
+        ResponseEntity<List<PartnerInfoResponse>> response = new ResponseEntity<>(infoResponse, HttpStatus.OK);
 
         when(restTemplate.exchange(
                 Mockito.eq(URL),
                 Mockito.eq(HttpMethod.GET),
-                Mockito.any(),
-                Mockito.<Class<Object>>any()
+                Mockito.<HttpEntity<List<PartnerInfoResponse>>>any(),
+                Mockito.<ParameterizedTypeReference<List<PartnerInfoResponse>>>any()
         )).thenReturn(response);
     }
 

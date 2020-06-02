@@ -31,7 +31,7 @@ class SyfoPartnerInfoConsumer(
                     entity(syfoPartnerInfoAppId),
                     object: ParameterizedTypeReference<List<PartnerInfoResponse>>() {}
             )
-
+            LOG.info("Got response from syfopartnerinfo ")
             metrikk.countEvent(CALL_SYFOPARTNERINFO_BEHANDLER_SUCCESS)
             return response.body!!
         } catch (e: RestClientResponseException) {
