@@ -19,6 +19,7 @@ import no.nhn.schemas.reg.flr.IFlrReadOperations;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -51,6 +52,9 @@ public class DialogRessursTest {
     private static final int HER_ID = 123;
     private static final String VEILEDER_ID = "veilederID";
     private static final String VEILEDER_TOKEN = JwtTokenGenerator.createSignedJWT(VEILEDER_ID).serialize();
+
+    @Mock
+    private DialogRessurs dialogRessurs;
 
     @MockBean
     private ICommunicationPartyService adresseregisterSoapClient;
@@ -107,6 +111,10 @@ public class DialogRessursTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(oppfolgingsplan))
         ).andExpect(status().isOk());
+    }
+
+    public void sendOppfolgingsplanFraSBS() throws Exception {
+
     }
 
     private void mockPartnerResource() {

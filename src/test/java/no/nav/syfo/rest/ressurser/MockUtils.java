@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 public class MockUtils {
     public static final String LEGEKONTOR = "Pontypandy Legekontor";
 
-    static void mockHarFastlege(IFlrReadOperations fastlegeSoapClient) throws IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage {
+    public static void mockHarFastlege(IFlrReadOperations fastlegeSoapClient) throws IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage {
         WSArrayOfGPOnContractAssociation fastlege = mockFastlege();
         WSGPOffice legeKontor = mockLegeKontor();
         WSGPContract fastlegeKontrakt = new WSGPContract().withGPOffice(legeKontor);
@@ -61,7 +61,7 @@ public class MockUtils {
                 .withElectronicAddresses(new WSArrayOfElectronicAddress());
     }
 
-    static void mockBrukerProfil(BrukerprofilV3 brukerprofilV3) throws Exception {
+    public static void mockBrukerProfil(BrukerprofilV3 brukerprofilV3) throws Exception {
         WSPersonnavn wsPersonnavn = new WSPersonnavn()
                 .withFornavn("Homer")
                 .withMellomnavn("Jay")
