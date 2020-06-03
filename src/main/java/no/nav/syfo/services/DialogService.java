@@ -42,6 +42,7 @@ public class DialogService {
     public void sendOppfolgingsplan(final RSOppfolgingsplan oppfolgingsplan) {
         Fastlege fastlege = fastlegeService.hentBrukersFastlege(oppfolgingsplan.getSykmeldtFnr())
                 .orElseThrow(FastlegeIkkeFunnet::new);
+
         Partnerinformasjon partnerinformasjon = partnerService.getPartnerinformasjon(fastlege);
 
         RSHodemelding hodemelding = new RSHodemelding(fastlege, partnerinformasjon, oppfolgingsplan);
@@ -67,7 +68,7 @@ public class DialogService {
     private HttpHeaders lagHeaders(){
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(org.springframework.http.MediaType.APPLICATION_JSON));
-        headers.setBearerAuth(tokenService.getToken());
+        headers.set("Authorization", "Bearer " + tokenService.getToken());
         return headers;
 
     }

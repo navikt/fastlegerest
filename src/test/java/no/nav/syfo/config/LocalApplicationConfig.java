@@ -17,13 +17,12 @@ import static java.util.Arrays.asList;
         FastlegeInformasjonConfig.class,
         BrukerprofilConfig.class,
         PartnerEmottakConfig.class,
-        TokenGeneratorConfiguration.class,
+        TokenGeneratorConfiguration.class
 })
 @Profile("local")
 public class LocalApplicationConfig {
 
     @Bean(name = "Oidc")
-    @Primary
     public RestTemplate restTemplate(ClientHttpRequestInterceptor... interceptors) {
         RestTemplate template = new RestTemplate();
         template.setInterceptors(asList(interceptors));

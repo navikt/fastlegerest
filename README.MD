@@ -16,9 +16,7 @@ Appen kjører da på localhost:8899/
 
 ### Testing
 
-Appen har komponenttester fra kant til kant for alle sine endepunkter. Appen er satt opp til å bruke
-syntetisk test miljø hos Norsk Helsenett i preprod, dvs q4 hos NAV. Kontakt med Norsk Helsenett finnes
-i slack-kanalen #ext-nav-grunndata
+Appen har komponenttester fra kant til kant for alle sine endepunkter.
 
 ### Bygging
 

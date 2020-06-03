@@ -26,14 +26,7 @@ SECURITYTOKENSERVICE_URL: sts.url
 SRV_USERNAME: admin
 SRV_PASSWORD: admin
 
-client.id: "clientId"
-client.secret: "clientSecret"
-
-syfopartnerinfo.appid: "syfopartnerinfoId"
-
 security.token.service.token.url: "https://sts.url"
-
-ad.accesstoken.url: "http://aadaccesstoken"
 
 no.nav.modig.security.sts.url: "https://e34jbsl01816.devillo.no:8443/SecurityTokenServiceProvider/"
 isso-host.url: "https://isso-t.adeo.no/isso/oauth2"
@@ -45,9 +38,10 @@ local_mock: false
 environment.name: local
 
 no.nav.security.oidc:
+  issuers: veileder
   issuer:
     veileder:
-      discoveryurl: http://metadata
+      discoveryurl: http:://metadata
       accepted_audience: aud-localhost
       cookie_name: localhost-idtoken
 
