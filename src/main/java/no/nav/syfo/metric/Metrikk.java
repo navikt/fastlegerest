@@ -16,14 +16,6 @@ public class Metrikk {
         this.registry = registry;
     }
 
-    public void countEvent(String navn) {
-        registry.counter(
-                addPrefix(navn),
-                Tags.of("type", "info")
-        ).increment();
-    }
-
-
     public void tellHendelse(String navn) {
         registry.counter(
                 addPrefix(navn),

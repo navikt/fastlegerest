@@ -11,7 +11,7 @@ val springBootVersion = "2.1.1.RELEASE"
 val cxfVersion = "3.3.3"
 val kotlinLibVersion = "1.3.50"
 val kotlinJacksonVersion = "2.9.8"
-val navOidcVersion = "0.2.18"
+val navOidcVersion = "0.2.15"
 
 plugins {
     kotlin("jvm") version "1.3.50"
@@ -72,7 +72,6 @@ dependencies {
 
     implementation("no.nav.security:oidc-spring-support:$navOidcVersion")
     implementation("no.nav.security:oidc-support:$navOidcVersion")
-    implementation("com.microsoft.azure:adal4j:1.6.4")
     implementation( "no.nav.syfo.tjenester:adresseregisteretV1-tjenestespesifikasjon:1.0.2")
     implementation( "no.nav.syfo.tjenester:partner-emottak:1.0")
     implementation( "no.nav.syfo.tjenester:fastlegeinformasjonV1-tjenestespesifikasjon:2.1.8")

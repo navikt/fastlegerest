@@ -1,24 +1,15 @@
 package no.nav.syfo.rest.ressurser;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import no.nav.emottak.schemas.HentPartnerIDViaOrgnummerRequest;
-import no.nav.emottak.schemas.HentPartnerIDViaOrgnummerResponse;
-import no.nav.emottak.schemas.PartnerResource;
-import no.nav.emottak.schemas.WSPartnerInformasjon;
+import no.nav.emottak.schemas.*;
 import no.nav.security.spring.oidc.test.JwtTokenGenerator;
 import no.nav.syfo.LocalApplication;
-import no.nav.syfo.azuread.AzureAdResponse;
 import no.nav.syfo.domain.Token;
 import no.nav.syfo.domain.oppfolgingsplan.RSOppfolgingsplan;
-import no.nav.syfo.syfopartnerinfo.PartnerInfoResponse;
 import no.nav.tjeneste.virksomhet.brukerprofil.v3.BrukerprofilV3;
-import no.nhn.register.communicationparty.ICommunicationPartyService;
-import no.nhn.register.communicationparty.ICommunicationPartyServiceGetOrganizationPersonDetailsGenericFaultFaultFaultMessage;
-import no.nhn.register.communicationparty.WSOrganizationPerson;
+import no.nhn.register.communicationparty.*;
 import no.nhn.schemas.reg.flr.IFlrReadOperations;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +22,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
-
-import java.time.Instant;
-import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -64,11 +52,6 @@ public class DialogRessursTest {
     private PartnerResource partnerResource;
 
     @MockBean
-    @Qualifier("restTemplateWithProxy")
-    private RestTemplate restTemplateWithProxy;
-
-
-    @MockBean
     @Qualifier("BasicAuth")
     private RestTemplate basicAuthRestTemplate;
 
@@ -84,19 +67,16 @@ public class DialogRessursTest {
 
     @Before
     public void setUp() throws Exception {
-        mockPartnerResource();
         mockAdresseRegisteret();
-        mockAzureAD();
-        mockSyfopartnerinfo();
         MockUtils.mockBrukerProfil(brukerprofilV3);
         MockUtils.mockHarFastlege(fastlegeSoapClient);
+        mockPartnerResource();
         mockDialogfordeler();
         mockTokenService();
     }
 
-
+    @Ignore
     @Test
-    @Ignore // Ignored because of issues with oidc-test-support (https://github.com/navikt/token-support/issues/29)
     public void sendOppfolgingsplan() throws Exception {
         byte[] oppfolgingsplanPDF = new byte[20];
         RSOppfolgingsplan oppfolgingsplan = new RSOppfolgingsplan("99999900000", oppfolgingsplanPDF);
@@ -125,11 +105,10 @@ public class DialogRessursTest {
 
     private void mockDialogfordeler() {
         ResponseEntity<Object> responseEntity200 = new ResponseEntity<>(HttpStatus.OK);
-
         when(restTemplate.exchange(
                 Mockito.anyString(),
-                Mockito.eq(HttpMethod.POST),
-                Mockito.any(),
+                Mockito.<HttpMethod>eq(HttpMethod.POST),
+                Mockito.<HttpEntity<?>>any(),
                 Mockito.<Class<Object>>any()
         )).thenReturn(responseEntity200);
     }
@@ -143,38 +122,4 @@ public class DialogRessursTest {
                 Mockito.<Class<Object>>any()
         )).thenReturn(new ResponseEntity<>(token, HttpStatus.OK));
     }
-
-    private void mockSyfopartnerinfo() {
-        final String URL = "http://syfopartnerinfo/api/v1/behandler?herid=123";
-        PartnerInfoResponse partnerInfoResponse = new PartnerInfoResponse(123);
-        ResponseEntity<Object> response = new ResponseEntity<>(Arrays.asList(partnerInfoResponse), HttpStatus.OK);
-
-        when(restTemplate.exchange(
-                Mockito.eq(URL),
-                Mockito.eq(HttpMethod.GET),
-                Mockito.any(),
-                Mockito.<Class<Object>>any()
-        )).thenReturn(response);
-    }
-
-    private void mockAzureAD() {
-        AzureAdResponse azureAdResponse = new AzureAdResponse(
-                "token",
-                "",
-                "",
-                "",
-                Instant.now(),
-                "",
-                ""
-        );
-        ResponseEntity<Object> response = new ResponseEntity<>(azureAdResponse, HttpStatus.OK);
-
-        when(restTemplateWithProxy.exchange(
-                Mockito.anyString(),
-                Mockito.eq(HttpMethod.POST),
-                Mockito.any(),
-                Mockito.<Class<Object>>any()
-        )).thenReturn(response);
-    }
-
 }
