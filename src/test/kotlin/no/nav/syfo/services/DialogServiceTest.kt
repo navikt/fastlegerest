@@ -79,8 +79,7 @@ class DialogServiceTest {
     @Before
     fun setUp() {
         mockRestServiceServer = MockRestServiceServer
-                .bindTo(restTemplate) // :+1:
-                //.ignoreExpectOrder(true)
+                .bindTo(restTemplate)
                 .build()
 
         mockAdresseRegisteret()
@@ -104,7 +103,7 @@ class DialogServiceTest {
 
         dialogService.sendOppfolgingsplan(oppfolgingsplan)
 
-        mockRestServiceServer.verify() //---testtest
+        mockRestServiceServer.verify()
 
     }
 
