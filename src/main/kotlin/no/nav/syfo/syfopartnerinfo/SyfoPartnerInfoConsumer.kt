@@ -29,7 +29,7 @@ class SyfoPartnerInfoConsumer(
                     "$SYFOPARTNERINFO_BASEURL/api/v1/behandler?herid=$herId",
                     HttpMethod.GET,
                     entity(syfoPartnerInfoAppId),
-                    object: ParameterizedTypeReference<List<PartnerInfoResponse>>() {}
+                    object : ParameterizedTypeReference<List<PartnerInfoResponse>>() {}
             )
             LOG.info("Got response from syfopartnerinfo ")
             metrikk.countEvent(CALL_SYFOPARTNERINFO_BEHANDLER_SUCCESS)

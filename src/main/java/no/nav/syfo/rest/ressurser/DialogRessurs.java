@@ -7,7 +7,9 @@ import no.nav.security.oidc.api.ProtectedWithClaims;
 import no.nav.syfo.domain.oppfolgingsplan.RSOppfolgingsplan;
 import no.nav.syfo.services.DialogService;
 import no.nav.syfo.services.exceptions.PartnerinformasjonIkkeFunnet;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 

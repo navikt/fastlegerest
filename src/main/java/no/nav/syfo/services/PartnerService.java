@@ -1,7 +1,9 @@
 package no.nav.syfo.services;
 
 import lombok.extern.slf4j.Slf4j;
-import no.nav.syfo.domain.*;
+import no.nav.syfo.domain.Fastlege;
+import no.nav.syfo.domain.OrganisasjonPerson;
+import no.nav.syfo.domain.Partnerinformasjon;
 import no.nav.syfo.services.exceptions.PartnerinformasjonIkkeFunnet;
 import no.nav.syfo.syfopartnerinfo.PartnerInfoResponse;
 import no.nav.syfo.syfopartnerinfo.SyfoPartnerInfoConsumer;
@@ -15,8 +17,8 @@ import static java.util.Optional.of;
 @Service
 public class PartnerService {
 
-    private AdresseregisterService adresseregisterService;
-    private SyfoPartnerInfoConsumer syfoPartnerInfoConsumer;
+    private final AdresseregisterService adresseregisterService;
+    private final SyfoPartnerInfoConsumer syfoPartnerInfoConsumer;
 
     public PartnerService(final AdresseregisterService adresseregisterService, final SyfoPartnerInfoConsumer syfoPartnerInfoConsumer) {
         this.adresseregisterService = adresseregisterService;
@@ -41,7 +43,7 @@ public class PartnerService {
         }
     }
 
-    private Optional<String> hentForeldreEnhetHerId(Fastlege fastlege){
+    private Optional<String> hentForeldreEnhetHerId(Fastlege fastlege) {
         Optional<String> fastlegeForeldreEnhetHerId = of(fastlege)
                 .map(Fastlege::herId)
                 .map(adresseregisterService::hentFastlegeOrganisasjonPerson)
