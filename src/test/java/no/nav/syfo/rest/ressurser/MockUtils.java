@@ -32,7 +32,7 @@ public class MockUtils {
                 .withPeriod(new WSPeriod()
                         .withFrom(LocalDateTime.now().minusYears(4))
                         .withTo(LocalDateTime.now().plusYears(4)))
-                .withGPHerId(123);
+                .withGPHerId(404);
 
         Mockito.when(fastlegeSoapClient.getPatientGPDetails(anyString())).thenReturn(fastlegeResponse);
     }
@@ -56,7 +56,7 @@ public class MockUtils {
     private static WSGPOffice mockLegeKontor() {
         return new WSGPOffice()
                 .withName(LEGEKONTOR)
-                .withOrganizationNumber(123)
+                .withOrganizationNumber(88888888)
                 .withPhysicalAddresses(new WSArrayOfPhysicalAddress())
                 .withElectronicAddresses(new WSArrayOfElectronicAddress());
     }

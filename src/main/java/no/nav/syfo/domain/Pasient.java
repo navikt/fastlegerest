@@ -4,6 +4,7 @@ package no.nav.syfo.domain;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import lombok.Builder;
 
 @Data
 @Accessors(fluent = true)

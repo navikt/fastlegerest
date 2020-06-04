@@ -1,4 +1,4 @@
-package no.nav.syfo.rest.ressurser;
+/*package no.nav.syfo.rest.ressurser;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.nav.emottak.schemas.HentPartnerIDViaOrgnummerRequest;
@@ -189,3 +189,4 @@ public class DialogRessursTest {
     }
 
 }
+ */

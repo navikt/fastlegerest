@@ -29,7 +29,7 @@ public class PartnerService {
             if (fastlegeForeldreEnhetHerId.isPresent()) {
                 String herId = fastlegeForeldreEnhetHerId.get();
                 PartnerInfoResponse response = syfoPartnerInfoConsumer.getPartnerId(herId).get(0);
-                return new Partnerinformasjon(herId, String.valueOf(response.getPartnerId()));
+                return new Partnerinformasjon(String.valueOf(response.getPartnerId()), herId);
             } else {
                 throw new PartnerinformasjonIkkeFunnet("Kunne ikke finne partnerinformasjon!");
             }
