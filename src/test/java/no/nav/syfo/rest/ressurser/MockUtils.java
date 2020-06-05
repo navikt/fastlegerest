@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 public class MockUtils {
     public static final String LEGEKONTOR = "Pontypandy Legekontor";
 
-    static void mockHarFastlege(IFlrReadOperations fastlegeSoapClient) throws IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage {
+    public static void mockHarFastlege(IFlrReadOperations fastlegeSoapClient) throws IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage {
         WSArrayOfGPOnContractAssociation fastlege = mockFastlege();
         WSGPOffice legeKontor = mockLegeKontor();
         WSGPContract fastlegeKontrakt = new WSGPContract().withGPOffice(legeKontor);
@@ -32,7 +32,7 @@ public class MockUtils {
                 .withPeriod(new WSPeriod()
                         .withFrom(LocalDateTime.now().minusYears(4))
                         .withTo(LocalDateTime.now().plusYears(4)))
-                .withGPHerId(123);
+                .withGPHerId(404);
 
         Mockito.when(fastlegeSoapClient.getPatientGPDetails(anyString())).thenReturn(fastlegeResponse);
     }
@@ -56,12 +56,12 @@ public class MockUtils {
     private static WSGPOffice mockLegeKontor() {
         return new WSGPOffice()
                 .withName(LEGEKONTOR)
-                .withOrganizationNumber(123)
+                .withOrganizationNumber(88888888)
                 .withPhysicalAddresses(new WSArrayOfPhysicalAddress())
                 .withElectronicAddresses(new WSArrayOfElectronicAddress());
     }
 
-    static void mockBrukerProfil(BrukerprofilV3 brukerprofilV3) throws Exception {
+    public static void mockBrukerProfil(BrukerprofilV3 brukerprofilV3) throws Exception {
         WSPersonnavn wsPersonnavn = new WSPersonnavn()
                 .withFornavn("Homer")
                 .withMellomnavn("Jay")

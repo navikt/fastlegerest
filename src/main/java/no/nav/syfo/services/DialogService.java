@@ -19,19 +19,19 @@ import java.util.Collections;
 @Slf4j
 public class DialogService {
 
-    private FastlegeService fastlegeService;
-    private PartnerService partnerService;
-    private TokenService tokenService;
-    private RestTemplate restTemplate;
-    private String dialogfordelerDomain;
+    private final FastlegeService fastlegeService;
+    private final PartnerService partnerService;
+    private final TokenService tokenService;
+    private final RestTemplate restTemplate;
+    private final String dialogfordelerDomain;
 
     @Inject
-    public DialogService (
+    public DialogService(
             final FastlegeService fastlegeService,
             final PartnerService partnerService,
             final TokenService tokenService,
             final @Qualifier("Oidc") RestTemplate restTemplate,
-            final @Value("${environment.name:nonlocal}") String environmenName ) {
+            final @Value("${environment.name:nonlocal}") String environmenName) {
         this.fastlegeService = fastlegeService;
         this.partnerService = partnerService;
         this.restTemplate = restTemplate;
@@ -42,7 +42,6 @@ public class DialogService {
     public void sendOppfolgingsplan(final RSOppfolgingsplan oppfolgingsplan) {
         Fastlege fastlege = fastlegeService.hentBrukersFastlege(oppfolgingsplan.getSykmeldtFnr())
                 .orElseThrow(FastlegeIkkeFunnet::new);
-
         Partnerinformasjon partnerinformasjon = partnerService.getPartnerinformasjon(fastlege);
 
         RSHodemelding hodemelding = new RSHodemelding(fastlege, partnerinformasjon, oppfolgingsplan);
@@ -59,16 +58,16 @@ public class DialogService {
                 String.class
         );
         HttpStatus statusCode = response.getStatusCode();
-        if (statusCode.is3xxRedirection() || statusCode.isError()){
+        if (statusCode.is3xxRedirection() || statusCode.isError()) {
             log.error("Feil ved sending av oppfølgingsdialog til fastlege: Fikk responskode {}", statusCode.value());
             throw new RuntimeException("Feil ved sending av oppfølgingsdialog til fastlege: Fikk responskode " + statusCode.value());
         }
     }
 
-    private HttpHeaders lagHeaders(){
+    private HttpHeaders lagHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(org.springframework.http.MediaType.APPLICATION_JSON));
-        headers.set("Authorization", "Bearer " + tokenService.getToken());
+        headers.setBearerAuth(tokenService.getToken());
         return headers;
 
     }
