@@ -13,6 +13,9 @@ import org.mockito.Mockito;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -20,6 +23,20 @@ import static org.mockito.Mockito.when;
 
 public class MockUtils {
     public static final String LEGEKONTOR = "Pontypandy Legekontor";
+
+
+    public static XMLGregorianCalendar toXMLGregorianCalendar(LocalDateTime localDateTime)
+    {
+        XMLGregorianCalendar xmlGregorianCalendar =
+                null;
+        try {
+            xmlGregorianCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(localDateTime.toString());
+        } catch (DatatypeConfigurationException e) {
+            e.printStackTrace();
+        }
+
+        return xmlGregorianCalendar;
+    }
 
     public static void mockHarFastlege(IFlrReadOperations fastlegeSoapClient) throws IFlrReadOperationsGetPatientGPDetailsGenericFaultFaultFaultMessage {
         WSArrayOfGPOnContractAssociation fastlege = mockFastlege();
@@ -30,8 +47,8 @@ public class MockUtils {
                 .withDoctorCycles(fastlege)
                 .withGPContract(fastlegeKontrakt)
                 .withPeriod(new WSPeriod()
-                        .withFrom(LocalDateTime.now().minusYears(4))
-                        .withTo(LocalDateTime.now().plusYears(4)))
+                        .withFrom(toXMLGregorianCalendar(LocalDateTime.now().minusYears(4)))
+                        .withTo(toXMLGregorianCalendar(LocalDateTime.now().plusYears(4))))
                 .withGPHerId(404);
 
         Mockito.when(fastlegeSoapClient.getPatientGPDetails(anyString())).thenReturn(fastlegeResponse);
