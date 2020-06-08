@@ -7,18 +7,22 @@ group = "no.nav.syfo"
 version = "1.0.0"
 
 val sourceCompatibility = "1.8"
-val springBootVersion = "2.1.1.RELEASE"
-val cxfVersion = "3.3.3"
+val springBootVersion = "2.3.0.RELEASE"
+val cxfVersion = "3.3.6"
 val kotlinLibVersion = "1.3.50"
-val kotlinJacksonVersion = "2.9.8"
+val kotlinJacksonVersion = "2.10.0"
 val navOidcVersion = "0.2.18"
+val logstashVersion = "6.3"
+val commonsVersion = "3.10"
+val owaspHtmlSanitizerVersion = "20190325.1"
+val prometheusVersion = "1.5.1"
 
 plugins {
     kotlin("jvm") version "1.3.50"
     id("java")
     id("org.jetbrains.kotlin.plugin.allopen") version "1.3.50"
     id("com.github.johnrengelman.shadow") version "4.0.3"
-    id("org.springframework.boot") version "2.1.1.RELEASE"
+    id("org.springframework.boot") version "2.3.0.RELEASE"
 }
 
 buildscript {
@@ -68,7 +72,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-jta-atomikos:$springBootVersion")
     implementation( "org.springframework:spring-context-support:5.1.2.RELEASE")
 
-    implementation("io.micrometer:micrometer-registry-prometheus:1.0.6")
+    implementation("io.micrometer:micrometer-registry-prometheus:$prometheusVersion")
 
     implementation("no.nav.security:oidc-spring-support:$navOidcVersion")
     implementation("no.nav.security:oidc-support:$navOidcVersion")
@@ -87,9 +91,9 @@ dependencies {
     implementation("javax.inject:javax.inject:1")
     implementation("javax.ws.rs:javax.ws.rs-api:2.0.1")
     implementation("org.slf4j:slf4j-api:1.7.25")
-    implementation("net.logstash.logback:logstash-logback-encoder:4.10")
-    implementation("org.apache.commons:commons-lang3:3.5")
-    implementation("com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20171016.1")
+    implementation("net.logstash.logback:logstash-logback-encoder:$logstashVersion")
+    implementation("org.apache.commons:commons-lang3:$commonsVersion")
+    implementation("com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:$owaspHtmlSanitizerVersion")
     compileOnly("org.projectlombok:lombok:1.18.6")
     annotationProcessor("org.projectlombok:lombok:1.18.6")
 

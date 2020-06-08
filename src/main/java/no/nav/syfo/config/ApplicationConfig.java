@@ -33,7 +33,7 @@ public class ApplicationConfig {
     public RestTemplate basicAuthRestTemplate(@Value("${srv.username}") String username,
                                               @Value("${srv.password}") String password) {
         return new RestTemplateBuilder()
-                .basicAuthorization(username, password)
+                .basicAuthentication(username, password)
                 .build();
     }
 }
