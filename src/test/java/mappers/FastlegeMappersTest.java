@@ -1,14 +1,11 @@
 package mappers;
 
-import no.nav.emottak.schemas.WSPartnerInformasjon;
 import no.nav.syfo.domain.Fastlegekontor;
-import no.nav.syfo.domain.Partnerinformasjon;
 import no.nhn.register.fastlegeinformasjon.common.*;
 import no.nhn.schemas.reg.flr.WSGPOffice;
 import org.junit.Test;
 
 import static no.nav.syfo.mappers.FastlegeMappers.ws2fastlegekontor;
-import static no.nav.syfo.mappers.FastlegeMappers.ws2partnerinformasjon;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FastlegeMappersTest {
@@ -84,52 +81,5 @@ public class FastlegeMappersTest {
         assertThat(fastlegekontor.orgnummer()).isEqualTo("123456789");
         assertThat(fastlegekontor.telefon()).isEqualTo("12345678");
         assertThat(fastlegekontor.epost()).isEqualTo("test@nav.no");
-    }
-
-    @Test
-    public void ws2PartnerinformasjonHappyCase() {
-        WSPartnerInformasjon wsPartnerInfo = new WSPartnerInformasjon()
-                .withPartnerID("123")
-                .withHERid("12");
-
-        Partnerinformasjon partnerInfo = ws2partnerinformasjon.apply(wsPartnerInfo);
-
-        assertThat(partnerInfo.getHerId()).isEqualTo("12");
-        assertThat(partnerInfo.getPartnerId()).isEqualTo("123");
-    }
-
-    @Test
-    public void fjernTabsFraPartnerinfomrasjonHerId() {
-        WSPartnerInformasjon wsPartnerInfo = new WSPartnerInformasjon()
-                .withPartnerID("123")
-                .withHERid("12\t\t");
-
-        Partnerinformasjon partnerInfo = ws2partnerinformasjon.apply(wsPartnerInfo);
-
-        assertThat(partnerInfo.getHerId()).isEqualTo("12");
-        assertThat(partnerInfo.getPartnerId()).isEqualTo("123");
-    }
-
-    @Test
-    public void partnerinformasjonManglerHerId() {
-        WSPartnerInformasjon wsPartnerInfo = new WSPartnerInformasjon()
-                .withPartnerID("123");
-
-        Partnerinformasjon partnerInfo = ws2partnerinformasjon.apply(wsPartnerInfo);
-
-        assertThat(partnerInfo.getHerId()).isNull();
-        assertThat(partnerInfo.getPartnerId()).isEqualTo("123");
-    }
-
-    @Test
-    public void partnerinformasjonHarHerIdMedTomStreng() {
-        WSPartnerInformasjon wsPartnerInfo = new WSPartnerInformasjon()
-                .withPartnerID("123")
-                .withHERid("");
-
-        Partnerinformasjon partnerInfo = ws2partnerinformasjon.apply(wsPartnerInfo);
-
-        assertThat(partnerInfo.getHerId()).isEqualTo("");
-        assertThat(partnerInfo.getPartnerId()).isEqualTo("123");
     }
 }

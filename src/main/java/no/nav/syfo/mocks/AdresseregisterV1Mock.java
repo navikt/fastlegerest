@@ -225,7 +225,7 @@ public class AdresseregisterV1Mock implements ICommunicationPartyService {
     }
 
     @Override
-    public WSArrayOfCommunicationPartyLastChangedInfo getChangedCommunicationPartiesInfo(WSArrayOfint herIds) throws ICommunicationPartyServiceGetChangedCommunicationPartiesInfoGenericFaultFaultFaultMessage {
+    public WSArrayOfCommunicationPartyLastChangedInfo getChangedCommunicationPartiesInfo(WSArrayOfint wsArrayOfint) throws ICommunicationPartyServiceGetChangedCommunicationPartiesInfoGenericFaultFaultFaultMessage {
         return null;
     }
 
