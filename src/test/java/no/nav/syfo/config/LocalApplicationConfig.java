@@ -1,6 +1,6 @@
 package no.nav.syfo.config;
 
-import no.nav.security.spring.oidc.test.TokenGeneratorConfiguration;
+import no.nav.security.oidc.test.support.spring.TokenGeneratorConfiguration;
 import no.nav.syfo.exception.RestTemplateErrorHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -16,7 +16,6 @@ import static java.util.Arrays.asList;
         AdresseregisterConfig.class,
         FastlegeInformasjonConfig.class,
         BrukerprofilConfig.class,
-        PartnerEmottakConfig.class,
         TokenGeneratorConfiguration.class,
 })
 @Profile("local")

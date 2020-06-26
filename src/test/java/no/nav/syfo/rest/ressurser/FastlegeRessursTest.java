@@ -1,6 +1,6 @@
 package no.nav.syfo.rest.ressurser;
 
-import no.nav.security.spring.oidc.test.JwtTokenGenerator;
+import no.nav.security.oidc.test.support.JwtTokenGenerator;
 import no.nav.syfo.LocalApplication;
 import no.nav.tjeneste.virksomhet.brukerprofil.v3.BrukerprofilV3;
 import no.nhn.schemas.reg.flr.IFlrReadOperations;

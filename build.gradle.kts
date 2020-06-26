@@ -17,6 +17,9 @@ val commonsVersion = "3.10"
 val owaspHtmlSanitizerVersion = "20190325.1"
 val prometheusVersion = "1.5.1"
 
+val syfotjenesterVersion = "1.2020.06.26-10.40-9af491f93602"
+val tjenesteSpesifikasjonerVersion = "1.2020.06.23-15.31-57b909d0a05c"
+
 plugins {
     kotlin("jvm") version "1.3.50"
     id("java")
@@ -48,13 +51,26 @@ allOpen {
     annotation("lombok.AllArgsConstructor")
 }
 
+val githubUser: String by project
+val githubPassword: String by project
 repositories {
     mavenCentral()
     jcenter()
-    maven(url = "https://repo.adeo.no/repository/maven-releases/")
-    maven(url = "https://repo.adeo.no/repository/maven-snapshots/")
-    maven(url = "http://packages.confluent.io/maven/")
     maven(url = "https://dl.bintray.com/kotlin/kotlinx/")
+    maven {
+        url = uri("https://maven.pkg.github.com/navikt/syfotjenester")
+        credentials {
+            username = githubUser
+            password = githubPassword
+        }
+    }
+    maven {
+        url = uri("https://maven.pkg.github.com/navikt/tjenestespesifikasjoner")
+        credentials {
+            username = githubUser
+            password = githubPassword
+        }
+    }
 }
 
 dependencies {
@@ -77,10 +93,11 @@ dependencies {
     implementation("no.nav.security:oidc-spring-support:$navOidcVersion")
     implementation("no.nav.security:oidc-support:$navOidcVersion")
     implementation("com.microsoft.azure:adal4j:1.6.4")
-    implementation( "no.nav.syfo.tjenester:adresseregisteretV1-tjenestespesifikasjon:1.0.3")
-    implementation( "no.nav.syfo.tjenester:partner-emottak:1.0")
-    implementation( "no.nav.syfo.tjenester:fastlegeinformasjonV1-tjenestespesifikasjon:2.1.8")
-    implementation( "no.nav.syfo.tjenester:brukerprofil-v3-tjenestespesifikasjon:3.0.1")
+
+    implementation( "no.nav.syfotjenester:adresseregisteretV1-tjenestespesifikasjon:$syfotjenesterVersion")
+    implementation( "no.nav.syfotjenester:fastlegeinformasjonV1-tjenestespesifikasjon:$syfotjenesterVersion")
+
+    implementation( "no.nav.tjenestespesifikasjoner:brukerprofil-v3-tjenestespesifikasjon:$tjenesteSpesifikasjonerVersion")
 
     implementation("org.apache.cxf:cxf-rt-features-logging:$cxfVersion")
     implementation("org.apache.cxf:cxf-rt-ws-security:$cxfVersion")
@@ -97,7 +114,7 @@ dependencies {
     compileOnly("org.projectlombok:lombok:1.18.6")
     annotationProcessor("org.projectlombok:lombok:1.18.6")
 
-    testCompile("no.nav.security:oidc-spring-test:0.2.5")
+    testImplementation("no.nav.security:oidc-test-support:$navOidcVersion")
     testCompile("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
 }
 

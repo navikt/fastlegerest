@@ -15,8 +15,6 @@ import static java.util.Arrays.asList;
         AdresseregisterConfig.class,
         FastlegeInformasjonConfig.class,
         BrukerprofilConfig.class,
-        PartnerEmottakConfig.class
-
 })
 @Profile("remote")
 public class ApplicationConfig {
