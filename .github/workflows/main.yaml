@@ -93,4 +93,4 @@ jobs:
           ORG_GRADLE_PROJECT_githubUser: x-access-token
           ORG_GRADLE_PROJECT_githubPassword: ${{ secrets.GITHUB_TOKEN }}
         with:
-          command: monitor
+          command: monitor  --project-name=${GITHUB_REPOSITORY
