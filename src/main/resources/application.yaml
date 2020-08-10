@@ -9,6 +9,9 @@ no.nav.security.oidc:
       discoveryurl: <SETTES FRA FASIT>
       accepted_audience: <SETTES FRA FASIT>
       cookie_name: selvbetjening-idtoken
+    sts:
+      discoveryurl: <naiserator>
+      accepted_audience: <naiserator>
     veileder:
       discoveryurl: <syfonais>
       accepted_audience: <syfonais>

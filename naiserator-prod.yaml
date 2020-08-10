@@ -66,6 +66,10 @@ spec:
       value: https://login.microsoftonline.com/navnob2c.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten
     - name: NO_NAV_SECURITY_OIDC_ISSUER_SELVBETJENING_ACCEPTEDAUDIENCE
       value: 45104d6a-f5bc-4e8c-b352-4bbfc9381f25
+    - name: NO_NAV_SECURITY_OIDC_ISSUER_STS_DISCOVERYURL
+      value: http://security-token-service/rest/v1/sts/.well-known/openid-configuration
+    - name: NO_NAV_SECURITY_OIDC_ISSUER_STS_ACCEPTEDAUDIENCE
+      value: srvsyfooppfolgings
     - name: NO_NAV_SECURITY_OIDC_ISSUER_VEILEDER_DISCOVERYURL
       value: https://login.microsoftonline.com/navno.onmicrosoft.com/.well-known/openid-configuration
     - name: NO_NAV_SECURITY_OIDC_ISSUER_VEILEDER_ACCEPTEDAUDIENCE

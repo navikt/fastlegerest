@@ -1,6 +1,5 @@
 package no.nav.syfo.rest.ressurser;
 
-
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.security.oidc.api.ProtectedWithClaims;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 import static no.nav.syfo.OIDCIssuer.EKSTERN;
+import static no.nav.syfo.OIDCIssuer.STS;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -28,6 +28,18 @@ public class DialogRessurs {
     @PostMapping(path = "/api/dialogmelding/v1/sendOppfolgingsplanFraSelvbetjening", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ProtectedWithClaims(issuer = EKSTERN)
     public void sendOppfolgingsplanFraSBS(@RequestBody @Valid RSOppfolgingsplan oppfolgingsplan) {
+        sendPlan(oppfolgingsplan);
+    }
+
+    @PostMapping(path = "/api/dialogmelding/v1/oppfolgingsplan/lps", consumes = APPLICATION_JSON_VALUE)
+    @ProtectedWithClaims(issuer = STS)
+    public void mottaOppfolgingsplanLPS(
+            @RequestBody @Valid RSOppfolgingsplan oppfolgingsplan
+    ) {
+        sendPlan(oppfolgingsplan);
+    }
+
+    private void sendPlan(RSOppfolgingsplan oppfolgingsplan) {
         try {
             log.info("Sender oppfølgingsplan");
             dialogService.sendOppfolgingsplan(oppfolgingsplan);
