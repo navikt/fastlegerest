@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 import no.nav.syfo.domain.oppfolgingsplan.RSOppfolgingsplan;
 import no.nav.syfo.services.DialogService;
+import no.nav.syfo.services.exceptions.FastlegeIkkeFunnet;
 import no.nav.syfo.services.exceptions.PartnerinformasjonIkkeFunnet;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +44,9 @@ public class DialogRessurs {
         try {
             log.info("Sender oppfølgingsplan");
             dialogService.sendOppfolgingsplan(oppfolgingsplan);
+        } catch (FastlegeIkkeFunnet e) {
+            log.warn("Feil ved sending av oppfølgingsplan", e);
+            throw e;
         } catch (PartnerinformasjonIkkeFunnet e) {
             log.warn("Feil ved sending av oppfølgingsplan", e);
             throw e;

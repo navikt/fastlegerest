@@ -5,6 +5,7 @@ import no.nav.security.spring.oidc.validation.interceptor.OIDCUnauthorizedExcept
 import no.nav.syfo.metric.Metrikk;
 import no.nav.syfo.services.exceptions.FastlegeIkkeFunnet;
 import no.nav.syfo.services.exceptions.HarIkkeTilgang;
+import no.nav.syfo.services.exceptions.PartnerinformasjonIkkeFunnet;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -38,6 +39,7 @@ public class ControllerExceptionHandler {
             ForbiddenException.class,
             IllegalArgumentException.class,
             OIDCUnauthorizedException.class,
+            PartnerinformasjonIkkeFunnet.class,
     })
     public final ResponseEntity<ApiError> handleException(Exception ex, WebRequest request) {
         HttpHeaders headers = new HttpHeaders();
@@ -62,6 +64,10 @@ public class ControllerExceptionHandler {
             FastlegeIkkeFunnet notFoundException = (FastlegeIkkeFunnet) ex;
 
             return handleFastlegeIkkeFunnetException(notFoundException, headers, request);
+        } else if (ex instanceof PartnerinformasjonIkkeFunnet) {
+            PartnerinformasjonIkkeFunnet notFoundException = (PartnerinformasjonIkkeFunnet) ex;
+
+            return handlePartnerinformasjonIkkeFunnetException(notFoundException, headers, request);
         } else {
             HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -89,6 +95,11 @@ public class ControllerExceptionHandler {
     }
 
     private ResponseEntity<ApiError> handleFastlegeIkkeFunnetException(FastlegeIkkeFunnet ex, HttpHeaders headers, WebRequest request) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        return handleExceptionInternal(ex, new ApiError(status.value(), ex.getMessage()), headers, status, request);
+    }
+
+    private ResponseEntity<ApiError> handlePartnerinformasjonIkkeFunnetException(PartnerinformasjonIkkeFunnet ex, HttpHeaders headers, WebRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
         return handleExceptionInternal(ex, new ApiError(status.value(), ex.getMessage()), headers, status, request);
     }
