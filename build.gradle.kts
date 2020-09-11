@@ -12,6 +12,7 @@ val cxfVersion = "3.3.6"
 val kotlinLibVersion = "1.3.50"
 val kotlinJacksonVersion = "2.10.0"
 val navOidcVersion = "0.2.18"
+val nimbusSDKVersion = "7.0.3"
 val logstashVersion = "6.3"
 val commonsVersion = "3.10"
 val owaspHtmlSanitizerVersion = "20190325.1"
@@ -90,6 +91,7 @@ dependencies {
 
     implementation("io.micrometer:micrometer-registry-prometheus:$prometheusVersion")
 
+    implementation("com.nimbusds:oauth2-oidc-sdk:$nimbusSDKVersion")
     implementation("no.nav.security:oidc-spring-support:$navOidcVersion")
     implementation("no.nav.security:oidc-support:$navOidcVersion")
     implementation("com.microsoft.azure:adal4j:1.6.4")
