@@ -6,6 +6,7 @@ import no.nav.syfo.domain.Partnerinformasjon;
 import no.nav.syfo.domain.dialogmelding.RSHodemelding;
 import no.nav.syfo.domain.oppfolgingsplan.RSOppfolgingsplan;
 import no.nav.syfo.services.exceptions.FastlegeIkkeFunnet;
+import no.nav.syfo.services.exceptions.InnsendingFeiletException;
 import no.nav.syfo.services.exceptions.PartnerinformasjonIkkeFunnet;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -62,7 +63,7 @@ public class DialogService {
         HttpStatus statusCode = response.getStatusCode();
         if (statusCode.is3xxRedirection() || statusCode.isError()) {
             log.error("Feil ved sending av oppfølgingsdialog til fastlege: Fikk responskode {}", statusCode.value());
-            throw new RuntimeException("Feil ved sending av oppfølgingsdialog til fastlege: Fikk responskode " + statusCode.value());
+            throw new InnsendingFeiletException("Feil ved sending av oppfølgingsdialog til fastlege: Fikk responskode " + statusCode.value());
         }
     }
 

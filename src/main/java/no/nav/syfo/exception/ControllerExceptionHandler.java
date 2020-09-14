@@ -5,6 +5,7 @@ import no.nav.security.spring.oidc.validation.interceptor.OIDCUnauthorizedExcept
 import no.nav.syfo.metric.Metrikk;
 import no.nav.syfo.services.exceptions.FastlegeIkkeFunnet;
 import no.nav.syfo.services.exceptions.HarIkkeTilgang;
+import no.nav.syfo.services.exceptions.InnsendingFeiletException;
 import no.nav.syfo.services.exceptions.PartnerinformasjonIkkeFunnet;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -40,6 +41,7 @@ public class ControllerExceptionHandler {
             IllegalArgumentException.class,
             OIDCUnauthorizedException.class,
             PartnerinformasjonIkkeFunnet.class,
+            InnsendingFeiletException.class,
     })
     public final ResponseEntity<ApiError> handleException(Exception ex, WebRequest request) {
         HttpHeaders headers = new HttpHeaders();
@@ -68,6 +70,10 @@ public class ControllerExceptionHandler {
             PartnerinformasjonIkkeFunnet notFoundException = (PartnerinformasjonIkkeFunnet) ex;
 
             return handlePartnerinformasjonIkkeFunnetException(notFoundException, headers, request);
+        } else if (ex instanceof InnsendingFeiletException) {
+            InnsendingFeiletException notFoundException = (InnsendingFeiletException) ex;
+
+            return handleInnsendingFeiletException(notFoundException, headers, request);
         } else {
             HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -104,10 +110,16 @@ public class ControllerExceptionHandler {
         return handleExceptionInternal(ex, new ApiError(status.value(), ex.getMessage()), headers, status, request);
     }
 
+    private ResponseEntity<ApiError> handleInnsendingFeiletException(InnsendingFeiletException ex, HttpHeaders headers, WebRequest request) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        return handleExceptionInternal(ex, new ApiError(status.value(), ex.getMessage()), headers, status, request);
+    }
+
     private ResponseEntity<ApiError> handleExceptionInternal(Exception ex, ApiError body, HttpHeaders headers, HttpStatus status, WebRequest request) {
         metrikk.tellHttpKall(status.value());
 
-        if (HttpStatus.INTERNAL_SERVER_ERROR.equals(status)) {
+        if (HttpStatus.INTERNAL_SERVER_ERROR.equals(status)
+                && !(ex instanceof InnsendingFeiletException)) {
             log.error("Uventet feil: {} : {}", ex.getClass().toString(), ex.getMessage(), ex);
             request.setAttribute(WebUtils.ERROR_EXCEPTION_ATTRIBUTE, ex, WebRequest.SCOPE_REQUEST);
         }
