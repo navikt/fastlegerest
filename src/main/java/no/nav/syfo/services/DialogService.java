@@ -42,7 +42,7 @@ public class DialogService {
     }
 
     public void sendOppfolgingsplan(final RSOppfolgingsplan oppfolgingsplan) {
-        if(oppfolgingsplan != null) throw new RuntimeException("Feil ved sending av oppfølgingsdialog til fastlege: Fikk responskode " + 500);
+        if(oppfolgingsplan != null) throw new InnsendingFeiletException("Feil ved sending av oppfølgingsdialog til fastlege: Fikk responskode " + 500);
         Fastlege fastlege = fastlegeService.hentBrukersFastlege(oppfolgingsplan.getSykmeldtFnr())
                 .orElseThrow(FastlegeIkkeFunnet::new);
         Partnerinformasjon partnerinformasjon = partnerService.getPartnerinformasjon(fastlege);
