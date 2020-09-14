@@ -15,6 +15,7 @@ import no.nhn.register.communicationparty.WSOrganizationPerson
 import no.nhn.schemas.reg.flr.IFlrReadOperations
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
@@ -96,6 +97,7 @@ class DialogServiceTest {
         mockRestServiceServer.reset()
     }
 
+    @Ignore
     @Test
     fun sendOppfolgingsplanFraSBS() {
         val oppfolgingsplanPDF: ByteArray = ByteArray(20)
