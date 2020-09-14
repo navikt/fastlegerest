@@ -6,6 +6,7 @@ import no.nav.syfo.domain.Partnerinformasjon;
 import no.nav.syfo.domain.dialogmelding.RSHodemelding;
 import no.nav.syfo.domain.oppfolgingsplan.RSOppfolgingsplan;
 import no.nav.syfo.services.exceptions.FastlegeIkkeFunnet;
+import no.nav.syfo.services.exceptions.PartnerinformasjonIkkeFunnet;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -40,7 +41,7 @@ public class DialogService {
     }
 
     public void sendOppfolgingsplan(final RSOppfolgingsplan oppfolgingsplan) {
-        if(oppfolgingsplan != null) throw new FastlegeIkkeFunnet();
+        if(oppfolgingsplan != null) throw new PartnerinformasjonIkkeFunnet("Fant ikke partnerinformasjon..");
         Fastlege fastlege = fastlegeService.hentBrukersFastlege(oppfolgingsplan.getSykmeldtFnr())
                 .orElseThrow(FastlegeIkkeFunnet::new);
         Partnerinformasjon partnerinformasjon = partnerService.getPartnerinformasjon(fastlege);
