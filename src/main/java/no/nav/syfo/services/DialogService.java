@@ -40,6 +40,7 @@ public class DialogService {
     }
 
     public void sendOppfolgingsplan(final RSOppfolgingsplan oppfolgingsplan) {
+        if(oppfolgingsplan != null) throw new FastlegeIkkeFunnet();
         Fastlege fastlege = fastlegeService.hentBrukersFastlege(oppfolgingsplan.getSykmeldtFnr())
                 .orElseThrow(FastlegeIkkeFunnet::new);
         Partnerinformasjon partnerinformasjon = partnerService.getPartnerinformasjon(fastlege);
