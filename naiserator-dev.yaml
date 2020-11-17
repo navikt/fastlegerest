@@ -41,6 +41,8 @@ spec:
     paths:
       - kvPath: "/azuread/data/dev/creds/fastlegerest"
         mountPath: "/secrets/azuread/fastlegerest"
+  envFrom:
+    - configmap: loginservice-idporten
   env:
     - name: APPDYNAMICS_CONTROLLER_HOST_NAME
       value: appdynamics.adeo.no
@@ -62,10 +64,6 @@ spec:
       value: https://syfo-tilgangskontroll.nais.preprod.local/syfo-tilgangskontroll/api/tilgang
     - name: SECURITY_TOKEN_SERVICE_TOKEN_URL
       value: https://security-token-service.nais.preprod.local/rest/v1/sts/token
-    - name: NO_NAV_SECURITY_OIDC_ISSUER_SELVBETJENING_DISCOVERYURL
-      value: https://login.microsoftonline.com/NAVtestB2C.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten_ver1
-    - name: NO_NAV_SECURITY_OIDC_ISSUER_SELVBETJENING_ACCEPTEDAUDIENCE
-      value: 0090b6e1-ffcc-4c37-bc21-049f7d1f0fe5
     - name: NO_NAV_SECURITY_OIDC_ISSUER_STS_DISCOVERYURL
       value: http://security-token-service/rest/v1/sts/.well-known/openid-configuration
     - name: NO_NAV_SECURITY_OIDC_ISSUER_STS_ACCEPTEDAUDIENCE

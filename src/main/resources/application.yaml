@@ -6,8 +6,8 @@ no.nav.security.oidc:
   issuers: selvbetjening,veileder
   issuer:
     selvbetjening:
-      discoveryurl: <SETTES FRA FASIT>
-      accepted_audience: <SETTES FRA FASIT>
+      discoveryurl: ${LOGINSERVICE_IDPORTEN_DISCOVERY_URL}
+      accepted_audience: ${LOGINSERVICE_IDPORTEN_AUDIENCE}
       cookie_name: selvbetjening-idtoken
     sts:
       discoveryurl: <naiserator>
