@@ -41,6 +41,10 @@ spec:
     paths:
       - kvPath: "/azuread/data/prod/creds/fastlegerest"
         mountPath: "/secrets/azuread/fastlegerest"
+      - kvPath: "/serviceuser/data/prod/srvfastlegerest"
+        mountPath: "/secrets/serviceuser/fastlegerest"
+      - kvPath: "/kv/prod/fss/fastlegerest/default"
+        mountPath: "/secrets/vault"
   envFrom:
     - configmap: loginservice-idporten
   env:
