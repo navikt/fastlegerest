@@ -97,7 +97,7 @@ class SyfoPartnerInfoConsumerTest {
 
     private fun mockSyfopartnerinfo() {
         val URL = "http://syfopartnerinfo/api/v1/behandler?herid=$HER_ID"
-        val infoResponse: MutableList<PartnerInfoResponse>? = null // listOf(ResponseEntity<List<PartnerInfoResponse>>(infoResponse, HttpStatus.OK))
+        val infoResponse: MutableList<PartnerInfoResponse>? = null
 
         mockRestServiceServer.expect(ExpectedCount.manyTimes(), MockRestRequestMatchers.requestTo(URL))
                 .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
