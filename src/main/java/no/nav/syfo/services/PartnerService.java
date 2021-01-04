@@ -9,6 +9,7 @@ import no.nav.syfo.syfopartnerinfo.PartnerInfoResponse;
 import no.nav.syfo.syfopartnerinfo.SyfoPartnerInfoConsumer;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.Optional.of;
@@ -30,10 +31,15 @@ public class PartnerService {
         try {
             if (fastlegeForeldreEnhetHerId.isPresent()) {
                 String herId = fastlegeForeldreEnhetHerId.get();
-                PartnerInfoResponse response = syfoPartnerInfoConsumer.getPartnerId(herId).get(0);
-                return new Partnerinformasjon(String.valueOf(response.getPartnerId()), herId);
+                List<PartnerInfoResponse> partnerInfoList = syfoPartnerInfoConsumer.getPartnerId(herId);
+                if (partnerInfoList.isEmpty()) {
+                    throw new PartnerinformasjonIkkeFunnet("Kunne ikke finne partnerinformasjon! Ingen partnerInfo er knyttet til fastlegeForeldreEnhetHerId.");
+                } else {
+                    PartnerInfoResponse response = partnerInfoList.get(0);
+                    return new Partnerinformasjon(String.valueOf(response.getPartnerId()), herId);
+                }
             } else {
-                throw new PartnerinformasjonIkkeFunnet("Kunne ikke finne partnerinformasjon!");
+                throw new PartnerinformasjonIkkeFunnet("Kunne ikke finne partnerinformasjon! Fant ikke fastlegeForeldreEnhetHerId.");
             }
         } catch (PartnerinformasjonIkkeFunnet e) {
             throw e;
