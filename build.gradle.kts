@@ -129,6 +129,10 @@ tasks {
         manifest.attributes["Main-Class"] = "no.nav.syfo.Application"
     }
 
+    withType<Test> {
+        useJUnitPlatform()
+    }
+
     create("printVersion") {
         doLast {
             println(project.version)
