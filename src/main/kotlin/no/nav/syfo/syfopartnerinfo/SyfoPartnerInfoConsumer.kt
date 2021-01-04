@@ -33,7 +33,7 @@ class SyfoPartnerInfoConsumer(
             )
             LOG.info("Got response from syfopartnerinfo ")
             metrikk.countEvent(CALL_SYFOPARTNERINFO_BEHANDLER_SUCCESS)
-            return response.body ?: listOf()
+            return response.body ?: emptyList()
         } catch (e: RestClientResponseException) {
             LOG.error("Request to syfopartnerinfo failed with status ${e.rawStatusCode} and message: ${e.responseBodyAsString}")
             throw e

@@ -43,7 +43,6 @@ class SyfoPartnerInfoConsumerTest {
 
     lateinit var syfoPartnerInfoConsumer: SyfoPartnerInfoConsumer
 
-
     @MockBean
     lateinit var metrikk: Metrikk
 
