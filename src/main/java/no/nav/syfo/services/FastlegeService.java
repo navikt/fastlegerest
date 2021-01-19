@@ -1,6 +1,7 @@
 package no.nav.syfo.services;
 
 import lombok.extern.slf4j.Slf4j;
+import no.nav.syfo.consumer.pdl.*;
 import no.nav.syfo.domain.*;
 import no.nav.syfo.services.exceptions.FastlegeIkkeFunnet;
 import no.nhn.schemas.reg.common.en.WSPeriod;
@@ -20,17 +21,21 @@ import static no.nav.syfo.mappers.FastlegeMappers.ws2fastlege;
 import static no.nav.syfo.mappers.FastlegeMappers.ws2fastlegekontor;
 import static no.nav.syfo.util.MapUtil.map;
 import static no.nav.syfo.util.MapUtil.mapListe;
+import static no.nav.syfo.util.StringUtil.lowerCapitalize;
 
 @Slf4j
 @Service
 public class FastlegeService {
     private IFlrReadOperations fastlegeSoapClient;
-    private BrukerprofilService brukerprofilService;
+    private PdlConsumer pdlConsumer;
 
     @Inject
-    public FastlegeService(final IFlrReadOperations fastlegeSoapClient, final BrukerprofilService brukerprofilService) {
+    public FastlegeService(
+            final IFlrReadOperations fastlegeSoapClient,
+            final PdlConsumer pdlConsumer
+    ) {
         this.fastlegeSoapClient = fastlegeSoapClient;
-        this.brukerprofilService = brukerprofilService;
+        this.pdlConsumer = pdlConsumer;
     }
 
     @Cacheable(value = "fastlege")
@@ -41,7 +46,8 @@ public class FastlegeService {
     @Cacheable(value = "fastlege")
     public List<Fastlege> hentBrukersFastleger(String brukersFnr) {
         try {
-            Pasient pasient = brukerprofilService.hentNavnByFnr(brukersFnr);
+            Optional<PdlHentPerson> maybePerson = Optional.ofNullable(pdlConsumer.person(brukersFnr));
+            Pasient pasient = toPasient(maybePerson);
             WSPatientToGPContractAssociation patientGPDetails = fastlegeSoapClient.getPatientGPDetails(brukersFnr);
             return hentFastleger(patientGPDetails).stream()
                     .map(fastlege -> fastlege
@@ -69,8 +75,27 @@ public class FastlegeService {
                 .collect(toList());
     }
 
-    private  LocalDate toLocalDate(XMLGregorianCalendar xmlGregorianCalendar){
-      return  LocalDate.of(
+    private Pasient toPasient(Optional<PdlHentPerson> maybePerson) {
+        Pasient pasient = new Pasient();
+        if (maybePerson.isPresent()) {
+            Optional<PdlPerson> pdlHentPerson = Optional.ofNullable(maybePerson.get().getHentPerson());
+            if (pdlHentPerson.isPresent()) {
+                List<PdlPersonNavn> nameList = pdlHentPerson.get().getNavn();
+                if (nameList.isEmpty()) {
+                    return pasient;
+                } else {
+                    PdlPersonNavn personNavn = nameList.get(0);
+                    pasient.fornavn = lowerCapitalize(personNavn.getFornavn());
+                    pasient.mellomnavn = lowerCapitalize(personNavn.getMellomnavn());
+                    pasient.etternavn = lowerCapitalize(personNavn.getEtternavn());
+                }
+            }
+        }
+        return pasient;
+    }
+
+    private LocalDate toLocalDate(XMLGregorianCalendar xmlGregorianCalendar) {
+        return LocalDate.of(
                 xmlGregorianCalendar.getYear(),
                 xmlGregorianCalendar.getMonth(),
                 xmlGregorianCalendar.getDay());

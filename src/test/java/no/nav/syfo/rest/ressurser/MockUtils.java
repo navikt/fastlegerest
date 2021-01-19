@@ -1,10 +1,5 @@
 package no.nav.syfo.rest.ressurser;
 
-import no.nav.tjeneste.virksomhet.brukerprofil.v3.BrukerprofilV3;
-import no.nav.tjeneste.virksomhet.brukerprofil.v3.informasjon.WSBruker;
-import no.nav.tjeneste.virksomhet.brukerprofil.v3.informasjon.WSPersonnavn;
-import no.nav.tjeneste.virksomhet.brukerprofil.v3.meldinger.WSHentKontaktinformasjonOgPreferanserRequest;
-import no.nav.tjeneste.virksomhet.brukerprofil.v3.meldinger.WSHentKontaktinformasjonOgPreferanserResponse;
 import no.nhn.register.fastlegeinformasjon.common.WSArrayOfElectronicAddress;
 import no.nhn.register.fastlegeinformasjon.common.WSArrayOfPhysicalAddress;
 import no.nhn.schemas.reg.common.en.WSPeriod;
@@ -13,9 +8,7 @@ import org.mockito.Mockito;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.datatype.*;
 import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -25,8 +18,7 @@ public class MockUtils {
     public static final String LEGEKONTOR = "Pontypandy Legekontor";
 
 
-    public static XMLGregorianCalendar toXMLGregorianCalendar(LocalDateTime localDateTime)
-    {
+    public static XMLGregorianCalendar toXMLGregorianCalendar(LocalDateTime localDateTime) {
         XMLGregorianCalendar xmlGregorianCalendar =
                 null;
         try {
@@ -76,21 +68,6 @@ public class MockUtils {
                 .withOrganizationNumber(88888888)
                 .withPhysicalAddresses(new WSArrayOfPhysicalAddress())
                 .withElectronicAddresses(new WSArrayOfElectronicAddress());
-    }
-
-    public static void mockBrukerProfil(BrukerprofilV3 brukerprofilV3) throws Exception {
-        WSPersonnavn wsPersonnavn = new WSPersonnavn()
-                .withFornavn("Homer")
-                .withMellomnavn("Jay")
-                .withEtternavn("Simpson");
-        WSHentKontaktinformasjonOgPreferanserResponse kontaktinfoResponse =
-                new WSHentKontaktinformasjonOgPreferanserResponse()
-                        .withBruker(new WSBruker()
-                                .withPersonnavn(wsPersonnavn));
-        WSHentKontaktinformasjonOgPreferanserRequest anyRequest = Mockito.<WSHentKontaktinformasjonOgPreferanserRequest>any();
-
-        Mockito.when(brukerprofilV3.hentKontaktinformasjonOgPreferanser(anyRequest))
-                .thenReturn(kontaktinfoResponse);
     }
 
     static void mockResponseFraTilgangskontroll(RestTemplate restTemplate, HttpStatus httpStatus) {

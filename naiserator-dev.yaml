@@ -60,8 +60,6 @@ spec:
       value: https://pep-gw-q4.oera-q.local:9443/ekstern/helse/fastlegeinformasjon
     - name: EKSTERN_HELSE_ADRESSEREGISTERET_V1_URL
       value: https://pep-gw-q4.oera-q.local:9443/ekstern/helse/adresseregisteret/v1
-    - name: VIRKSOMHET_BRUKERPROFIL_V3_URL
-      value: https://wasapp-q1.adeo.no/tpsws/Brukerprofil_v3
     - name: PARTNER_WS_URL
       value: https://wasapp-q1.adeo.no/emottak-partnerweb/partnerService/
     - name: TILGANGSKONTROLLAPI_URL
@@ -80,3 +78,7 @@ spec:
       value: https://login.microsoftonline.com/navq.onmicrosoft.com/oauth2/token
     - name: SYFOPARTNERINFO_APPID
       value: 077b7904-dec5-4d2e-bf69-bb17f56658c2
+    - name: PDL_URL
+      value: https://pdl-api.nais.preprod.local/graphql
+    - name: SECURITY_TOKEN_SERVICE_REST_URL
+      value: https://security-token-service.nais.preprod.local

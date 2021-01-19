@@ -15,7 +15,6 @@ import static java.util.Arrays.asList;
 @Import({
         AdresseregisterConfig.class,
         FastlegeInformasjonConfig.class,
-        BrukerprofilConfig.class,
         TokenGeneratorConfiguration.class,
 })
 @Profile("local")
@@ -38,4 +37,8 @@ public class LocalApplicationConfig {
                 .build();
     }
 
+    @Bean(name = "default")
+    public RestTemplate defaultRestTemplate() {
+        return new RestTemplate();
+    }
 }

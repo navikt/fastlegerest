@@ -2,13 +2,14 @@ package no.nav.syfo.rest.ressurser;
 
 import no.nav.security.oidc.test.support.JwtTokenGenerator;
 import no.nav.syfo.LocalApplication;
-import no.nav.tjeneste.virksomhet.brukerprofil.v3.BrukerprofilV3;
+import no.nav.syfo.consumer.pdl.PdlConsumer;
 import no.nhn.schemas.reg.flr.IFlrReadOperations;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,10 +23,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static testhelper.PdlPersonResponseGeneratorKt.generatePdlHentPerson;
 
 
 @RunWith(SpringRunner.class)
@@ -43,7 +46,7 @@ public class FastlegeRessursTest {
     private MockMvc mvc;
 
     @MockBean
-    private BrukerprofilV3 brukerprofilV3;
+    private PdlConsumer pdlConsumer;
 
     @MockBean
     private IFlrReadOperations fastlegeSoapClient;
@@ -54,8 +57,9 @@ public class FastlegeRessursTest {
 
 
     @Before
-    public void setUp() throws Exception {
-        MockUtils.mockBrukerProfil(brukerprofilV3);
+    public void setUp() {
+        Mockito.when(pdlConsumer.person(anyString()))
+                .thenReturn(generatePdlHentPerson(null));
     }
 
     @Test

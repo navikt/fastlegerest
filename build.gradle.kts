@@ -19,7 +19,6 @@ val owaspHtmlSanitizerVersion = "20190325.1"
 val prometheusVersion = "1.5.1"
 
 val syfotjenesterVersion = "1.2020.06.26-10.40-9af491f93602"
-val tjenesteSpesifikasjonerVersion = "1.2020.06.23-15.31-57b909d0a05c"
 
 plugins {
     kotlin("jvm") version "1.3.50"
@@ -98,8 +97,6 @@ dependencies {
 
     implementation( "no.nav.syfotjenester:adresseregisteretV1-tjenestespesifikasjon:$syfotjenesterVersion")
     implementation( "no.nav.syfotjenester:fastlegeinformasjonV1-tjenestespesifikasjon:$syfotjenesterVersion")
-
-    implementation( "no.nav.tjenestespesifikasjoner:brukerprofil-v3-tjenestespesifikasjon:$tjenesteSpesifikasjonerVersion")
 
     implementation("org.apache.cxf:cxf-rt-features-logging:$cxfVersion")
     implementation("org.apache.cxf:cxf-rt-ws-security:$cxfVersion")

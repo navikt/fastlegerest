@@ -14,7 +14,6 @@ import static java.util.Arrays.asList;
 @Import({
         AdresseregisterConfig.class,
         FastlegeInformasjonConfig.class,
-        BrukerprofilConfig.class,
 })
 @Profile("remote")
 public class ApplicationConfig {
@@ -33,5 +32,10 @@ public class ApplicationConfig {
         return new RestTemplateBuilder()
                 .basicAuthentication(username, password)
                 .build();
+    }
+
+    @Bean(name = "default")
+    public RestTemplate defaultRestTemplate() {
+        return new RestTemplate();
     }
 }
