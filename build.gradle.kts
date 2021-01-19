@@ -22,7 +22,7 @@ plugins {
     id("java")
     kotlin("jvm") version "1.4.21"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.4.21"
-    id("com.github.johnrengelman.shadow") version "4.0.3"
+    id("com.github.johnrengelman.shadow") version "6.1.0"
     id("org.springframework.boot") version "2.3.0.RELEASE"
     id("io.spring.dependency-management") version "1.0.10.RELEASE"
 }
