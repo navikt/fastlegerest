@@ -86,7 +86,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-jersey")
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("org.springframework.boot:spring-boot-starter-jta-atomikos")
-    implementation("org.springframework:spring-context-support:5.1.2.RELEASE")
+    implementation("org.springframework:spring-context-support:5.1.20.RELEASE")
 
     implementation("org.apache.httpcomponents:httpclient:$apacheHttpClientVersion")
 
