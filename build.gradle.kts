@@ -6,13 +6,17 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 group = "no.nav.syfo"
 version = "1.0.0"
 
+val adal4jVersion = "1.6.4"
 val apacheHttpClientVersion = "4.5.6"
 val cxfVersion = "3.3.6"
+val javaxWsRsApiVersion = "2.0.1"
 val kotlinJacksonVersion = "2.10.0"
 val navOidcVersion = "0.2.18"
 val nimbusSDKVersion = "7.0.3"
 val logstashVersion = "6.3"
 val prometheusVersion = "1.5.1"
+val slf4jVersion = "1.7.25"
+val swaggerVersion = "1.5.21"
 
 val syfotjenesterVersion = "1.2020.06.26-10.40-9af491f93602"
 
@@ -71,7 +75,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(kotlin("reflect"))
 
-    implementation( "io.swagger:swagger-annotations:1.5.21")
+    implementation("io.swagger:swagger-annotations:$swaggerVersion")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$kotlinJacksonVersion")
 
@@ -94,7 +98,7 @@ dependencies {
     implementation("com.nimbusds:oauth2-oidc-sdk:$nimbusSDKVersion")
     implementation("no.nav.security:oidc-spring-support:$navOidcVersion")
     implementation("no.nav.security:oidc-support:$navOidcVersion")
-    implementation("com.microsoft.azure:adal4j:1.6.4")
+    implementation("com.microsoft.azure:adal4j:$adal4jVersion")
 
     implementation( "no.nav.syfotjenester:adresseregisteretV1-tjenestespesifikasjon:$syfotjenesterVersion")
     implementation( "no.nav.syfotjenester:fastlegeinformasjonV1-tjenestespesifikasjon:$syfotjenesterVersion")
@@ -105,8 +109,8 @@ dependencies {
     implementation("org.apache.cxf:cxf-rt-transports-http:$cxfVersion")
     implementation("org.apache.cxf:cxf-rt-frontend-jaxws:$cxfVersion")
 
-    implementation("javax.ws.rs:javax.ws.rs-api:2.0.1")
-    implementation("org.slf4j:slf4j-api:1.7.25")
+    implementation("javax.ws.rs:javax.ws.rs-api:$javaxWsRsApiVersion")
+    implementation("org.slf4j:slf4j-api:$slf4jVersion")
     implementation("net.logstash.logback:logstash-logback-encoder:$logstashVersion")
 
     testImplementation("no.nav.security:oidc-test-support:$navOidcVersion")
