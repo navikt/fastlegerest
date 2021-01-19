@@ -14,8 +14,6 @@ val kotlinJacksonVersion = "2.10.0"
 val navOidcVersion = "0.2.18"
 val nimbusSDKVersion = "7.0.3"
 val logstashVersion = "6.3"
-val commonsVersion = "3.10"
-val owaspHtmlSanitizerVersion = "20190325.1"
 val prometheusVersion = "1.5.1"
 
 val syfotjenesterVersion = "1.2020.06.26-10.40-9af491f93602"
@@ -112,8 +110,6 @@ dependencies {
     implementation("javax.ws.rs:javax.ws.rs-api:2.0.1")
     implementation("org.slf4j:slf4j-api:1.7.25")
     implementation("net.logstash.logback:logstash-logback-encoder:$logstashVersion")
-    implementation("org.apache.commons:commons-lang3:$commonsVersion")
-    implementation("com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:$owaspHtmlSanitizerVersion")
 
     testImplementation("no.nav.security:oidc-test-support:$navOidcVersion")
     testCompile("org.springframework.boot:spring-boot-starter-test")
