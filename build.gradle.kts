@@ -7,7 +7,6 @@ group = "no.nav.syfo"
 version = "1.0.0"
 
 val apacheHttpClientVersion = "4.5.6"
-val sourceCompatibility = "1.8"
 val cxfVersion = "3.3.6"
 val kotlinJacksonVersion = "2.10.0"
 val navOidcVersion = "0.2.18"
