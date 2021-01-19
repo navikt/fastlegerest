@@ -21,9 +21,9 @@ val prometheusVersion = "1.5.1"
 val syfotjenesterVersion = "1.2020.06.26-10.40-9af491f93602"
 
 plugins {
-    kotlin("jvm") version "1.3.50"
     id("java")
-    id("org.jetbrains.kotlin.plugin.allopen") version "1.3.50"
+    kotlin("jvm") version "1.4.21"
+    id("org.jetbrains.kotlin.plugin.allopen") version "1.4.21"
     id("com.github.johnrengelman.shadow") version "4.0.3"
     id("org.springframework.boot") version "2.3.0.RELEASE"
     id("io.spring.dependency-management") version "1.0.10.RELEASE"
@@ -72,9 +72,11 @@ repositories {
 }
 
 dependencies {
+    implementation(kotlin("stdlib"))
+    implementation(kotlin("reflect"))
+
     implementation( "io.swagger:swagger-annotations:1.5.21")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinLibVersion")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinLibVersion")
+
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$kotlinJacksonVersion")
 
     implementation("org.springframework.boot:spring-boot-starter-web")
