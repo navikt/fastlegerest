@@ -14,7 +14,7 @@ val kotlinJacksonVersion = "2.10.0"
 val navOidcVersion = "0.2.18"
 val nimbusSDKVersion = "7.0.3"
 val logstashVersion = "6.3"
-val prometheusVersion = "1.5.1"
+val prometheusVersion = "1.5.5"
 val slf4jVersion = "1.7.25"
 val swaggerVersion = "1.5.21"
 
