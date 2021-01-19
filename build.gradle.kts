@@ -6,8 +6,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 group = "no.nav.syfo"
 version = "1.0.0"
 
+val apacheHttpClientVersion = "4.5.6"
 val sourceCompatibility = "1.8"
-val springBootVersion = "2.3.0.RELEASE"
 val cxfVersion = "3.3.6"
 val kotlinLibVersion = "1.3.50"
 val kotlinJacksonVersion = "2.10.0"
@@ -26,15 +26,14 @@ plugins {
     id("org.jetbrains.kotlin.plugin.allopen") version "1.3.50"
     id("com.github.johnrengelman.shadow") version "4.0.3"
     id("org.springframework.boot") version "2.3.0.RELEASE"
+    id("io.spring.dependency-management") version "1.0.10.RELEASE"
 }
 
 buildscript {
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.0")
         classpath("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
         classpath("org.glassfish.jaxb:jaxb-runtime:2.4.0-b180830.0438")
         classpath("com.sun.activation:javax.activation:1.2.0")
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.4.RELEASE")
         classpath("com.sun.xml.ws:jaxws-tools:2.3.1") {
             exclude(group = "com.sun.xml.ws", module = "policy")
         }
@@ -46,7 +45,6 @@ allOpen {
     annotation("org.springframework.stereotype.Service")
     annotation("org.springframework.stereotype.Component")
     annotation("lombok.extern.slf4j.Slf4j")
-    annotation("org.springframework.boot.autoconfigure.SpringBootApplication")
     annotation("org.springframework.boot.autoconfigure.SpringBootApplication")
     annotation("lombok.AllArgsConstructor")
 }
@@ -79,14 +77,19 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinLibVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$kotlinJacksonVersion")
 
-    implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
-    implementation("org.springframework.boot:spring-boot-starter-actuator:$springBootVersion")
-    implementation("org.springframework.boot:spring-boot-starter-logging:$springBootVersion")
-    implementation("org.springframework.boot:spring-boot-starter-aop:$springBootVersion")
-    implementation("org.springframework.boot:spring-boot-starter-jersey:$springBootVersion")
-    implementation("org.springframework.boot:spring-boot-starter-cache:$springBootVersion")
-    implementation("org.springframework.boot:spring-boot-starter-jta-atomikos:$springBootVersion")
-    implementation( "org.springframework:spring-context-support:5.1.2.RELEASE")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-logging")
+    implementation("org.springframework.boot:spring-boot-starter-aop")
+    implementation("org.springframework.boot:spring-boot-starter-jersey")
+    implementation("org.springframework.boot:spring-boot-starter-cache")
+    implementation("org.springframework.boot:spring-boot-starter-jta-atomikos")
+    implementation("org.springframework:spring-context-support:5.1.2.RELEASE")
+
+    implementation("org.apache.httpcomponents:httpclient:$apacheHttpClientVersion")
+
+    implementation("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok")
 
     implementation("io.micrometer:micrometer-registry-prometheus:$prometheusVersion")
 
@@ -104,17 +107,14 @@ dependencies {
     implementation("org.apache.cxf:cxf-rt-transports-http:$cxfVersion")
     implementation("org.apache.cxf:cxf-rt-frontend-jaxws:$cxfVersion")
 
-    implementation("javax.inject:javax.inject:1")
     implementation("javax.ws.rs:javax.ws.rs-api:2.0.1")
     implementation("org.slf4j:slf4j-api:1.7.25")
     implementation("net.logstash.logback:logstash-logback-encoder:$logstashVersion")
     implementation("org.apache.commons:commons-lang3:$commonsVersion")
     implementation("com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:$owaspHtmlSanitizerVersion")
-    compileOnly("org.projectlombok:lombok:1.18.6")
-    annotationProcessor("org.projectlombok:lombok:1.18.6")
 
     testImplementation("no.nav.security:oidc-test-support:$navOidcVersion")
-    testCompile("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
 tasks {
