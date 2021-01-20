@@ -8,7 +8,7 @@ version = "1.0.0"
 
 val adal4jVersion = "1.6.4"
 val apacheHttpClientVersion = "4.5.13"
-val cxfVersion = "3.3.7"
+val cxfVersion = "3.3.9"
 val javaxWsRsApiVersion = "2.1.1"
 val kotlinJacksonVersion = "2.11.3"
 val navOidcVersion = "0.2.18"
