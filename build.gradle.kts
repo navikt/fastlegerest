@@ -9,7 +9,9 @@ version = "1.0.0"
 val adal4jVersion = "1.6.4"
 val apacheHttpClientVersion = "4.5.13"
 val cxfVersion = "3.3.9"
+val javaxActivationVersion = "1.2.0"
 val javaxWsRsApiVersion = "2.1.1"
+val jaxRiVersion = "2.3.2"
 val kotlinJacksonVersion = "2.11.3"
 val navOidcVersion = "0.2.18"
 val nimbusSDKVersion = "7.0.3"
@@ -109,12 +111,15 @@ dependencies {
     implementation("org.apache.cxf:cxf-rt-transports-http:$cxfVersion")
     implementation("org.apache.cxf:cxf-rt-frontend-jaxws:$cxfVersion")
 
+    implementation("com.sun.xml.ws:jaxws-ri:$jaxRiVersion")
+    implementation("com.sun.activation:javax.activation:$javaxActivationVersion")
+
     implementation("javax.ws.rs:javax.ws.rs-api:$javaxWsRsApiVersion")
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
     implementation("net.logstash.logback:logstash-logback-encoder:$logstashVersion")
 
     testImplementation("no.nav.security:oidc-test-support:$navOidcVersion")
-    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
 tasks {
@@ -149,10 +154,10 @@ tasks {
     }
 
     named<KotlinCompile>("compileKotlin") {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = "11"
     }
 
     named<KotlinCompile>("compileTestKotlin") {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = "11"
     }
 }
