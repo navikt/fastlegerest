@@ -2,9 +2,9 @@ package no.nav.syfo.services;
 
 import lombok.extern.slf4j.Slf4j;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
-import no.nav.syfo.OIDCIssuer;
+import no.nav.syfo.api.auth.OIDCIssuer;
 import no.nav.syfo.domain.Tilgang;
-import no.nav.syfo.util.OIDCUtil;
+import no.nav.syfo.api.auth.OIDCUtil;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;

@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static no.nav.syfo.OIDCIssuer.EKSTERN;
-import static no.nav.syfo.OIDCIssuer.STS;
+import static no.nav.syfo.api.auth.OIDCIssuer.EKSTERN;
+import static no.nav.syfo.api.auth.OIDCIssuer.STS;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController

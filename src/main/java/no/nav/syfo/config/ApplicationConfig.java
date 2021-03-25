@@ -1,6 +1,6 @@
 package no.nav.syfo.config;
 
-import no.nav.syfo.exception.RestTemplateErrorHandler;
+import no.nav.syfo.api.exception.RestTemplateErrorHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.*;
