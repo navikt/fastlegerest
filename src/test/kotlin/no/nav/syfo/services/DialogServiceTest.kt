@@ -8,7 +8,7 @@ import no.nav.syfo.consumer.syfopartnerinfo.PartnerInfoResponse
 import no.nav.syfo.domain.*
 import no.nav.syfo.domain.dialogmelding.RSHodemelding
 import no.nav.syfo.domain.oppfolgingsplan.RSOppfolgingsplan
-import no.nav.syfo.rest.ressurser.MockUtils
+import testhelper.MockUtils
 import no.nhn.register.communicationparty.*
 import no.nhn.schemas.reg.flr.IFlrReadOperations
 import org.junit.*

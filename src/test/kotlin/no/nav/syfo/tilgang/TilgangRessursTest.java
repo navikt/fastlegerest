@@ -1,4 +1,4 @@
-package no.nav.syfo.rest.ressurser;
+package no.nav.syfo.tilgang;
 
 import no.nav.security.oidc.test.support.JwtTokenGenerator;
 import no.nav.syfo.LocalApplication;
@@ -21,7 +21,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import static testhelper.MockUtilsKt.mockResponseFraTilgangskontroll;
 
 //Disse testene må ha local_mock i application.yaml satt til False for å kjøre
 @RunWith(SpringRunner.class)
@@ -43,7 +43,7 @@ public class TilgangRessursTest {
 
     @Test
     public void godkjennRiktigTilgang() throws Exception {
-        MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
+        mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
         this.mvc.perform(get("/api/internad/tilgang")
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION, "Bearer " + token))
@@ -53,7 +53,7 @@ public class TilgangRessursTest {
 
     @Test
     public void avslaFeilTilgang() throws Exception {
-        MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.FORBIDDEN);
+        mockResponseFraTilgangskontroll(restTemplate, HttpStatus.FORBIDDEN);
         this.mvc.perform(get("/api/internad/tilgang")
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION, "Bearer " + token))
@@ -62,7 +62,7 @@ public class TilgangRessursTest {
     }
 
     @Test
-    public void svarMed401NarTokenMangler() throws Exception{
+    public void svarMed401NarTokenMangler() throws Exception {
         this.mvc.perform(get("/api/internad/tilgang")
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION, "Bearer "))
@@ -72,12 +72,11 @@ public class TilgangRessursTest {
     }
 
     @Test
-    public void svarMed401NarAuthorizationHeaderMangler() throws Exception{
+    public void svarMed401NarAuthorizationHeaderMangler() throws Exception {
         this.mvc.perform(get("/api/internad/tilgang")
                 .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isUnauthorized())
                 .andExpect(content().string(containsString("Autorisasjonsfeil")));
 
     }
-
 }

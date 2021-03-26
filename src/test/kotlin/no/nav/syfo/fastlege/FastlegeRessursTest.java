@@ -1,8 +1,9 @@
-package no.nav.syfo.rest.ressurser;
+package no.nav.syfo.fastlege;
 
 import no.nav.security.oidc.test.support.JwtTokenGenerator;
 import no.nav.syfo.LocalApplication;
 import no.nav.syfo.consumer.pdl.PdlConsumer;
+import testhelper.MockUtils;
 import no.nhn.schemas.reg.flr.IFlrReadOperations;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,8 +29,9 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static testhelper.MockUtilsKt.mockIngenFastleger;
+import static testhelper.MockUtilsKt.mockResponseFraTilgangskontroll;
 import static testhelper.PdlPersonResponseGeneratorKt.generatePdlHentPerson;
-
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = LocalApplication.class)
@@ -65,7 +67,7 @@ public class FastlegeRessursTest {
     @Test
     public void finnAktivFastlege() throws Exception {
         MockUtils.mockHarFastlege(fastlegeSoapClient);
-        MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
+        mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
 
         this.mvc.perform(get("/api/internad/fastlege/v1?fnr=" + FNR)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -77,7 +79,7 @@ public class FastlegeRessursTest {
     @Test
     public void finnAlleFastleger() throws Exception {
         MockUtils.mockHarFastlege(fastlegeSoapClient);
-        MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
+        mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
 
         this.mvc.perform(get("/api/internad/fastlege/v1/fastleger?fnr=" + FNR)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -88,8 +90,8 @@ public class FastlegeRessursTest {
 
     @Test
     public void brukerHarIngenFastleger() throws Exception {
-        MockUtils.mockIngenFastleger(fastlegeSoapClient);
-        MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
+        mockIngenFastleger(fastlegeSoapClient);
+        mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
 
         this.mvc.perform(get("/api/internad/fastlege/v1/fastleger?fnr=" + FNR)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -100,8 +102,8 @@ public class FastlegeRessursTest {
 
     @Test
     public void brukerManglerAktivFastlege() throws Exception {
-        MockUtils.mockIngenFastleger(fastlegeSoapClient);
-        MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
+        mockIngenFastleger(fastlegeSoapClient);
+        mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
 
         this.mvc.perform(get("/api/internad/fastlege/v1?fnr=" + FNR)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -113,7 +115,7 @@ public class FastlegeRessursTest {
     @Test
     public void brukerHarIkkeTilgang() throws Exception {
         MockUtils.mockHarFastlege(fastlegeSoapClient);
-        MockUtils.mockResponseFraTilgangskontroll(restTemplate, HttpStatus.FORBIDDEN);
+        mockResponseFraTilgangskontroll(restTemplate, HttpStatus.FORBIDDEN);
 
         this.mvc.perform(get("/api/internad/fastlege/v1?fnr=" + FNR)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
