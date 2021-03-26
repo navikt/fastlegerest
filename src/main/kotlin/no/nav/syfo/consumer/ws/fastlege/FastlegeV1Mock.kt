@@ -1,6 +1,6 @@
 package no.nav.syfo.consumer.ws.fastlege
 
-import no.nav.syfo.mocks.TimeUtils
+import no.nav.syfo.consumer.ws.util.toXMLGregorianCalendar
 import no.nhn.register.fastlegeinformasjon.common.*
 import no.nhn.schemas.reg.common.en.WSPeriod
 import no.nhn.schemas.reg.flr.*
@@ -51,8 +51,8 @@ class FastlegeV1Mock : IFlrReadOperations {
                 )
             )
             .withPeriod(WSPeriod()
-                .withFrom(TimeUtils.toXMLGregorianCalendar(LocalDateTime.now().minusYears(4)))
-                .withTo(TimeUtils.toXMLGregorianCalendar(LocalDateTime.now().plusYears(2))))
+                .withFrom(LocalDateTime.now().minusYears(4).toXMLGregorianCalendar())
+                .withTo(LocalDateTime.now().plusYears(2).toXMLGregorianCalendar()))
             .withPatient(WSPerson()
                 .withFirstName("MOCKDATA: Sygve Sykmeldt"))
             .withDoctorCycles(WSArrayOfGPOnContractAssociation()
@@ -64,8 +64,8 @@ class FastlegeV1Mock : IFlrReadOperations {
                             .withLastName("MOCKDATA: Legesen")
                             .withNIN("MOCKDATA: 12312312312"))
                         .withValid(WSPeriod()
-                            .withFrom(TimeUtils.toXMLGregorianCalendar(LocalDateTime.now().minusYears(4)))
-                            .withTo(TimeUtils.toXMLGregorianCalendar(LocalDateTime.now().plusYears(2))))
+                            .withFrom(LocalDateTime.now().minusYears(4).toXMLGregorianCalendar())
+                            .withTo(LocalDateTime.now().plusYears(2).toXMLGregorianCalendar()))
                 ))
     }
 
