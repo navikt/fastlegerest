@@ -1,13 +1,13 @@
 package no.nav.syfo.services;
 
 import lombok.extern.slf4j.Slf4j;
+import no.nav.syfo.consumer.sts.StsConsumer;
 import no.nav.syfo.domain.Fastlege;
 import no.nav.syfo.domain.Partnerinformasjon;
 import no.nav.syfo.domain.dialogmelding.RSHodemelding;
 import no.nav.syfo.domain.oppfolgingsplan.RSOppfolgingsplan;
 import no.nav.syfo.services.exceptions.FastlegeIkkeFunnet;
 import no.nav.syfo.services.exceptions.InnsendingFeiletException;
-import no.nav.syfo.services.exceptions.PartnerinformasjonIkkeFunnet;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -23,7 +23,7 @@ public class DialogService {
 
     private final FastlegeService fastlegeService;
     private final PartnerService partnerService;
-    private final TokenService tokenService;
+    private final StsConsumer stsConsumer;
     private final RestTemplate restTemplate;
     private final String dialogfordelerDomain;
 
@@ -31,13 +31,13 @@ public class DialogService {
     public DialogService(
             final FastlegeService fastlegeService,
             final PartnerService partnerService,
-            final TokenService tokenService,
+            final StsConsumer stsConsumer,
             final @Qualifier("Oidc") RestTemplate restTemplate,
             final @Value("${environment.name:nonlocal}") String environmenName) {
         this.fastlegeService = fastlegeService;
         this.partnerService = partnerService;
         this.restTemplate = restTemplate;
-        this.tokenService = tokenService;
+        this.stsConsumer = stsConsumer;
         this.dialogfordelerDomain = "local".equalsIgnoreCase(environmenName) ? "localhost:8080" : "dialogfordeler";
     }
 
@@ -69,7 +69,7 @@ public class DialogService {
     private HttpHeaders lagHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(org.springframework.http.MediaType.APPLICATION_JSON));
-        headers.setBearerAuth(tokenService.getToken());
+        headers.setBearerAuth(stsConsumer.token());
         return headers;
 
     }

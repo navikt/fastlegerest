@@ -6,7 +6,6 @@ import no.nav.syfo.consumer.azuread.AzureAdResponse
 import no.nav.syfo.consumer.azuread.AzureAdTokenConsumer
 import no.nav.syfo.consumer.syfopartnerinfo.PartnerInfoResponse
 import no.nav.syfo.consumer.syfopartnerinfo.SyfoPartnerInfoConsumer
-import no.nav.syfo.domain.Token
 import no.nav.syfo.metric.Metrikk
 import org.junit.After
 import org.junit.Before
@@ -14,8 +13,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.beans.factory.annotation.*
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpMethod
@@ -29,6 +27,7 @@ import org.springframework.test.web.client.MockRestServiceServer
 import org.springframework.test.web.client.match.MockRestRequestMatchers
 import org.springframework.test.web.client.response.MockRestResponseCreators
 import org.springframework.web.client.RestTemplate
+import testhelper.mockAndExpectSTSService
 import java.time.Instant
 import javax.inject.Inject
 
@@ -45,10 +44,6 @@ class SyfoPartnerInfoConsumerTest {
 
     @MockBean
     lateinit var metrikk: Metrikk
-
-    @MockBean
-    @Qualifier(value = "BasicAuth")
-    lateinit var basicAuthRestTemplate: RestTemplate
 
     @Inject
     @Qualifier(value = "Oidc")
@@ -69,7 +64,6 @@ class SyfoPartnerInfoConsumerTest {
 
         mockAzureAD()
         mockSyfopartnerinfo()
-        mockTokenService()
 
         syfoPartnerInfoConsumer = SyfoPartnerInfoConsumer(azureAdTokenConsumer = azureAdTokenConsumer, metrikk = metrikk, restTemplate = restTemplate, syfoPartnerInfoAppId = "")
     }
@@ -82,16 +76,6 @@ class SyfoPartnerInfoConsumerTest {
     @After
     fun cleanUp() {
         mockRestServiceServer.reset()
-    }
-
-    private fun mockTokenService() {
-        val token = Token.builder().access_token("testtoken").build()
-        Mockito.`when`(basicAuthRestTemplate.exchange(
-                Mockito.anyString(),
-                Mockito.eq(HttpMethod.GET),
-                Mockito.any(),
-                Mockito.any<Class<Any>>()
-        )).thenReturn(ResponseEntity(token, HttpStatus.OK))
     }
 
     private fun mockSyfopartnerinfo() {

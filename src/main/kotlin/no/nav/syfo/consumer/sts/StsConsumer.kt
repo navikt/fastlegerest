@@ -35,7 +35,7 @@ class StsConsumer(
             val stsTokenUri = getStsTokenUriTemplate.build().toUri()
 
             try {
-                val response = defaultRestTemplate.exchange<StsToken>(
+                val response = defaultRestTemplate.exchange(
                     stsTokenUri,
                     HttpMethod.GET,
                     request,

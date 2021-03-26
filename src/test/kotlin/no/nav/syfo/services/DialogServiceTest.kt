@@ -4,30 +4,20 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import no.nav.syfo.LocalApplication
 import no.nav.syfo.consumer.azuread.AzureAdResponse
 import no.nav.syfo.consumer.pdl.PdlConsumer
+import no.nav.syfo.consumer.syfopartnerinfo.PartnerInfoResponse
 import no.nav.syfo.domain.*
 import no.nav.syfo.domain.dialogmelding.RSHodemelding
 import no.nav.syfo.domain.oppfolgingsplan.RSOppfolgingsplan
 import no.nav.syfo.rest.ressurser.MockUtils
-import no.nav.syfo.consumer.syfopartnerinfo.PartnerInfoResponse
-import no.nhn.register.communicationparty.ICommunicationPartyService
-import no.nhn.register.communicationparty.ICommunicationPartyServiceGetOrganizationPersonDetailsGenericFaultFaultFaultMessage
-import no.nhn.register.communicationparty.WSOrganizationPerson
+import no.nhn.register.communicationparty.*
 import no.nhn.schemas.reg.flr.IFlrReadOperations
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers
-import org.mockito.InjectMocks
-import org.mockito.Mockito
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Qualifier
+import org.mockito.*
+import org.springframework.beans.factory.annotation.*
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.http.HttpMethod
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
+import org.springframework.http.*
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.client.ExpectedCount
@@ -40,6 +30,7 @@ import testhelper.UserConstants.ARBEIDSTAKER_NAME_FIRST
 import testhelper.UserConstants.ARBEIDSTAKER_NAME_LAST
 import testhelper.UserConstants.ARBEIDSTAKER_NAME_MIDDLE
 import testhelper.generatePdlHentPerson
+import testhelper.mockAndExpectSTSService
 import java.time.Instant
 import java.time.LocalDate
 import java.util.*
@@ -50,6 +41,16 @@ import javax.inject.Inject
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class DialogServiceTest {
     lateinit var mockRestServiceServer: MockRestServiceServer
+    lateinit var mockDefaultRestServiceServer: MockRestServiceServer
+
+    @Value("\${security.token.service.rest.url}")
+    private lateinit var stsUrl: String
+
+    @Value("\${srv.username}")
+    private lateinit var srvUsername: String
+
+    @Value("\${srv.password}")
+    private lateinit var srvPassword: String
 
     @Autowired
     lateinit var objectMapper: ObjectMapper
@@ -58,9 +59,9 @@ class DialogServiceTest {
     @Autowired
     lateinit var dialogService: DialogService
 
-    @MockBean
-    @Qualifier(value = "BasicAuth")
-    lateinit var basicAuthRestTemplate: RestTemplate
+    @Inject
+    @Qualifier(value = "default")
+    lateinit var defaultRestTemplate: RestTemplate
 
     @Inject
     @Qualifier(value = "Oidc")
@@ -86,6 +87,10 @@ class DialogServiceTest {
             .bindTo(restTemplate)
             .build()
 
+        mockDefaultRestServiceServer = MockRestServiceServer
+            .bindTo(defaultRestTemplate)
+            .build()
+
         mockAdresseRegisteret()
         mockAzureAD()
         mockSyfopartnerinfo()
@@ -99,23 +104,25 @@ class DialogServiceTest {
     @After
     fun cleanUp() {
         mockRestServiceServer.reset()
+        mockDefaultRestServiceServer.reset()
     }
 
     @Test
     fun sendOppfolgingsplanFraSBS() {
-        val oppfolgingsplanPDF: ByteArray = ByteArray(20)
-        val oppfolgingsplan: RSOppfolgingsplan = RSOppfolgingsplan("99999900000", oppfolgingsplanPDF)
+        val oppfolgingsplanPDF = ByteArray(20)
+        val oppfolgingsplan = RSOppfolgingsplan("99999900000", oppfolgingsplanPDF)
 
         dialogService.sendOppfolgingsplan(oppfolgingsplan)
 
         mockRestServiceServer.verify()
+        mockDefaultRestServiceServer.verify()
 
     }
 
     @Throws(ICommunicationPartyServiceGetOrganizationPersonDetailsGenericFaultFaultFaultMessage::class)
     private fun mockAdresseRegisteret() {
         val wsOrganisationPerson = WSOrganizationPerson().withParentHerId(HER_ID)
-        Mockito.`when`<WSOrganizationPerson>(adresseregisterSoapClient.getOrganizationPersonDetails(ArgumentMatchers.anyInt())).thenReturn(wsOrganisationPerson)
+        Mockito.`when`(adresseregisterSoapClient.getOrganizationPersonDetails(ArgumentMatchers.anyInt())).thenReturn(wsOrganisationPerson)
     }
 
     private fun mockDialogfordeler() {
@@ -130,8 +137,8 @@ class DialogServiceTest {
     }
 
     private fun mockRsHodemelding(): RSHodemelding {
-        val oppfolgingsplanPDF: ByteArray = ByteArray(20)
-        val oppfolgingsplan: RSOppfolgingsplan = RSOppfolgingsplan("99999900000", oppfolgingsplanPDF)
+        val oppfolgingsplanPDF = ByteArray(20)
+        val oppfolgingsplan = RSOppfolgingsplan("99999900000", oppfolgingsplanPDF)
         val partnerinformasjon = Partnerinformasjon(PARTNER_ID.toString(), HER_ID.toString())
         val fastlege: Fastlege = Fastlege()
             .fornavn("Michaela")
@@ -160,13 +167,12 @@ class DialogServiceTest {
     }
 
     private fun mockTokenService() {
-        val token = Token.builder().access_token("testtoken").build()
-        Mockito.`when`(basicAuthRestTemplate.exchange(
-            Mockito.anyString(),
-            Mockito.eq(HttpMethod.GET),
-            Mockito.any(),
-            Mockito.any<Class<Any>>()
-        )).thenReturn(ResponseEntity(token, HttpStatus.OK))
+        mockAndExpectSTSService(
+            mockRestServiceServer = mockDefaultRestServiceServer,
+            stsUrl = stsUrl,
+            username = srvUsername,
+            password = srvPassword,
+        )
     }
 
     private fun mockSyfopartnerinfo() {
