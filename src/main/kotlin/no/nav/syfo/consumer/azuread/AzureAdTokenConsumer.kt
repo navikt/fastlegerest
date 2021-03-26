@@ -1,4 +1,4 @@
-package no.nav.syfo.azuread
+package no.nav.syfo.consumer.azuread
 
 import no.nav.syfo.metric.Metrikk
 import org.slf4j.LoggerFactory

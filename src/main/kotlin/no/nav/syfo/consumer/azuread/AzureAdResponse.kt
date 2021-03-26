@@ -1,4 +1,4 @@
-package no.nav.syfo.azuread
+package no.nav.syfo.consumer.azuread
 
 import java.time.Instant
 

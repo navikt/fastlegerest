@@ -5,8 +5,8 @@ import no.nav.syfo.domain.Fastlege;
 import no.nav.syfo.domain.OrganisasjonPerson;
 import no.nav.syfo.domain.Partnerinformasjon;
 import no.nav.syfo.services.exceptions.PartnerinformasjonIkkeFunnet;
-import no.nav.syfo.syfopartnerinfo.PartnerInfoResponse;
-import no.nav.syfo.syfopartnerinfo.SyfoPartnerInfoConsumer;
+import no.nav.syfo.consumer.syfopartnerinfo.PartnerInfoResponse;
+import no.nav.syfo.consumer.syfopartnerinfo.SyfoPartnerInfoConsumer;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

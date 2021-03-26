@@ -1,16 +1,17 @@
-package no.nav.syfo.syfopartnerinfo
+package no.nav.syfo.consumer
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import no.nav.syfo.LocalApplication
-import no.nav.syfo.azuread.AzureAdResponse
-import no.nav.syfo.azuread.AzureAdTokenConsumer
+import no.nav.syfo.consumer.azuread.AzureAdResponse
+import no.nav.syfo.consumer.azuread.AzureAdTokenConsumer
+import no.nav.syfo.consumer.syfopartnerinfo.PartnerInfoResponse
+import no.nav.syfo.consumer.syfopartnerinfo.SyfoPartnerInfoConsumer
 import no.nav.syfo.domain.Token
 import no.nav.syfo.metric.Metrikk
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,7 +30,6 @@ import org.springframework.test.web.client.match.MockRestRequestMatchers
 import org.springframework.test.web.client.response.MockRestResponseCreators
 import org.springframework.web.client.RestTemplate
 import java.time.Instant
-import java.util.*
 import javax.inject.Inject
 
 @RunWith(SpringRunner::class)

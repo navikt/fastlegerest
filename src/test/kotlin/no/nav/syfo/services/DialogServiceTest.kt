@@ -2,13 +2,13 @@ package no.nav.syfo.services
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import no.nav.syfo.LocalApplication
-import no.nav.syfo.azuread.AzureAdResponse
+import no.nav.syfo.consumer.azuread.AzureAdResponse
 import no.nav.syfo.consumer.pdl.PdlConsumer
 import no.nav.syfo.domain.*
 import no.nav.syfo.domain.dialogmelding.RSHodemelding
 import no.nav.syfo.domain.oppfolgingsplan.RSOppfolgingsplan
 import no.nav.syfo.rest.ressurser.MockUtils
-import no.nav.syfo.syfopartnerinfo.PartnerInfoResponse
+import no.nav.syfo.consumer.syfopartnerinfo.PartnerInfoResponse
 import no.nhn.register.communicationparty.ICommunicationPartyService
 import no.nhn.register.communicationparty.ICommunicationPartyServiceGetOrganizationPersonDetailsGenericFaultFaultFaultMessage
 import no.nhn.register.communicationparty.WSOrganizationPerson
