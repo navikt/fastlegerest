@@ -1,5 +1,7 @@
 package no.nav.syfo.consumer.util.ws;
 
+import no.nav.syfo.consumer.ws.util.LogErrorHandler;
+import no.nav.syfo.consumer.ws.util.WsClient;
 import no.nhn.schemas.reg.flr.IFlrReadOperations;
 import org.junit.Test;
 
