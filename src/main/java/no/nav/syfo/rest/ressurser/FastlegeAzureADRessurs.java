@@ -3,11 +3,11 @@ package no.nav.syfo.rest.ressurser;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.security.oidc.api.ProtectedWithClaims;
+import no.nav.syfo.consumer.tilgangskontroll.Tilgang;
+import no.nav.syfo.consumer.tilgangskontroll.TilgangkontrollConsumer;
 import no.nav.syfo.domain.Fastlege;
-import no.nav.syfo.domain.Tilgang;
 import no.nav.syfo.metric.Metrikk;
 import no.nav.syfo.services.FastlegeService;
-import no.nav.syfo.services.TilgangService;
 import no.nav.syfo.services.exceptions.FastlegeIkkeFunnet;
 import no.nav.syfo.services.exceptions.HarIkkeTilgang;
 import org.springframework.web.bind.annotation.*;
@@ -28,17 +28,17 @@ public class FastlegeAzureADRessurs {
 
     private final FastlegeService fastlegeService;
     private final Metrikk metrikk;
-    private final TilgangService tilgangService;
+    private final TilgangkontrollConsumer tilgangkontrollConsumer;
 
     @Inject
     public FastlegeAzureADRessurs(
             FastlegeService fastlegeService,
             Metrikk metrikk,
-            TilgangService tilgangService
+            TilgangkontrollConsumer tilgangkontrollConsumer
     ) {
         this.fastlegeService = fastlegeService;
         this.metrikk = metrikk;
-        this.tilgangService = tilgangService;
+        this.tilgangkontrollConsumer = tilgangkontrollConsumer;
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
@@ -64,10 +64,10 @@ public class FastlegeAzureADRessurs {
     }
 
     private void kastExceptionHvisIkkeTilgang(String fnr) {
-        Tilgang tilgang = tilgangService.sjekkTilgang(fnr);
-        if (!tilgang.harTilgang) {
+        Tilgang tilgang = tilgangkontrollConsumer.sjekkTilgang(fnr);
+        if (!tilgang.getHarTilgang()) {
             log.info("Har ikke tilgang til å se fastlegeinformasjon om brukeren");
-            throw new HarIkkeTilgang(tilgang.begrunnelse);
+            throw new HarIkkeTilgang(tilgang.getBegrunnelse());
         }
     }
 }
