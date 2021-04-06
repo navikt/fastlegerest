@@ -1,7 +1,6 @@
 package no.nav.syfo.consumer.tilgangskontroll
 
 import no.nav.security.oidc.context.OIDCRequestContextHolder
-import no.nav.syfo.services.TilgangService
 import org.assertj.core.api.Assertions
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -10,8 +9,8 @@ import org.mockito.junit.MockitoJUnitRunner
 import org.springframework.web.client.RestTemplate
 
 @RunWith(MockitoJUnitRunner::class)
-class TilgangServiceTest {
-    private lateinit var tilgangService: TilgangService
+class TilgangkontrollConsumerTest {
+    private lateinit var tilgangkontrollConsumer: TilgangkontrollConsumer
 
     @Mock
     private lateinit var restTemplate: RestTemplate
@@ -21,8 +20,8 @@ class TilgangServiceTest {
 
     @Test
     fun godkjennMocketTilgangMedInternAzureAD() {
-        tilgangService = TilgangService(TILGANGSKONTROLL_URL, HAR_LOCAL_MOCK, restTemplate, contextHolder)
-        val tilgang = tilgangService.sjekkTilgang(FNR).harTilgang
+        tilgangkontrollConsumer = TilgangkontrollConsumer(TILGANGSKONTROLL_URL, HAR_LOCAL_MOCK, restTemplate, contextHolder)
+        val tilgang = tilgangkontrollConsumer.sjekkTilgang(FNR).harTilgang
         Assertions.assertThat(tilgang).isTrue
     }
 

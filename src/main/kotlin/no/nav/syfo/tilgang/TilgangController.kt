@@ -2,7 +2,7 @@ package no.nav.syfo.tilgang
 
 import no.nav.security.oidc.api.ProtectedWithClaims
 import no.nav.syfo.api.auth.OIDCIssuer
-import no.nav.syfo.services.TilgangService
+import no.nav.syfo.consumer.tilgangskontroll.TilgangkontrollConsumer
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import javax.inject.Inject
@@ -11,10 +11,10 @@ import javax.inject.Inject
 @ProtectedWithClaims(issuer = OIDCIssuer.AZURE)
 @RequestMapping(value = ["/api/internad/tilgang"])
 class TilgangController @Inject constructor(
-    private val tilgangService: TilgangService
+    private val tilgangkontrollConsumer: TilgangkontrollConsumer
 ) {
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun isGrantedAccess(): Boolean {
-        return tilgangService.isVeilederGrantedAccessToSYFOWithAD
+        return tilgangkontrollConsumer.isVeilederGrantedAccessToSYFOWithAD()
     }
 }
