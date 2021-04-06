@@ -1,6 +1,5 @@
 package no.nav.syfo.consumer.ws.fastlege
 
-import no.nav.syfo.consumer.util.ws.LogErrorHandler
 import no.nav.syfo.consumer.ws.util.*
 import no.nhn.schemas.reg.flr.IFlrReadOperations
 import org.springframework.beans.factory.annotation.Value
