@@ -1,12 +1,13 @@
 package no.nav.syfo.services;
 
 import lombok.extern.slf4j.Slf4j;
-import no.nav.syfo.domain.Fastlege;
-import no.nav.syfo.domain.OrganisasjonPerson;
-import no.nav.syfo.domain.Partnerinformasjon;
-import no.nav.syfo.services.exceptions.PartnerinformasjonIkkeFunnet;
 import no.nav.syfo.consumer.syfopartnerinfo.PartnerInfoResponse;
 import no.nav.syfo.consumer.syfopartnerinfo.SyfoPartnerInfoConsumer;
+import no.nav.syfo.consumer.ws.adresseregister.AdresseregisterConsumer;
+import no.nav.syfo.consumer.ws.adresseregister.OrganisasjonPerson;
+import no.nav.syfo.domain.Fastlege;
+import no.nav.syfo.domain.Partnerinformasjon;
+import no.nav.syfo.services.exceptions.PartnerinformasjonIkkeFunnet;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,11 +19,11 @@ import static java.util.Optional.of;
 @Service
 public class PartnerService {
 
-    private final AdresseregisterService adresseregisterService;
+    private final AdresseregisterConsumer adresseregisterConsumer;
     private final SyfoPartnerInfoConsumer syfoPartnerInfoConsumer;
 
-    public PartnerService(final AdresseregisterService adresseregisterService, final SyfoPartnerInfoConsumer syfoPartnerInfoConsumer) {
-        this.adresseregisterService = adresseregisterService;
+    public PartnerService(final AdresseregisterConsumer adresseregisterConsumer, final SyfoPartnerInfoConsumer syfoPartnerInfoConsumer) {
+        this.adresseregisterConsumer = adresseregisterConsumer;
         this.syfoPartnerInfoConsumer = syfoPartnerInfoConsumer;
     }
 
@@ -52,8 +53,8 @@ public class PartnerService {
     private Optional<String> hentForeldreEnhetHerId(Fastlege fastlege) {
         Optional<String> fastlegeForeldreEnhetHerId = of(fastlege)
                 .map(Fastlege::herId)
-                .map(adresseregisterService::hentFastlegeOrganisasjonPerson)
-                .map(OrganisasjonPerson::foreldreEnhetHerId)
+                .map(adresseregisterConsumer::hentFastlegeOrganisasjonPerson)
+                .map(OrganisasjonPerson::getForeldreEnhetHerId)
                 .map(Object::toString);
 
         log.info("DIALOGMELDING-TRACE: Fant fastlegeForeldreEnhetHerId: {}", fastlegeForeldreEnhetHerId.orElse(null));
