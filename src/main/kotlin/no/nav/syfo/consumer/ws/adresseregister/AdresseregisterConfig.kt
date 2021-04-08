@@ -1,6 +1,6 @@
 package no.nav.syfo.consumer.ws.adresseregister
 
-import no.nav.syfo.consumer.util.ws.*
+import no.nav.syfo.consumer.ws.util.*
 import no.nhn.register.communicationparty.ICommunicationPartyService
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
