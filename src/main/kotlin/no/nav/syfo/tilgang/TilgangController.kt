@@ -15,6 +15,6 @@ class TilgangController @Inject constructor(
 ) {
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun isGrantedAccess(): Boolean {
-        return tilgangkontrollConsumer.isVeilederGrantedAccessToSYFOWithAD()
+        return tilgangkontrollConsumer.isVeilederGrantedAccessToSYFOWithAD(OIDCIssuer.AZURE)
     }
 }

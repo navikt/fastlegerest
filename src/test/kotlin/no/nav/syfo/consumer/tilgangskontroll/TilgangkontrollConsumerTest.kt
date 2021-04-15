@@ -1,6 +1,7 @@
 package no.nav.syfo.consumer.tilgangskontroll
 
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
+import no.nav.syfo.consumer.azuread.v2.AzureAdV2TokenConsumer
 import org.assertj.core.api.Assertions
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -18,9 +19,19 @@ class TilgangkontrollConsumerTest {
     @Mock
     private lateinit var contextHolder: TokenValidationContextHolder
 
+    @Mock
+    private lateinit var azureAdV2TokenConsumer: AzureAdV2TokenConsumer
+
     @Test
     fun godkjennMocketTilgangMedInternAzureAD() {
-        tilgangkontrollConsumer = TilgangkontrollConsumer(TILGANGSKONTROLL_URL, HAR_LOCAL_MOCK, restTemplate, contextHolder)
+        tilgangkontrollConsumer = TilgangkontrollConsumer(
+            HAR_LOCAL_MOCK,
+            TILGANGSKONTROLL_URL,
+            "1234567",
+            restTemplate,
+            azureAdV2TokenConsumer,
+            contextHolder
+        )
         val tilgang = tilgangkontrollConsumer.sjekkTilgang(FNR).harTilgang
         Assertions.assertThat(tilgang).isTrue
     }

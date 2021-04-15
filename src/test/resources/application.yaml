@@ -24,9 +24,12 @@ SECURITYTOKENSERVICE_URL: sts.url
 SRV_USERNAME: admin
 SRV_PASSWORD: admin
 
+azuread.tenant.id: "1345678"
+
 client.id: "clientId"
 client.secret: "clientSecret"
 
+syfotilgangskontroll.client.id: "syfopartnerinfoId"
 syfopartnerinfo.appid: "syfopartnerinfoId"
 
 ad.accesstoken.url: "http://aadaccesstoken"
@@ -48,4 +51,9 @@ no.nav.security.jwt:
       discoveryurl: http://metadata
       accepted_audience: aud-localhost
       cookie_name: localhost-idtoken
+    veilederaad:
+      discoveryurl: http://metadata
+      accepted_audience: aud-localhost
+      cookie_name: localhost-idtoken
+
 
