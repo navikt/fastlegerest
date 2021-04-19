@@ -1,12 +1,12 @@
 package no.nav.syfo
 
-import no.nav.security.spring.oidc.api.EnableOIDCTokenValidation
+import no.nav.security.token.support.spring.api.EnableJwtTokenValidation
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Profile
 
 @SpringBootApplication
-@EnableOIDCTokenValidation(ignore = ["org.springframework"])
+@EnableJwtTokenValidation
 @Profile("local")
 class LocalApplication
 

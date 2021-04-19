@@ -2,7 +2,7 @@ server:
   servlet:
     context-path: /fastlegerest
 
-no.nav.security.oidc:
+no.nav.security.jwt:
   issuers: selvbetjening,veileder
   issuer:
     selvbetjening:

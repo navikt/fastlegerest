@@ -2,7 +2,7 @@ package no.nav.syfo.rest.ressurser;
 
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
-import no.nav.security.oidc.api.ProtectedWithClaims;
+import no.nav.security.token.support.core.api.ProtectedWithClaims;
 import no.nav.syfo.domain.oppfolgingsplan.RSOppfolgingsplan;
 import no.nav.syfo.services.DialogService;
 import no.nav.syfo.services.exceptions.FastlegeIkkeFunnet;

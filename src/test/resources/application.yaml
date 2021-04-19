@@ -42,7 +42,7 @@ local_mock: false
 
 environment.name: local
 
-no.nav.security.oidc:
+no.nav.security.jwt:
   issuer:
     veileder:
       discoveryurl: http://metadata
