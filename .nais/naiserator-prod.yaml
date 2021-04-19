@@ -34,6 +34,7 @@ spec:
     enabled: true
     path: fastlegerest/internal/prometheus
   ingresses:
+    - "https://fastlegerest.intern.nav.no"
     - "https://fastlegerest.nais.adeo.no"
     - "https://app.adeo.no/fastlegerest"
   vault:
