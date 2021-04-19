@@ -1,6 +1,6 @@
 package no.nav.syfo.consumer.tilgangskontroll
 
-import no.nav.security.oidc.context.OIDCRequestContextHolder
+import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.syfo.api.auth.OIDCIssuer
 import no.nav.syfo.api.auth.OIDCUtil.tokenFraOIDC
 import org.slf4j.LoggerFactory
@@ -19,7 +19,7 @@ class TilgangkontrollConsumer @Inject constructor(
     @Value("\${tilgangskontrollapi.url}") private val TILGANGSKONTROLLAPI_URL: String,
     @Value("\${local_mock}") private val HAR_LOKAL_MOCK: Boolean,
     @Qualifier("Oidc") private val restTemplate: RestTemplate,
-    private val contextHolder: OIDCRequestContextHolder
+    private val contextHolder: TokenValidationContextHolder
 ) {
     @Cacheable(value = ["tilgang"])
     fun sjekkTilgang(fnr: String): Tilgang {

@@ -1,6 +1,6 @@
 package no.nav.syfo.tilgang;
 
-import no.nav.security.oidc.test.support.JwtTokenGenerator;
+import no.nav.security.token.support.test.JwtTokenGenerator;
 import no.nav.syfo.LocalApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;

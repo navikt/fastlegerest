@@ -1,6 +1,6 @@
 package no.nav.syfo
 
-import no.nav.security.oidc.test.support.spring.TokenGeneratorConfiguration
+import no.nav.security.token.support.test.spring.TokenGeneratorConfiguration
 import no.nav.syfo.api.exception.RestTemplateErrorHandler
 import no.nav.syfo.consumer.ws.adresseregister.AdresseregisterConfig
 import no.nav.syfo.consumer.ws.fastlege.FastlegeInformasjonConfig

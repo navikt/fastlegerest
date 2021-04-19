@@ -1,6 +1,6 @@
 package no.nav.syfo.fastlege;
 
-import no.nav.security.oidc.test.support.JwtTokenGenerator;
+import no.nav.security.token.support.test.JwtTokenGenerator;
 import no.nav.syfo.LocalApplication;
 import no.nav.syfo.consumer.pdl.PdlConsumer;
 import testhelper.MockUtils;

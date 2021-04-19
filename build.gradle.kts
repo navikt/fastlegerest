@@ -13,12 +13,11 @@ val javaxActivationVersion = "1.2.0"
 val javaxWsRsApiVersion = "2.1.1"
 val jaxRiVersion = "2.3.2"
 val kotlinJacksonVersion = "2.11.3"
-val navOidcVersion = "0.2.18"
-val nimbusSDKVersion = "7.0.3"
 val logstashVersion = "6.3"
 val prometheusVersion = "1.5.5"
 val slf4jVersion = "1.7.25"
 val swaggerVersion = "1.5.21"
+val tokenValidationSpringSupportVersion = "1.3.2"
 
 val syfotjenesterVersion = "1.2020.06.26-10.40-9af491f93602"
 
@@ -97,9 +96,7 @@ dependencies {
 
     implementation("io.micrometer:micrometer-registry-prometheus:$prometheusVersion")
 
-    implementation("com.nimbusds:oauth2-oidc-sdk:$nimbusSDKVersion")
-    implementation("no.nav.security:oidc-spring-support:$navOidcVersion")
-    implementation("no.nav.security:oidc-support:$navOidcVersion")
+    implementation("no.nav.security:token-validation-spring:$tokenValidationSpringSupportVersion")
     implementation("com.microsoft.azure:adal4j:$adal4jVersion")
 
     implementation( "no.nav.syfotjenester:adresseregisteretV1-tjenestespesifikasjon:$syfotjenesterVersion")
@@ -118,7 +115,7 @@ dependencies {
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
     implementation("net.logstash.logback:logstash-logback-encoder:$logstashVersion")
 
-    testImplementation("no.nav.security:oidc-test-support:$navOidcVersion")
+    testImplementation("no.nav.security:token-validation-test-support:$tokenValidationSpringSupportVersion")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 

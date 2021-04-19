@@ -1,6 +1,6 @@
 package no.nav.syfo.consumer.tilgangskontroll
 
-import no.nav.security.oidc.context.OIDCRequestContextHolder
+import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import org.assertj.core.api.Assertions
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -16,7 +16,7 @@ class TilgangkontrollConsumerTest {
     private lateinit var restTemplate: RestTemplate
 
     @Mock
-    private lateinit var contextHolder: OIDCRequestContextHolder
+    private lateinit var contextHolder: TokenValidationContextHolder
 
     @Test
     fun godkjennMocketTilgangMedInternAzureAD() {
