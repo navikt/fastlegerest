@@ -67,7 +67,8 @@ public class FastlegeRessursTest {
     @Test
     public void finnAktivFastlege() throws Exception {
         MockUtils.mockHarFastlege(fastlegeSoapClient);
-        mockResponseFraTilgangskontroll(restTemplate, HttpStatus.OK);
+        mockResponseFraTilgangskontroll
+                (restTemplate, HttpStatus.OK);
 
         this.mvc.perform(get("/api/internad/fastlege/v1?fnr=" + FNR)
                 .accept(MediaType.APPLICATION_JSON_VALUE)

@@ -7,4 +7,6 @@ object UserConstants {
     val ARBEIDSTAKER_NAME_MIDDLE = "Middle"
     @JvmStatic
     val ARBEIDSTAKER_NAME_LAST = "Last"
+
+    const val VEILEDER_ID = "Z999999"
 }

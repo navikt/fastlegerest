@@ -3,7 +3,7 @@ server:
     context-path: /fastlegerest
 
 no.nav.security.jwt:
-  issuers: selvbetjening,veileder
+  issuers: selvbetjening,veileder,veilederaad
   issuer:
     selvbetjening:
       discoveryurl: ${LOGINSERVICE_IDPORTEN_DISCOVERY_URL}
@@ -16,6 +16,10 @@ no.nav.security.jwt:
       discoveryurl: <syfonais>
       accepted_audience: <syfonais>
       cookie_name: isso-idtoken
+    veilederaad:
+      discoveryurl: <nais-manifest>
+      accepted_audience: <nais-manifest>
+      cookiename: ID_token
 
 local_mock: false
 
