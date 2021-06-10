@@ -19,7 +19,7 @@ val slf4jVersion = "1.7.25"
 val swaggerVersion = "1.5.21"
 val tokenValidationSpringSupportVersion = "1.3.2"
 
-val syfotjenesterVersion = "1.2020.06.26-10.40-9af491f93602"
+val syfotjenesterVersion = "1.2021.06.09-13.09-b3d30de9996e"
 
 plugins {
     id("java")
@@ -53,6 +53,7 @@ allOpen {
 val githubUser: String by project
 val githubPassword: String by project
 repositories {
+    mavenLocal()
     mavenCentral()
     jcenter()
     maven(url = "https://dl.bintray.com/kotlin/kotlinx/")
@@ -99,8 +100,8 @@ dependencies {
     implementation("no.nav.security:token-validation-spring:$tokenValidationSpringSupportVersion")
     implementation("com.microsoft.azure:adal4j:$adal4jVersion")
 
-    implementation( "no.nav.syfotjenester:adresseregisteretV1-tjenestespesifikasjon:$syfotjenesterVersion")
-    implementation( "no.nav.syfotjenester:fastlegeinformasjonV1-tjenestespesifikasjon:$syfotjenesterVersion")
+    implementation( "no.nav.syfotjenester:adresseregisteretv1-tjenestespesifikasjon:$syfotjenesterVersion")
+    implementation( "no.nav.syfotjenester:fastlegeinformasjonv1-tjenestespesifikasjon:$syfotjenesterVersion")
 
     implementation("org.apache.cxf:cxf-rt-features-logging:$cxfVersion")
     implementation("org.apache.cxf:cxf-rt-ws-security:$cxfVersion")
