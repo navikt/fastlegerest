@@ -101,10 +101,11 @@ public class FastlegeService {
                 xmlGregorianCalendar.getDay());
     }
 
+
     private Pasientforhold getPasientForhold(WSPeriod period) {
         return new Pasientforhold()
-                .fom(toLocalDate(period.getFrom()))
-                .tom(period.getTo() == null ? LocalDate.parse("9999-12-31") : toLocalDate(period.getTo()));
+                .fom(period.getFrom().toLocalDate())
+                .tom(period.getTo() == null ? LocalDate.parse("9999-12-31") : period.getTo().toLocalDate());
     }
 
     private static Optional<Fastlege> finnAktivFastlege(List<Fastlege> fastleger) {

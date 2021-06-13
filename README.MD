@@ -18,6 +18,10 @@ Appen har komponenttester fra kant til kant for alle sine endepunkter. Appen er 
 syntetisk test miljø hos Norsk Helsenett i preprod, dvs q4 hos NAV. Kontakt med Norsk Helsenett finnes
 i slack-kanalen #ext-nav-grunndata
 
+### Oppdatering av eksterne pakker for SOAP-tjenester hos Norske Helsenett (NHN) 
+
+Se https://github.com/navikt/syfotjenester.
+
 ### Bygging
 
 Applikasjonen pakkes til en stor jar i gradle, og bygges med docker.

@@ -33,8 +33,8 @@ object MockUtils {
             .withDoctorCycles(fastlege)
             .withGPContract(fastlegeKontrakt)
             .withPeriod(WSPeriod()
-                .withFrom(toXMLGregorianCalendar(LocalDateTime.now().minusYears(4)))
-                .withTo(toXMLGregorianCalendar(LocalDateTime.now().plusYears(4))))
+                .withFrom(LocalDateTime.now().minusYears(4))
+                .withTo(LocalDateTime.now().plusYears(4)))
             .withGPHerId(404)
         Mockito.`when`(fastlegeSoapClient.getPatientGPDetails(ArgumentMatchers.anyString())).thenReturn(fastlegeResponse)
     }
