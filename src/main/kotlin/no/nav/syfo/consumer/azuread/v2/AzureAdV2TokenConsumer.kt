@@ -1,10 +1,12 @@
 package no.nav.syfo.consumer.azuread.v2
 
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.*
 import org.springframework.http.*
 import org.springframework.stereotype.Component
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
+import org.springframework.web.client.RestClientResponseException
 import org.springframework.web.client.RestTemplate
 
 @Component
@@ -20,13 +22,27 @@ class AzureAdV2TokenConsumer @Autowired constructor(
         scopeClientId: String,
         token: String
     ): String {
-        val response = restTemplateWithProxy.exchange(
-            azureOauthTokenEndpoint,
-            HttpMethod.POST,
-            requestEntity(scopeClientId, token),
-            TokenResponse::class.java
-        )
-        return response.body!!.access_token
+        val scopeToken = scopeTokenMap[scopeClientId]
+        return if (scopeToken == null || scopeToken.isExpired()) {
+            try {
+                val response = restTemplateWithProxy.exchange(
+                    azureOauthTokenEndpoint,
+                    HttpMethod.POST,
+                    requestEntity(scopeClientId, token),
+                    AzureAdV2TokenResponse::class.java
+                )
+                val tokenResponse = response.body!!
+
+                val azureADV2Token = tokenResponse.toAzureAdV2Token()
+                scopeTokenMap[scopeClientId] = azureADV2Token
+                azureADV2Token.accessToken
+            } catch (e: RestClientResponseException) {
+                log.error("Call to get AzureADV2Token from AzureAD for scope: $scopeClientId with status: ${e.rawStatusCode} and message: ${e.responseBodyAsString}", e)
+                throw e
+            }
+        } else {
+            scopeToken.accessToken
+        }
     }
 
     private fun requestEntity(
@@ -44,5 +60,11 @@ class AzureAdV2TokenConsumer @Autowired constructor(
         body.add("scope", "api://$scopeClientId/.default")
         body.add("requested_token_use", "on_behalf_of")
         return HttpEntity<MultiValueMap<String, String>>(body, headers)
+    }
+
+    companion object {
+        private val log = LoggerFactory.getLogger(AzureAdV2TokenConsumer::class.java)
+
+        private val scopeTokenMap = HashMap<String, AzureAdV2Token>()
     }
 }
