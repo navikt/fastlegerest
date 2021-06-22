@@ -9,8 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.*
 import org.springframework.stereotype.Service
-import org.springframework.web.client.RestClientResponseException
-import org.springframework.web.client.RestTemplate
+import org.springframework.web.client.*
 import org.springframework.web.util.UriComponentsBuilder
 import javax.inject.Inject
 
@@ -42,7 +41,17 @@ class TilgangkontrollConsumer @Inject constructor(
                 lagRequest(token),
                 Tilgang::class.java
             ).body!!
-        } catch (e: RestClientResponseException) {
+        } catch (e: HttpClientErrorException) {
+            return if (e.rawStatusCode == 403) {
+                Tilgang(
+                    harTilgang = false,
+                    begrunnelse = "",
+                )
+            } else {
+                log.error("Request to get Tilgang from syfo-tilgangskontroll failed with HTTP-status: ${e.rawStatusCode} and ${e.statusText}")
+                throw e
+            }
+        } catch (e: HttpServerErrorException) {
             log.error("Request to get Tilgang from syfo-tilgangskontroll failed with HTTP-status: ${e.rawStatusCode} and ${e.statusText}")
             throw e
         }
@@ -61,7 +70,17 @@ class TilgangkontrollConsumer @Inject constructor(
                 lagRequest(oboToken),
                 Tilgang::class.java
             ).body!!
-        } catch (e: RestClientResponseException) {
+        } catch (e: HttpClientErrorException) {
+            return if (e.rawStatusCode == 403) {
+                Tilgang(
+                    harTilgang = false,
+                    begrunnelse = "",
+                )
+            } else {
+                log.error("Request to get Tilgang from syfo-tilgangskontroll failed with HTTP-status: ${e.rawStatusCode} and ${e.statusText}")
+                throw e
+            }
+        } catch (e: HttpServerErrorException) {
             log.error("Request to get Tilgang from syfo-tilgangskontroll failed with HTTP-status: ${e.rawStatusCode} and ${e.statusText}")
             throw e
         }
