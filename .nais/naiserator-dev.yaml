@@ -72,7 +72,7 @@ spec:
     - name: SYFOTILGANGSKONTROLL_CLIENT_ID
       value: "32e36aa5-1d12-452a-9b1e-9f3f557cbb4d"
     - name: NO_NAV_SECURITY_JWT_ISSUER_STS_DISCOVERYURL
-      value: http://security-token-service/rest/v1/sts/.well-known/openid-configuration
+      value: https://security-token-service.nais.preprod.local/rest/v1/sts/.well-known/openid-configuration
     - name: NO_NAV_SECURITY_JWT_ISSUER_STS_ACCEPTEDAUDIENCE
       value: srvsyfooppfolgings
     - name: NO_NAV_SECURITY_JWT_ISSUER_VEILEDER_DISCOVERYURL
@@ -85,6 +85,8 @@ spec:
       value: https://login.microsoftonline.com/navq.onmicrosoft.com/oauth2/token
     - name: SYFOPARTNERINFO_APPID
       value: 077b7904-dec5-4d2e-bf69-bb17f56658c2
+    - name: SYFOPARTNERINFO_URL
+      value: "https://syfopartnerinfo.dev.intern.nav.no"
     - name: PDL_URL
       value: https://pdl-api.nais.preprod.local/graphql
     - name: SECURITY_TOKEN_SERVICE_REST_URL

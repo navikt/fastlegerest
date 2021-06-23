@@ -38,7 +38,7 @@ public class DialogService {
         this.partnerService = partnerService;
         this.restTemplate = restTemplate;
         this.stsConsumer = stsConsumer;
-        this.dialogfordelerDomain = "local".equalsIgnoreCase(environmenName) ? "localhost:8080" : "dialogfordeler";
+        this.dialogfordelerDomain = "local".equalsIgnoreCase(environmenName) ? "localhost:8080" : "dialogfordeler.default";
     }
 
     public void sendOppfolgingsplan(final RSOppfolgingsplan oppfolgingsplan) {

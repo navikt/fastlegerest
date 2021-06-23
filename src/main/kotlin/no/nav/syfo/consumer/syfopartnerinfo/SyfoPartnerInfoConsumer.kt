@@ -17,13 +17,14 @@ class SyfoPartnerInfoConsumer(
     private val azureAdTokenConsumer: AzureAdTokenConsumer,
     private val metrikk: Metrikk,
     @Qualifier("Oidc") private val restTemplate: RestTemplate,
-    @Value("\${syfopartnerinfo.appid}") private val syfoPartnerInfoAppId: String
+    @Value("\${syfopartnerinfo.appid}") private val syfoPartnerInfoAppId: String,
+    @Value("\${syfopartnerinfo.url}") private val syfopartnerinfoUrl: String
 ) {
 
     fun getPartnerId(herId: String): List<PartnerInfoResponse> {
         try {
             val response = restTemplate.exchange(
-                "$SYFOPARTNERINFO_BASEURL/api/v1/behandler?herid=$herId",
+                "$syfopartnerinfoUrl/api/v1/behandler?herid=$herId",
                 HttpMethod.GET,
                 entity(syfoPartnerInfoAppId),
                 object : ParameterizedTypeReference<List<PartnerInfoResponse>>() {}
@@ -47,7 +48,6 @@ class SyfoPartnerInfoConsumer(
 
     companion object {
         private val LOG = LoggerFactory.getLogger(SyfoPartnerInfoConsumer::class.java)
-        private const val SYFOPARTNERINFO_BASEURL = "http://syfopartnerinfo"
         private const val CALL_SYFOPARTNERINFO_BEHANDLER_SUCCESS = "call_azuread_token_system_success"
     }
 
