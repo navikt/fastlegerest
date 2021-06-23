@@ -17,8 +17,8 @@ no.nav.security.jwt:
       accepted_audience: <syfonais>
       cookie_name: isso-idtoken
     veilederaad:
-      discoveryurl: <nais-manifest>
-      accepted_audience: <nais-manifest>
+      discoveryurl: ${azure.app.well.known.url}
+      accepted_audience: ${azure.app.client.id},${client.id}
       cookiename: ID_token
 
 local_mock: false
