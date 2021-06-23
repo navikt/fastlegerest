@@ -10,6 +10,16 @@ spring:
     min-pool-size: 8
     max-pool-size: 32
 
+azure:
+  app:
+    client:
+      id: "1345678"
+      secret: "secret"
+  openid:
+    config:
+      token:
+        endpoint: "https://login.microsoftonline.com/id/oauth2/v2.0/token"
+
 ekstern.helse.fastlegeinformasjon.url: "https://fastlegeinformasjon.url"
 ekstern.helse.adresseregisteret.v1.url: "https://adresseregisteret.url"
 partner.ws.url: "https://emottak.url"
