@@ -59,7 +59,7 @@ class TilgangkontrollConsumer @Inject constructor(
 
     fun accessAzureAdV2(fnr: String): Tilgang {
         val token = tokenFraOIDC(contextHolder, OIDCIssuer.VEILEDER_AZURE_V2)
-        val oboToken = azureAdV2TokenConsumer.getOnBehalfOfToken(
+        val oboToken = azureAdV2TokenConsumer.getToken(
             scopeClientId = syfotilgangskontrollClientId,
             token = token
         )
