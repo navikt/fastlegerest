@@ -44,6 +44,9 @@ class SyfoPartnerInfoConsumerTest {
     @MockBean
     lateinit var metrikk: Metrikk
 
+    @Value("\${syfopartnerinfo.url}")
+    private lateinit var syfopartnerinfoUrl: String
+
     @Inject
     @Qualifier(value = "Oidc")
     lateinit var restTemplate: RestTemplate
@@ -64,7 +67,13 @@ class SyfoPartnerInfoConsumerTest {
         mockAzureAD()
         mockSyfopartnerinfo()
 
-        syfoPartnerInfoConsumer = SyfoPartnerInfoConsumer(azureAdTokenConsumer = azureAdTokenConsumer, metrikk = metrikk, restTemplate = restTemplate, syfoPartnerInfoAppId = "")
+        syfoPartnerInfoConsumer = SyfoPartnerInfoConsumer(
+            azureAdTokenConsumer = azureAdTokenConsumer,
+            metrikk = metrikk,
+            restTemplate = restTemplate,
+            syfoPartnerInfoAppId = "",
+            syfopartnerinfoUrl = syfopartnerinfoUrl
+        )
     }
 
     @Test
@@ -78,10 +87,10 @@ class SyfoPartnerInfoConsumerTest {
     }
 
     private fun mockSyfopartnerinfo() {
-        val URL = "http://syfopartnerinfo/api/v1/behandler?herid=$HER_ID"
+        val url = "$syfopartnerinfoUrl/api/v1/behandler?herid=$HER_ID"
         val infoResponse: MutableList<PartnerInfoResponse>? = null
 
-        mockRestServiceServer.expect(ExpectedCount.manyTimes(), MockRestRequestMatchers.requestTo(URL))
+        mockRestServiceServer.expect(ExpectedCount.manyTimes(), MockRestRequestMatchers.requestTo(url))
                 .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
                 .andRespond(MockRestResponseCreators.withSuccess(objectMapper.writeValueAsString(infoResponse), MediaType.APPLICATION_JSON))
     }

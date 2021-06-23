@@ -43,6 +43,9 @@ class DialogServiceTest {
     lateinit var mockRestServiceServer: MockRestServiceServer
     lateinit var mockDefaultRestServiceServer: MockRestServiceServer
 
+    @Value("\${syfopartnerinfo.url}")
+    private lateinit var syfopartnerinfoUrl: String
+
     @Value("\${security.token.service.rest.url}")
     private lateinit var stsUrl: String
 
@@ -176,12 +179,12 @@ class DialogServiceTest {
     }
 
     private fun mockSyfopartnerinfo() {
-        val URL = "http://syfopartnerinfo/api/v1/behandler?herid=$HER_ID"
+        val url = "$syfopartnerinfoUrl/api/v1/behandler?herid=$HER_ID"
         val partnerInfoResponse = PartnerInfoResponse(PARTNER_ID)
         val infoResponse: MutableList<PartnerInfoResponse> = ArrayList() // listOf(ResponseEntity<List<PartnerInfoResponse>>(infoResponse, HttpStatus.OK))
         infoResponse.add(partnerInfoResponse)
 
-        mockRestServiceServer.expect(ExpectedCount.manyTimes(), MockRestRequestMatchers.requestTo(URL))
+        mockRestServiceServer.expect(ExpectedCount.manyTimes(), MockRestRequestMatchers.requestTo(url))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
             .andRespond(MockRestResponseCreators.withSuccess(objectMapper.writeValueAsString(infoResponse), MediaType.APPLICATION_JSON))
     }
