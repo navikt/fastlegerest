@@ -37,6 +37,21 @@ spec:
     - "https://fastlegerest.intern.nav.no"
     - "https://fastlegerest.nais.adeo.no"
     - "https://app.adeo.no/fastlegerest"
+  accessPolicy:
+    inbound:
+      rules:
+        - application: finnfastlege
+          namespace: teamsykefravr
+          cluster: prod-fss
+  azure:
+    application:
+      enabled: true
+      tenant: nav.no
+      replyURLs:
+        - "https://fastlegerest.intern.nav.no/oauth2/callback"
+      claims:
+        extra:
+          - "NAVident"
   vault:
     enabled: true
     paths:
