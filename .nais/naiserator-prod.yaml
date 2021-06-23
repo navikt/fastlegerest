@@ -86,7 +86,7 @@ spec:
     - name: SYFOPARTNERINFO_APPID
       value: 55732aaa-9976-4a7b-8342-2e502a3cdce4
     - name: SYFOPARTNERINFO_URL
-      value: "https://syfopartnerinfo.intern.nav.no"
+      value: "https://syfopartnerinfo.nais.adeo.no"
     - name: PDL_URL
       value: https://pdl-api.nais.adeo.no/graphql
     - name: SECURITY_TOKEN_SERVICE_REST_URL
