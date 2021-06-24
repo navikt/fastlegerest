@@ -16,15 +16,16 @@ class AzureAdV2TokenConsumer @Autowired constructor(
     @Value("\${azure.app.client.secret}") private val azureAppClientSecret: String,
     @Value("\${azure.openid.config.token.endpoint}") private val azureTokenEndpoint: String
 ) {
-    fun getOnBehalfOfToken(
+    fun getToken(
         scopeClientId: String,
-        token: String
+        token: String? = null
     ): String {
         try {
+            val requestEntity = token?.let { onBehalfOfRequestEntity(scopeClientId, token) } ?: systemTokenRequestEntity(scopeClientId)
             val response = restTemplateWithProxy.exchange(
                 azureTokenEndpoint,
                 HttpMethod.POST,
-                requestEntity(scopeClientId, token),
+                requestEntity,
                 AzureAdV2TokenResponse::class.java
             )
             val tokenResponse = response.body!!
@@ -36,7 +37,7 @@ class AzureAdV2TokenConsumer @Autowired constructor(
         }
     }
 
-    private fun requestEntity(
+    private fun onBehalfOfRequestEntity(
         scopeClientId: String,
         token: String
     ): HttpEntity<MultiValueMap<String, String>> {
@@ -50,6 +51,20 @@ class AzureAdV2TokenConsumer @Autowired constructor(
         body.add("assertion", token)
         body.add("scope", "api://$scopeClientId/.default")
         body.add("requested_token_use", "on_behalf_of")
+        return HttpEntity<MultiValueMap<String, String>>(body, headers)
+    }
+
+    private fun systemTokenRequestEntity(
+        scopeClientId: String,
+    ): HttpEntity<MultiValueMap<String, String>> {
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.MULTIPART_FORM_DATA
+        val body: MultiValueMap<String, String> = LinkedMultiValueMap()
+        body.add("client_id", azureAppClientId)
+        body.add("scope", "api://$scopeClientId/.default")
+        body.add("grant_type", "client_credentials")
+        body.add("client_secret", azureAppClientSecret)
+
         return HttpEntity<MultiValueMap<String, String>>(body, headers)
     }
 
