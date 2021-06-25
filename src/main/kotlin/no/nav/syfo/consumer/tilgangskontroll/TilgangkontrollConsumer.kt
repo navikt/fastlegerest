@@ -1,5 +1,6 @@
 package no.nav.syfo.consumer.tilgangskontroll
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.syfo.api.auth.OIDCIssuer
 import no.nav.syfo.api.auth.OIDCUtil.tokenFraOIDC
@@ -43,10 +44,7 @@ class TilgangkontrollConsumer @Inject constructor(
             ).body!!
         } catch (e: HttpClientErrorException) {
             return if (e.rawStatusCode == 403) {
-                Tilgang(
-                    harTilgang = false,
-                    begrunnelse = "",
-                )
+                objectMapper.readValue(e.responseBodyAsString, Tilgang::class.java)
             } else {
                 log.error("Request to get Tilgang from syfo-tilgangskontroll failed with HTTP-status: ${e.rawStatusCode} and ${e.statusText}")
                 throw e
@@ -72,10 +70,7 @@ class TilgangkontrollConsumer @Inject constructor(
             ).body!!
         } catch (e: HttpClientErrorException) {
             return if (e.rawStatusCode == 403) {
-                Tilgang(
-                    harTilgang = false,
-                    begrunnelse = "",
-                )
+                objectMapper.readValue(e.responseBodyAsString, Tilgang::class.java)
             } else {
                 log.error("Request to get Tilgang from syfo-tilgangskontroll failed with HTTP-status: ${e.rawStatusCode} and ${e.statusText}")
                 throw e
@@ -116,5 +111,7 @@ class TilgangkontrollConsumer @Inject constructor(
 
         private const val TILGANG_TIL_BRUKER_VIA_AZURE_V2_PATH = "/navident/bruker"
         private const val TILGANG_TIL_BRUKER_VIA_AZURE_PATH = "/bruker"
+
+        private val objectMapper = ObjectMapper()
     }
 }
