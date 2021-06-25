@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.security.token.support.core.api.ProtectedWithClaims;
 import no.nav.syfo.domain.oppfolgingsplan.RSOppfolgingsplan;
+import no.nav.syfo.metric.Metrikk;
 import no.nav.syfo.services.DialogService;
 import no.nav.syfo.services.exceptions.FastlegeIkkeFunnet;
 import no.nav.syfo.services.exceptions.PartnerinformasjonIkkeFunnet;
@@ -21,9 +22,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class DialogRessurs {
 
     private final DialogService dialogService;
+    private final Metrikk metrikk;
 
-    public DialogRessurs(final DialogService dialogService) {
+    public DialogRessurs(
+            final DialogService dialogService,
+            final Metrikk metrikk) {
         this.dialogService = dialogService;
+        this.metrikk = metrikk;
     }
 
     @PostMapping(path = "/api/dialogmelding/v1/sendOppfolgingsplanFraSelvbetjening", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
@@ -42,16 +47,20 @@ public class DialogRessurs {
 
     private void sendPlan(RSOppfolgingsplan oppfolgingsplan) {
         try {
+            metrikk.countEvent("send_oppfolgingsplan");
             log.info("Sender oppfølgingsplan");
             dialogService.sendOppfolgingsplan(oppfolgingsplan);
         } catch (FastlegeIkkeFunnet e) {
-            log.warn("Feil ved sending av oppfølgingsplan", e);
+            metrikk.countEvent("send_oppfolgingsplan_fastlegeikkefunnet");
+            log.warn("Feil ved sending av oppfølgingsplan, FastlegeIkkeFunnet", e);
             throw e;
         } catch (PartnerinformasjonIkkeFunnet e) {
-            log.warn("Feil ved sending av oppfølgingsplan", e);
+            metrikk.countEvent("send_oppfolgingsplan_partnerinformasjonikkefunnet");
+            log.warn("Feil ved sending av oppfølgingsplan, PartnerinformasjonIkkeFunnet", e);
             throw e;
         } catch (Exception e) {
-            log.error("Feil ved sending av oppfølgingsplan", e);
+            metrikk.countEvent("send_oppfolgingsplan_excption");
+            log.error("Feil ved sending av oppfølgingsplan, Ukjent Feil", e);
             throw e;
         }
     }

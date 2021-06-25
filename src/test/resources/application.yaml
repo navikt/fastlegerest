@@ -42,6 +42,8 @@ client.secret: "clientSecret"
 syfotilgangskontroll.client.id: "syfopartnerinfoId"
 syfopartnerinfo.appid: "syfopartnerinfoId"
 syfopartnerinfo.url: "https://syfopartnerinfourl"
+isdialogmelding.url: "https://isdialogmeldingurl"
+isdialogmelding.identifier: "local.teamsykefravr.isdialogmelding"
 
 ad.accesstoken.url: "http://aadaccesstoken"
 

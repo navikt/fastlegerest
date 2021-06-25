@@ -107,3 +107,7 @@ spec:
       value: https://pdl-api.nais.adeo.no/graphql
     - name: SECURITY_TOKEN_SERVICE_REST_URL
       value: https://security-token-service.nais.adeo.no
+    - name: ISDIALOGMELDING_IDENTIFIER
+      value: prod-gcp.teamsykefravr.isdialogmelding
+    - name: ISDIALOGMELDING_URL
+      value: https://isdialogmelding.intern.nav.no
