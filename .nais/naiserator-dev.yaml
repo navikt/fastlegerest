@@ -40,6 +40,9 @@ spec:
   accessPolicy:
     inbound:
       rules:
+        - application: syfomodiaperson
+          namespace: teamsykefravr
+          cluster: dev-fss
         - application: finnfastlege
           namespace: teamsykefravr
           cluster: dev-fss
