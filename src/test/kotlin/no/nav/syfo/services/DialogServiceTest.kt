@@ -3,12 +3,12 @@ package no.nav.syfo.services
 import com.fasterxml.jackson.databind.ObjectMapper
 import no.nav.syfo.LocalApplication
 import no.nav.syfo.consumer.azuread.AzureAdResponse
+import no.nav.syfo.consumer.azuread.v2.AzureAdV2TokenResponse
 import no.nav.syfo.consumer.pdl.PdlConsumer
 import no.nav.syfo.consumer.syfopartnerinfo.PartnerInfoResponse
 import no.nav.syfo.domain.*
 import no.nav.syfo.domain.dialogmelding.RSHodemelding
 import no.nav.syfo.domain.oppfolgingsplan.RSOppfolgingsplan
-import testhelper.MockUtils
 import no.nhn.register.communicationparty.*
 import no.nhn.schemas.reg.flr.IFlrReadOperations
 import org.junit.*
@@ -17,7 +17,8 @@ import org.mockito.*
 import org.springframework.beans.factory.annotation.*
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.http.*
+import org.springframework.http.HttpMethod
+import org.springframework.http.MediaType
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.client.ExpectedCount
@@ -26,14 +27,12 @@ import org.springframework.test.web.client.MockRestServiceServer
 import org.springframework.test.web.client.match.MockRestRequestMatchers
 import org.springframework.test.web.client.response.MockRestResponseCreators
 import org.springframework.web.client.RestTemplate
+import testhelper.*
 import testhelper.UserConstants.ARBEIDSTAKER_NAME_FIRST
 import testhelper.UserConstants.ARBEIDSTAKER_NAME_LAST
 import testhelper.UserConstants.ARBEIDSTAKER_NAME_MIDDLE
-import testhelper.generatePdlHentPerson
-import testhelper.mockAndExpectSTSService
 import java.time.Instant
 import java.time.LocalDate
-import java.util.*
 import javax.inject.Inject
 
 @RunWith(SpringRunner::class)
@@ -42,6 +41,7 @@ import javax.inject.Inject
 class DialogServiceTest {
     lateinit var mockRestServiceServer: MockRestServiceServer
     lateinit var mockDefaultRestServiceServer: MockRestServiceServer
+    lateinit var mockRestServiceServerProxy: MockRestServiceServer
 
     @Value("\${syfopartnerinfo.url}")
     private lateinit var syfopartnerinfoUrl: String
@@ -70,7 +70,7 @@ class DialogServiceTest {
     @Qualifier(value = "Oidc")
     lateinit var restTemplate: RestTemplate
 
-    @MockBean
+    @Inject
     @Qualifier(value = "restTemplateWithProxy")
     lateinit var restTemplateWithProxy: RestTemplate
 
@@ -94,13 +94,18 @@ class DialogServiceTest {
             .bindTo(defaultRestTemplate)
             .build()
 
+        mockRestServiceServerProxy = MockRestServiceServer
+            .bindTo(restTemplateWithProxy)
+            .build()
+
         mockAdresseRegisteret()
         mockAzureAD()
+        mockAzureADV2()
         mockSyfopartnerinfo()
         Mockito.`when`(pdlConsumer.person(ArgumentMatchers.anyString()))
             .thenReturn(generatePdlHentPerson(null))
         MockUtils.mockHarFastlege(fastlegeSoapClient)
-        mockDialogfordeler()
+        mockIsdialogmelding()
         mockTokenService()
     }
 
@@ -108,6 +113,7 @@ class DialogServiceTest {
     fun cleanUp() {
         mockRestServiceServer.reset()
         mockDefaultRestServiceServer.reset()
+        mockRestServiceServerProxy.reset()
     }
 
     @Test
@@ -117,26 +123,25 @@ class DialogServiceTest {
 
         dialogService.sendOppfolgingsplan(oppfolgingsplan)
 
-        mockRestServiceServer.verify()
-        mockDefaultRestServiceServer.verify()
+        mockRestServiceServerProxy.verify()
 
     }
 
     @Throws(ICommunicationPartyServiceGetOrganizationPersonDetailsGenericFaultFaultFaultMessage::class)
     private fun mockAdresseRegisteret() {
         val wsOrganisationPerson = WSOrganizationPerson().withParentHerId(HER_ID)
-        Mockito.`when`(adresseregisterSoapClient.getOrganizationPersonDetails(ArgumentMatchers.anyInt())).thenReturn(wsOrganisationPerson)
+        Mockito.`when`(adresseregisterSoapClient.getOrganizationPersonDetails(ArgumentMatchers.anyInt()))
+            .thenReturn(wsOrganisationPerson)
     }
 
-    private fun mockDialogfordeler() {
+    private fun mockIsdialogmelding() {
         val rsHodemelding = mockRsHodemelding()
         val OK_RESPONSE_JSON = "{\n" + "}"
-        mockRestServiceServer
-            .expect(once(), MockRestRequestMatchers.requestTo("http://localhost:8080/api/dialogmelding/sendOppfolgingsplan"))
+        mockRestServiceServerProxy
+            .expect(once(), MockRestRequestMatchers.requestTo("https://isdialogmeldingurl/api/v1/send/oppfolgingsplan"))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
             .andExpect(MockRestRequestMatchers.content().json(objectMapper.writeValueAsString(rsHodemelding)))
             .andRespond(MockRestResponseCreators.withSuccess(OK_RESPONSE_JSON, MediaType.APPLICATION_JSON))
-
     }
 
     private fun mockRsHodemelding(): RSHodemelding {
@@ -150,21 +155,27 @@ class DialogServiceTest {
             .fnr("Kake")
             .herId(HER_ID)
             .helsepersonellregisterId("123")
-            .pasient(Pasient()
-                .fornavn(ARBEIDSTAKER_NAME_FIRST)
-                .mellomnavn(ARBEIDSTAKER_NAME_MIDDLE)
-                .etternavn(ARBEIDSTAKER_NAME_LAST)
-                .fnr("99999900000"))
-            .fastlegekontor(Fastlegekontor()
-                .navn("Pontypandy Legekontor")
-                .besoeksadresse(null)
-                .postadresse(null)
-                .telefon("")
-                .epost("")
-                .orgnummer("88888888"))
-            .pasientforhold(Pasientforhold()
-                .fom(LocalDate.parse("2024-06-04"))
-                .tom(LocalDate.parse("2024-06-04")))
+            .pasient(
+                Pasient()
+                    .fornavn(ARBEIDSTAKER_NAME_FIRST)
+                    .mellomnavn(ARBEIDSTAKER_NAME_MIDDLE)
+                    .etternavn(ARBEIDSTAKER_NAME_LAST)
+                    .fnr("99999900000")
+            )
+            .fastlegekontor(
+                Fastlegekontor()
+                    .navn("Pontypandy Legekontor")
+                    .besoeksadresse(null)
+                    .postadresse(null)
+                    .telefon("")
+                    .epost("")
+                    .orgnummer("88888888")
+            )
+            .pasientforhold(
+                Pasientforhold()
+                    .fom(LocalDate.parse("2024-06-04"))
+                    .tom(LocalDate.parse("2024-06-04"))
+            )
 
         return RSHodemelding(fastlege, partnerinformasjon, oppfolgingsplan)
     }
@@ -181,12 +192,18 @@ class DialogServiceTest {
     private fun mockSyfopartnerinfo() {
         val url = "$syfopartnerinfoUrl/api/v1/behandler?herid=$HER_ID"
         val partnerInfoResponse = PartnerInfoResponse(PARTNER_ID)
-        val infoResponse: MutableList<PartnerInfoResponse> = ArrayList() // listOf(ResponseEntity<List<PartnerInfoResponse>>(infoResponse, HttpStatus.OK))
+        val infoResponse: MutableList<PartnerInfoResponse> =
+            ArrayList() // listOf(ResponseEntity<List<PartnerInfoResponse>>(infoResponse, HttpStatus.OK))
         infoResponse.add(partnerInfoResponse)
 
         mockRestServiceServer.expect(ExpectedCount.manyTimes(), MockRestRequestMatchers.requestTo(url))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-            .andRespond(MockRestResponseCreators.withSuccess(objectMapper.writeValueAsString(infoResponse), MediaType.APPLICATION_JSON))
+            .andRespond(
+                MockRestResponseCreators.withSuccess(
+                    objectMapper.writeValueAsString(infoResponse),
+                    MediaType.APPLICATION_JSON
+                )
+            )
     }
 
     private fun mockAzureAD() {
@@ -199,13 +216,33 @@ class DialogServiceTest {
             "",
             ""
         )
-        val response = ResponseEntity<Any>(azureAdResponse, HttpStatus.OK)
-        Mockito.`when`(restTemplateWithProxy.exchange(
-            Mockito.contains("aadaccesstoken"),
-            Mockito.eq(HttpMethod.POST),
-            Mockito.any(),
-            Mockito.any<Class<Any>>()
-        )).thenReturn(response)
+
+        mockRestServiceServerProxy
+            .expect(once(), MockRestRequestMatchers.requestTo("http://aadaccesstoken"))
+            .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
+            .andRespond(
+                MockRestResponseCreators.withSuccess(
+                    objectMapper.writeValueAsString(azureAdResponse),
+                    MediaType.APPLICATION_JSON
+                )
+            )
+    }
+
+    private fun mockAzureADV2() {
+        val azureAdResponse = AzureAdV2TokenResponse(
+            "token",
+            5000L,
+        )
+
+        mockRestServiceServerProxy
+            .expect(once(), MockRestRequestMatchers.requestTo("https://login.microsoftonline.com/id/oauth2/v2.0/token"))
+            .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
+            .andRespond(
+                MockRestResponseCreators.withSuccess(
+                    objectMapper.writeValueAsString(azureAdResponse),
+                    MediaType.APPLICATION_JSON
+                )
+            )
     }
 
 

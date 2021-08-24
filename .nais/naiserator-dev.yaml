@@ -107,3 +107,7 @@ spec:
       value: https://pdl-api.nais.preprod.local/graphql
     - name: SECURITY_TOKEN_SERVICE_REST_URL
       value: https://security-token-service.nais.preprod.local
+    - name: ISDIALOGMELDING_IDENTIFIER
+      value: dev-gcp.teamsykefravr.isdialogmelding
+    - name: ISDIALOGMELDING_URL
+      value: https://isdialogmelding.dev.intern.nav.no
