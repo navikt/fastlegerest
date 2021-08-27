@@ -36,7 +36,6 @@ spec:
   ingresses:
     - "https://fastlegerest.intern.nav.no"
     - "https://fastlegerest.nais.adeo.no"
-    - "https://app.adeo.no/fastlegerest"
   accessPolicy:
     inbound:
       rules:
@@ -93,10 +92,6 @@ spec:
       value: https://security-token-service.nais.adeo.no/rest/v1/sts/.well-known/openid-configuration
     - name: NO_NAV_SECURITY_JWT_ISSUER_STS_ACCEPTEDAUDIENCE
       value: srvsyfooppfolgings
-    - name: NO_NAV_SECURITY_JWT_ISSUER_VEILEDER_DISCOVERYURL
-      value: https://login.microsoftonline.com/navno.onmicrosoft.com/.well-known/openid-configuration
-    - name: NO_NAV_SECURITY_JWT_ISSUER_VEILEDER_ACCEPTEDAUDIENCE
-      value: 9b4e07a3-4f4c-4bab-b866-87f62dff480d,97085f8d-2aa8-4a4e-ba8c-10bcc5691191
     - name: AD_ACCESSTOKEN_URL
       value: https://login.microsoftonline.com/navno.onmicrosoft.com/oauth2/token
     - name: SYFOPARTNERINFO_APPID

@@ -54,8 +54,6 @@ pdl.url: "https://pdl.nais.no"
 security.token.service.rest.url: "http://localhost:8080"
 tilgangskontrollapi.url: "https://tilgangskontroll.url"
 
-local_mock: false
-
 environment.name: local
 
 no.nav.security.jwt:

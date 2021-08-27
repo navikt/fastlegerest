@@ -3,7 +3,7 @@ server:
     context-path: /fastlegerest
 
 no.nav.security.jwt:
-  issuers: selvbetjening,veileder,veilederaad
+  issuers: selvbetjening,veilederaad
   issuer:
     selvbetjening:
       discoveryurl: ${LOGINSERVICE_IDPORTEN_DISCOVERY_URL}
@@ -12,16 +12,10 @@ no.nav.security.jwt:
     sts:
       discoveryurl: <naiserator>
       accepted_audience: <naiserator>
-    veileder:
-      discoveryurl: <syfonais>
-      accepted_audience: <syfonais>
-      cookie_name: isso-idtoken
     veilederaad:
       discoveryurl: ${azure.app.well.known.url}
       accepted_audience: ${azure.app.client.id}
       cookiename: ID_token
-
-local_mock: false
 
 spring:
   profiles.active: remote
