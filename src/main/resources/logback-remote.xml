@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <included>
     <appender name="stdout_json" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="ch.qos.logback.classic.boolex.JaninoEventEvaluator">
+                <expression>return (
+                    message.contains("WS-Addressing - failed to retrieve Message Addressing Properties from context") ||
+                    message.contains("Response message does not contain WS-Addressing properties.  Not correlating response."));
+                </expression>
+            </evaluator>
+            <OnMismatch>NEUTRAL</OnMismatch>
+            <OnMatch>DENY</OnMatch>
+        </filter>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
     </appender>
 

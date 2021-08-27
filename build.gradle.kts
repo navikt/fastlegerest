@@ -16,6 +16,7 @@ val kotlinJacksonVersion = "2.11.3"
 val logstashVersion = "6.3"
 val prometheusVersion = "1.5.5"
 val slf4jVersion = "1.7.25"
+val janinoVersion = "3.1.6"
 val swaggerVersion = "1.5.21"
 val tokenValidationSpringSupportVersion = "1.3.2"
 
@@ -115,6 +116,7 @@ dependencies {
     implementation("javax.ws.rs:javax.ws.rs-api:$javaxWsRsApiVersion")
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
     implementation("net.logstash.logback:logstash-logback-encoder:$logstashVersion")
+    implementation("org.codehaus.janino:janino:$janinoVersion")
 
     testImplementation("no.nav.security:token-validation-test-support:$tokenValidationSpringSupportVersion")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
