@@ -80,14 +80,14 @@ spec:
       value: https://pep-gw.oera.no:9443/ekstern/helse/adresseregisteret/v1
     - name: PARTNER_WS_URL
       value: https://wasapp.adeo.no/emottak-partnerweb/partnerService/
+    - name: SYFOTILGANGSKONTROLL_CLIENT_ID
+      value: "prod-fss.teamsykefravr.syfo-tilgangskontroll"
     - name: TILGANGSKONTROLLAPI_URL
       value: https://syfo-tilgangskontroll.nais.adeo.no/syfo-tilgangskontroll/api/tilgang
     - name: SECURITY_TOKEN_SERVICE_TOKEN_URL
       value: https://security-token-service.nais.adeo.no/rest/v1/sts/token
     - name: AZUREAD_TENANT_ID
       value: "62366534-1ec3-4962-8869-9b5535279d0b"
-    - name: SYFOTILGANGSKONTROLL_CLIENT_ID
-      value: "dfaa2699-7390-4459-9cfc-2e8de64dfaf9"
     - name: NO_NAV_SECURITY_JWT_ISSUER_STS_DISCOVERYURL
       value: https://security-token-service.nais.adeo.no/rest/v1/sts/.well-known/openid-configuration
     - name: NO_NAV_SECURITY_JWT_ISSUER_STS_ACCEPTEDAUDIENCE
