@@ -5,6 +5,7 @@ import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.syfo.api.auth.OIDCIssuer
 import no.nav.syfo.api.auth.OIDCUtil.tokenFraOIDC
 import no.nav.syfo.consumer.azuread.v2.AzureAdV2TokenConsumer
+import no.nav.syfo.util.*
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
@@ -15,12 +16,18 @@ import javax.inject.Inject
 
 @Service
 class TilgangkontrollConsumer @Inject constructor(
-    @Value("\${tilgangskontrollapi.url}") private val TILGANGSKONTROLLAPI_URL: String,
+    @Value("\${tilgangskontrollapi.url}") private val syfotilgangskontrollUrl: String,
     @Value("\${syfotilgangskontroll.client.id}") private val syfotilgangskontrollClientId: String,
     @Qualifier("default") private val restTemplate: RestTemplate,
     private val azureAdV2TokenConsumer: AzureAdV2TokenConsumer,
     private val contextHolder: TokenValidationContextHolder
 ) {
+    private val tilgangskontrollPersonUrl: String
+
+    init {
+        tilgangskontrollPersonUrl = "$syfotilgangskontrollUrl$TILGANGSKONTROLL_PERSON_PATH"
+    }
+
     fun accessAzureAdV2(fnr: String): Tilgang {
         val token = tokenFraOIDC(contextHolder, OIDCIssuer.VEILEDER_AZURE_V2)
         val oboToken = azureAdV2TokenConsumer.getToken(
@@ -29,9 +36,12 @@ class TilgangkontrollConsumer @Inject constructor(
         )
         try {
             return restTemplate.exchange(
-                tilgangTilBrukerV2Url(fnr),
+                tilgangskontrollPersonUrl,
                 HttpMethod.GET,
-                lagRequest(oboToken),
+                lagRequest(
+                    personIdentNumber = fnr,
+                    token = oboToken,
+                ),
                 Tilgang::class.java
             ).body!!
         } catch (e: HttpClientErrorException) {
@@ -47,21 +57,23 @@ class TilgangkontrollConsumer @Inject constructor(
         }
     }
 
-    private fun lagRequest(token: String): HttpEntity<String> {
+    private fun lagRequest(
+        personIdentNumber: String,
+        token: String
+    ): HttpEntity<String> {
         val headers = HttpHeaders()
         headers.accept = listOf(MediaType.APPLICATION_JSON)
         headers.setBearerAuth(token)
+        headers[NAV_PERSONIDENT_HEADER] = personIdentNumber
+        headers[NAV_CALL_ID_HEADER] = createCallId()
+        headers[NAV_CONSUMER_ID_HEADER] = APP_CONSUMER_ID
         return HttpEntity(headers)
-    }
-
-    fun tilgangTilBrukerV2Url(fnr: String): String {
-        return "$TILGANGSKONTROLLAPI_URL$TILGANG_TIL_BRUKER_VIA_AZURE_V2_PATH/$fnr"
     }
 
     companion object {
         private val log = LoggerFactory.getLogger(TilgangkontrollConsumer::class.java)
 
-        private const val TILGANG_TIL_BRUKER_VIA_AZURE_V2_PATH = "/navident/bruker"
+        private const val TILGANGSKONTROLL_PERSON_PATH = "/navident/person"
 
         private val objectMapper = ObjectMapper()
     }
