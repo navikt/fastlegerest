@@ -35,6 +35,7 @@ spec:
     path: fastlegerest/internal/prometheus
   ingresses:
     - "https://fastlegerest.dev.intern.nav.no"
+    - "https://fastlegerest.dev-fss-pub.nais.io"
     - "https://fastlegerest.nais.preprod.local"
   accessPolicy:
     inbound:
