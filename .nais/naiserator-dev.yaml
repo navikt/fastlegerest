@@ -98,6 +98,8 @@ spec:
       value: 077b7904-dec5-4d2e-bf69-bb17f56658c2
     - name: SYFOPARTNERINFO_URL
       value: "https://syfopartnerinfo.nais.preprod.local"
+    - name: PDL_CLIENT_ID
+      value: dev-fss.pdl.pdl-api
     - name: PDL_URL
       value: https://pdl-api.nais.preprod.local/graphql
     - name: SECURITY_TOKEN_SERVICE_REST_URL
