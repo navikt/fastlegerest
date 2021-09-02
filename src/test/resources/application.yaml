@@ -50,6 +50,7 @@ ad.accesstoken.url: "http://aadaccesstoken"
 no.nav.modig.security.sts.url: "https://e34jbsl01816.devillo.no:8443/SecurityTokenServiceProvider/"
 isso-host.url: "https://isso-t.adeo.no/isso/oauth2"
 
+pdl.client.id: "pdl-client-id"
 pdl.url: "https://pdl.nais.no"
 security.token.service.rest.url: "http://localhost:8080"
 tilgangskontrollapi.url: "https://tilgangskontroll.url"

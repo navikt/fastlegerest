@@ -1,17 +1,14 @@
 package no.nav.syfo.consumer.pdl
 
-import no.nav.syfo.consumer.sts.StsConsumer
+import no.nav.syfo.consumer.azuread.v2.AzureAdV2TokenConsumer
 import no.nav.syfo.metric.Metrikk
 import no.nav.syfo.util.ALLE_TEMA_HEADERVERDI
-import no.nav.syfo.util.NAV_CONSUMER_TOKEN_HEADER
 import no.nav.syfo.util.TEMA_HEADER
-import no.nav.syfo.util.bearerCredentials
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
@@ -21,8 +18,9 @@ import org.springframework.web.client.RestTemplate
 @Service
 class PdlConsumer(
     private val metric: Metrikk,
+    private val azureAdV2TokenConsumer: AzureAdV2TokenConsumer,
+    @Value("\${pdl.client.id}") private val pdlClientId: String,
     @Value("\${pdl.url}") private val pdlUrl: String,
-    private val stsConsumer: StsConsumer,
     @Qualifier("default") private val defaultRestTemplate: RestTemplate
 ) {
     fun person(personIdentNumber: String): PdlHentPerson? {
@@ -57,12 +55,11 @@ class PdlConsumer(
     }
 
     private fun createRequestEntity(request: PdlRequest): HttpEntity<PdlRequest> {
-        val stsToken: String = stsConsumer.token()
+        val azureADSystemToken = azureAdV2TokenConsumer.getToken(pdlClientId)
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
         headers.set(TEMA_HEADER, ALLE_TEMA_HEADERVERDI)
-        headers.set(AUTHORIZATION, bearerCredentials(stsToken))
-        headers.set(NAV_CONSUMER_TOKEN_HEADER, bearerCredentials(stsToken))
+        headers.setBearerAuth(azureADSystemToken)
         return HttpEntity(request, headers)
     }
 
