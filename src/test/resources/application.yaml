@@ -30,10 +30,6 @@ mockPartnerEmottak: true
 srv.username: admin
 srv.password: admin
 
-SECURITYTOKENSERVICE_URL: sts.url
-SRV_USERNAME: admin
-SRV_PASSWORD: admin
-
 azuread.tenant.id: "1345678"
 
 client.id: "clientId"
@@ -52,7 +48,6 @@ isso-host.url: "https://isso-t.adeo.no/isso/oauth2"
 
 pdl.client.id: "pdl-client-id"
 pdl.url: "https://pdl.nais.no"
-security.token.service.rest.url: "http://localhost:8080"
 tilgangskontrollapi.url: "https://tilgangskontroll.url"
 
 environment.name: local

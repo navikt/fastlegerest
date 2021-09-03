@@ -85,8 +85,6 @@ spec:
       value: "prod-fss.teamsykefravr.syfo-tilgangskontroll"
     - name: TILGANGSKONTROLLAPI_URL
       value: https://syfo-tilgangskontroll.nais.adeo.no/syfo-tilgangskontroll/api/tilgang
-    - name: SECURITY_TOKEN_SERVICE_TOKEN_URL
-      value: https://security-token-service.nais.adeo.no/rest/v1/sts/token
     - name: AZUREAD_TENANT_ID
       value: "62366534-1ec3-4962-8869-9b5535279d0b"
     - name: NO_NAV_SECURITY_JWT_ISSUER_STS_DISCOVERYURL
@@ -103,8 +101,6 @@ spec:
       value: prod-fss.pdl.pdl-api
     - name: PDL_URL
       value: https://pdl-api.nais.adeo.no/graphql
-    - name: SECURITY_TOKEN_SERVICE_REST_URL
-      value: https://security-token-service.nais.adeo.no
     - name: ISDIALOGMELDING_IDENTIFIER
       value: prod-gcp.teamsykefravr.isdialogmelding
     - name: ISDIALOGMELDING_URL
