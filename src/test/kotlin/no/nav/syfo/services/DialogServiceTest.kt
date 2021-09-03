@@ -46,15 +46,6 @@ class DialogServiceTest {
     @Value("\${syfopartnerinfo.url}")
     private lateinit var syfopartnerinfoUrl: String
 
-    @Value("\${security.token.service.rest.url}")
-    private lateinit var stsUrl: String
-
-    @Value("\${srv.username}")
-    private lateinit var srvUsername: String
-
-    @Value("\${srv.password}")
-    private lateinit var srvPassword: String
-
     @Autowired
     lateinit var objectMapper: ObjectMapper
 
@@ -106,7 +97,6 @@ class DialogServiceTest {
             .thenReturn(generatePdlHentPerson(null))
         MockUtils.mockHarFastlege(fastlegeSoapClient)
         mockIsdialogmelding()
-        mockTokenService()
     }
 
     @After
@@ -178,15 +168,6 @@ class DialogServiceTest {
             )
 
         return RSHodemelding(fastlege, partnerinformasjon, oppfolgingsplan)
-    }
-
-    private fun mockTokenService() {
-        mockAndExpectSTSService(
-            mockRestServiceServer = mockDefaultRestServiceServer,
-            stsUrl = stsUrl,
-            username = srvUsername,
-            password = srvPassword,
-        )
     }
 
     private fun mockSyfopartnerinfo() {

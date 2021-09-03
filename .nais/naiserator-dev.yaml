@@ -85,8 +85,6 @@ spec:
       value: https://syfo-tilgangskontroll.nais.preprod.local/syfo-tilgangskontroll/api/tilgang
     - name: SYFOTILGANGSKONTROLL_CLIENT_ID
       value: "dev-fss.teamsykefravr.syfo-tilgangskontroll"
-    - name: SECURITY_TOKEN_SERVICE_TOKEN_URL
-      value: https://security-token-service.nais.preprod.local/rest/v1/sts/token
     - name: AZUREAD_TENANT_ID
       value: "966ac572-f5b7-4bbe-aa88-c76419c0f851"
     - name: NO_NAV_SECURITY_JWT_ISSUER_STS_DISCOVERYURL
@@ -103,8 +101,6 @@ spec:
       value: dev-fss.pdl.pdl-api
     - name: PDL_URL
       value: https://pdl-api.nais.preprod.local/graphql
-    - name: SECURITY_TOKEN_SERVICE_REST_URL
-      value: https://security-token-service.nais.preprod.local
     - name: ISDIALOGMELDING_IDENTIFIER
       value: dev-gcp.teamsykefravr.isdialogmelding
     - name: ISDIALOGMELDING_URL

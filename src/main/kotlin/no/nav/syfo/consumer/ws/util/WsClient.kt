@@ -27,25 +27,4 @@ class WsClient<T> {
         Arrays.stream(interceptors).forEach(Consumer { e: PhaseInterceptor<out Message?>? -> client.outInterceptors.add(e) })
         return port
     }
-
-    fun createPortWithCredentials(
-        username: String,
-        password: String,
-        serviceUrl: String,
-        portType: Class<*>,
-        handlers: List<Handler<*>>,
-        vararg interceptors: PhaseInterceptor<out Message>
-    ): T {
-        val jaxWsProxyFactoryBean = JaxWsProxyFactoryBean()
-        jaxWsProxyFactoryBean.serviceClass = portType
-        jaxWsProxyFactoryBean.address = Objects.requireNonNull(serviceUrl)
-        jaxWsProxyFactoryBean.features.add(WSAddressingFeature())
-        jaxWsProxyFactoryBean.username = username
-        jaxWsProxyFactoryBean.password = password
-        val port = jaxWsProxyFactoryBean.create() as T
-        (port as BindingProvider).binding.handlerChain = handlers
-        val client = ClientProxy.getClient(port)
-        Arrays.stream(interceptors).forEach(Consumer { e: PhaseInterceptor<out Message?>? -> client.outInterceptors.add(e) })
-        return port
-    }
 }
