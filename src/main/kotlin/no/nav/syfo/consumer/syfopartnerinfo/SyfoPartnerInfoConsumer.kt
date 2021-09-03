@@ -1,6 +1,6 @@
 package no.nav.syfo.consumer.syfopartnerinfo
 
-import no.nav.syfo.consumer.azuread.AzureAdTokenConsumer
+import no.nav.syfo.consumer.azuread.v2.AzureAdV2TokenConsumer
 import no.nav.syfo.metric.Metrikk
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
@@ -14,19 +14,18 @@ import org.springframework.web.client.RestTemplate
 
 @Service
 class SyfoPartnerInfoConsumer(
-    private val azureAdTokenConsumer: AzureAdTokenConsumer,
+    private val azureAdV2TokenConsumer: AzureAdV2TokenConsumer,
     private val metrikk: Metrikk,
-    @Qualifier("Oidc") private val restTemplate: RestTemplate,
-    @Value("\${syfopartnerinfo.appid}") private val syfoPartnerInfoAppId: String,
+    @Qualifier("default") private val restTemplate: RestTemplate,
+    @Value("\${syfopartnerinfo.client.id}") private val syfopartnerinfoClientId: String,
     @Value("\${syfopartnerinfo.url}") private val syfopartnerinfoUrl: String
 ) {
-
     fun getPartnerId(herId: String): List<PartnerInfoResponse> {
         try {
             val response = restTemplate.exchange(
-                "$syfopartnerinfoUrl/api/v1/behandler?herid=$herId",
+                "$syfopartnerinfoUrl/api/v2/behandler?herid=$herId",
                 HttpMethod.GET,
-                entity(syfoPartnerInfoAppId),
+                entity(),
                 object : ParameterizedTypeReference<List<PartnerInfoResponse>>() {}
             )
             LOG.info("Got response from syfopartnerinfo ")
@@ -38,10 +37,11 @@ class SyfoPartnerInfoConsumer(
         }
     }
 
-    fun entity(resource: String): HttpEntity<MultiValueMap<String, String>> {
+    fun entity(): HttpEntity<MultiValueMap<String, String>> {
+        val azureADSystemToken = azureAdV2TokenConsumer.getToken(syfopartnerinfoClientId)
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
-        headers.setBearerAuth(azureAdTokenConsumer.accessToken(resource))
+        headers.setBearerAuth(azureADSystemToken)
 
         return HttpEntity(headers)
     }

@@ -58,8 +58,6 @@ spec:
   vault:
     enabled: true
     paths:
-      - kvPath: "/azuread/data/prod/creds/fastlegerest"
-        mountPath: "/secrets/azuread/fastlegerest"
       - kvPath: "/serviceuser/data/prod/srvfastlegerest"
         mountPath: "/secrets/serviceuser/fastlegerest"
       - kvPath: "/kv/prod/fss/fastlegerest/default"
@@ -85,16 +83,12 @@ spec:
       value: "prod-fss.teamsykefravr.syfo-tilgangskontroll"
     - name: TILGANGSKONTROLLAPI_URL
       value: https://syfo-tilgangskontroll.nais.adeo.no/syfo-tilgangskontroll/api/tilgang
-    - name: AZUREAD_TENANT_ID
-      value: "62366534-1ec3-4962-8869-9b5535279d0b"
     - name: NO_NAV_SECURITY_JWT_ISSUER_STS_DISCOVERYURL
       value: https://security-token-service.nais.adeo.no/rest/v1/sts/.well-known/openid-configuration
     - name: NO_NAV_SECURITY_JWT_ISSUER_STS_ACCEPTEDAUDIENCE
       value: srvsyfooppfolgings
-    - name: AD_ACCESSTOKEN_URL
-      value: https://login.microsoftonline.com/navno.onmicrosoft.com/oauth2/token
-    - name: SYFOPARTNERINFO_APPID
-      value: 55732aaa-9976-4a7b-8342-2e502a3cdce4
+    - name: SYFOPARTNERINFO_CLIENT_ID
+      value: "prod-fss.teamsykefravr.syfopartnerinfo"
     - name: SYFOPARTNERINFO_URL
       value: "https://syfopartnerinfo.nais.adeo.no"
     - name: PDL_CLIENT_ID

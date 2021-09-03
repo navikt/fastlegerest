@@ -2,7 +2,6 @@ package no.nav.syfo.services
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import no.nav.syfo.LocalApplication
-import no.nav.syfo.consumer.azuread.AzureAdResponse
 import no.nav.syfo.consumer.azuread.v2.AzureAdV2TokenResponse
 import no.nav.syfo.consumer.pdl.PdlConsumer
 import no.nav.syfo.consumer.syfopartnerinfo.PartnerInfoResponse
@@ -21,17 +20,16 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.junit4.SpringRunner
-import org.springframework.test.web.client.ExpectedCount
 import org.springframework.test.web.client.ExpectedCount.once
 import org.springframework.test.web.client.MockRestServiceServer
 import org.springframework.test.web.client.match.MockRestRequestMatchers
 import org.springframework.test.web.client.response.MockRestResponseCreators
 import org.springframework.web.client.RestTemplate
-import testhelper.*
+import testhelper.MockUtils
 import testhelper.UserConstants.ARBEIDSTAKER_NAME_FIRST
 import testhelper.UserConstants.ARBEIDSTAKER_NAME_LAST
 import testhelper.UserConstants.ARBEIDSTAKER_NAME_MIDDLE
-import java.time.Instant
+import testhelper.generatePdlHentPerson
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -39,7 +37,6 @@ import javax.inject.Inject
 @SpringBootTest(classes = [LocalApplication::class])
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class DialogServiceTest {
-    lateinit var mockRestServiceServer: MockRestServiceServer
     lateinit var mockDefaultRestServiceServer: MockRestServiceServer
     lateinit var mockRestServiceServerProxy: MockRestServiceServer
 
@@ -58,10 +55,6 @@ class DialogServiceTest {
     lateinit var defaultRestTemplate: RestTemplate
 
     @Inject
-    @Qualifier(value = "Oidc")
-    lateinit var restTemplate: RestTemplate
-
-    @Inject
     @Qualifier(value = "restTemplateWithProxy")
     lateinit var restTemplateWithProxy: RestTemplate
 
@@ -77,10 +70,6 @@ class DialogServiceTest {
 
     @Before
     fun setUp() {
-        mockRestServiceServer = MockRestServiceServer
-            .bindTo(restTemplate)
-            .build()
-
         mockDefaultRestServiceServer = MockRestServiceServer
             .bindTo(defaultRestTemplate)
             .build()
@@ -90,18 +79,17 @@ class DialogServiceTest {
             .build()
 
         mockAdresseRegisteret()
-        mockAzureAD()
         mockAzureADV2()
         mockSyfopartnerinfo()
         Mockito.`when`(pdlConsumer.person(ArgumentMatchers.anyString()))
             .thenReturn(generatePdlHentPerson(null))
         MockUtils.mockHarFastlege(fastlegeSoapClient)
+        mockAzureADV2()
         mockIsdialogmelding()
     }
 
     @After
     fun cleanUp() {
-        mockRestServiceServer.reset()
         mockDefaultRestServiceServer.reset()
         mockRestServiceServerProxy.reset()
     }
@@ -171,39 +159,17 @@ class DialogServiceTest {
     }
 
     private fun mockSyfopartnerinfo() {
-        val url = "$syfopartnerinfoUrl/api/v1/behandler?herid=$HER_ID"
+        val url = "$syfopartnerinfoUrl/api/v2/behandler?herid=$HER_ID"
         val partnerInfoResponse = PartnerInfoResponse(PARTNER_ID)
         val infoResponse: MutableList<PartnerInfoResponse> =
             ArrayList() // listOf(ResponseEntity<List<PartnerInfoResponse>>(infoResponse, HttpStatus.OK))
         infoResponse.add(partnerInfoResponse)
 
-        mockRestServiceServer.expect(ExpectedCount.manyTimes(), MockRestRequestMatchers.requestTo(url))
+        mockDefaultRestServiceServer.expect(once(), MockRestRequestMatchers.requestTo(url))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
             .andRespond(
                 MockRestResponseCreators.withSuccess(
                     objectMapper.writeValueAsString(infoResponse),
-                    MediaType.APPLICATION_JSON
-                )
-            )
-    }
-
-    private fun mockAzureAD() {
-        val azureAdResponse = AzureAdResponse(
-            "token",
-            "",
-            "",
-            "",
-            Instant.now(),
-            "",
-            ""
-        )
-
-        mockRestServiceServerProxy
-            .expect(once(), MockRestRequestMatchers.requestTo("http://aadaccesstoken"))
-            .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
-            .andRespond(
-                MockRestResponseCreators.withSuccess(
-                    objectMapper.writeValueAsString(azureAdResponse),
                     MediaType.APPLICATION_JSON
                 )
             )

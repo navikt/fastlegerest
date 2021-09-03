@@ -2,24 +2,19 @@ package no.nav.syfo.consumer
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import no.nav.syfo.LocalApplication
-import no.nav.syfo.consumer.azuread.AzureAdResponse
-import no.nav.syfo.consumer.azuread.AzureAdTokenConsumer
+import no.nav.syfo.consumer.azuread.v2.AzureAdV2TokenConsumer
+import no.nav.syfo.consumer.azuread.v2.AzureAdV2TokenResponse
 import no.nav.syfo.consumer.syfopartnerinfo.PartnerInfoResponse
 import no.nav.syfo.consumer.syfopartnerinfo.SyfoPartnerInfoConsumer
 import no.nav.syfo.metric.Metrikk
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.*
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpMethod
-import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.client.ExpectedCount
@@ -27,7 +22,6 @@ import org.springframework.test.web.client.MockRestServiceServer
 import org.springframework.test.web.client.match.MockRestRequestMatchers
 import org.springframework.test.web.client.response.MockRestResponseCreators
 import org.springframework.web.client.RestTemplate
-import java.time.Instant
 import javax.inject.Inject
 
 @RunWith(SpringRunner::class)
@@ -35,6 +29,7 @@ import javax.inject.Inject
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class SyfoPartnerInfoConsumerTest {
     lateinit var mockRestServiceServer: MockRestServiceServer
+    lateinit var mockRestServiceServerProxy: MockRestServiceServer
 
     @Autowired
     lateinit var objectMapper: ObjectMapper
@@ -48,11 +43,11 @@ class SyfoPartnerInfoConsumerTest {
     private lateinit var syfopartnerinfoUrl: String
 
     @Inject
-    @Qualifier(value = "Oidc")
+    @Qualifier(value = "default")
     lateinit var restTemplate: RestTemplate
 
     @Mock
-    lateinit var azureAdTokenConsumer: AzureAdTokenConsumer
+    lateinit var azureAdV2TokenConsumer: AzureAdV2TokenConsumer
 
     @MockBean
     @Qualifier(value = "restTemplateWithProxy")
@@ -61,17 +56,21 @@ class SyfoPartnerInfoConsumerTest {
     @Before
     fun setUp() {
         mockRestServiceServer = MockRestServiceServer
-                .bindTo(restTemplate)
-                .build()
+            .bindTo(restTemplate)
+            .build()
 
-        mockAzureAD()
+        mockRestServiceServerProxy = MockRestServiceServer
+            .bindTo(restTemplateWithProxy)
+            .build()
+
+        mockAzureADV2()
         mockSyfopartnerinfo()
 
         syfoPartnerInfoConsumer = SyfoPartnerInfoConsumer(
-            azureAdTokenConsumer = azureAdTokenConsumer,
+            azureAdV2TokenConsumer = azureAdV2TokenConsumer,
             metrikk = metrikk,
             restTemplate = restTemplate,
-            syfoPartnerInfoAppId = "",
+            syfopartnerinfoClientId = "",
             syfopartnerinfoUrl = syfopartnerinfoUrl
         )
     }
@@ -84,34 +83,33 @@ class SyfoPartnerInfoConsumerTest {
     @After
     fun cleanUp() {
         mockRestServiceServer.reset()
+        mockRestServiceServerProxy.reset()
     }
 
     private fun mockSyfopartnerinfo() {
-        val url = "$syfopartnerinfoUrl/api/v1/behandler?herid=$HER_ID"
+        val url = "$syfopartnerinfoUrl/api/v2/behandler?herid=$HER_ID"
         val infoResponse: MutableList<PartnerInfoResponse>? = null
 
         mockRestServiceServer.expect(ExpectedCount.manyTimes(), MockRestRequestMatchers.requestTo(url))
-                .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-                .andRespond(MockRestResponseCreators.withSuccess(objectMapper.writeValueAsString(infoResponse), MediaType.APPLICATION_JSON))
+            .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
+            .andRespond(MockRestResponseCreators.withSuccess(objectMapper.writeValueAsString(infoResponse), MediaType.APPLICATION_JSON))
     }
 
-    private fun mockAzureAD() {
-        val azureAdResponse = AzureAdResponse(
-                "token",
-                "",
-                "",
-                "",
-                Instant.now(),
-                "",
-                ""
+    private fun mockAzureADV2() {
+        val azureAdResponse = AzureAdV2TokenResponse(
+            "token",
+            5000L,
         )
-        val response = ResponseEntity<Any>(azureAdResponse, HttpStatus.OK)
-        Mockito.`when`(restTemplateWithProxy.exchange(
-                Mockito.contains("aadaccesstoken"),
-                Mockito.eq(HttpMethod.POST),
-                Mockito.any(),
-                Mockito.any<Class<Any>>()
-        )).thenReturn(response)
+
+        mockRestServiceServerProxy
+            .expect(ExpectedCount.once(), MockRestRequestMatchers.requestTo("https://login.microsoftonline.com/id/oauth2/v2.0/token"))
+            .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
+            .andRespond(
+                MockRestResponseCreators.withSuccess(
+                    objectMapper.writeValueAsString(azureAdResponse),
+                    MediaType.APPLICATION_JSON
+                )
+            )
     }
 
 
