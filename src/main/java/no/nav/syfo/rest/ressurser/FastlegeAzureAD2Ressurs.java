@@ -11,6 +11,7 @@ import no.nav.syfo.services.exceptions.FastlegeIkkeFunnet;
 import no.nav.syfo.services.exceptions.HarIkkeTilgang;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import static java.util.Collections.emptyList;
 import static no.nav.syfo.api.auth.OIDCIssuer.VEILEDER_AZURE_V2;
+import static no.nav.syfo.util.RequestUtilKt.NAV_PERSONIDENT_HEADER;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -44,24 +46,51 @@ public class FastlegeAzureAD2Ressurs {
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
-    public Fastlege finnFastlegeAazure(@RequestParam(value = "fnr") String fnr) {
+    public Fastlege finnFastlegeAazure(
+            @RequestHeader MultiValueMap<String, String> headers,
+            @RequestParam(value = "fnr", required = false) String fnr
+    ) {
         metrikk.tellHendelse("finn_fastlege");
 
-        kastExceptionHvisIkkeTilgang(fnr);
+        String requestedPersonIdent = getRequestPersonIdent(headers, fnr);
 
-        return fastlegeService.hentBrukersFastlege(fnr).orElseThrow(FastlegeIkkeFunnet::new);
+        kastExceptionHvisIkkeTilgang(requestedPersonIdent);
+
+        return fastlegeService.hentBrukersFastlege(requestedPersonIdent).orElseThrow(FastlegeIkkeFunnet::new);
     }
 
     @GetMapping(path = "/fastleger", produces = APPLICATION_JSON_VALUE)
-    public List<Fastlege> getFastleger(@RequestParam(value = "fnr") String fnr) {
+    public List<Fastlege> getFastleger(
+            @RequestHeader MultiValueMap<String, String> headers,
+            @RequestParam(value = "fnr", required = false) String fnr
+    ) {
         metrikk.tellHendelse("get_fastleger");
 
-        kastExceptionHvisIkkeTilgang(fnr);
+        String requestedPersonIdent = getRequestPersonIdent(headers, fnr);
+
+        kastExceptionHvisIkkeTilgang(requestedPersonIdent);
 
         try {
-            return fastlegeService.hentBrukersFastleger(fnr);
+            return fastlegeService.hentBrukersFastleger(requestedPersonIdent);
         } catch (FastlegeIkkeFunnet e) {
             return emptyList();
+        }
+    }
+
+    private String getRequestPersonIdent(
+            MultiValueMap<String, String> headers,
+            String fnr
+    ) {
+        String requestedPersonIdent;
+        if (fnr == null) {
+            requestedPersonIdent = headers.getFirst(NAV_PERSONIDENT_HEADER);
+        } else {
+            requestedPersonIdent = fnr;
+        }
+        if (requestedPersonIdent == null) {
+            throw new IllegalArgumentException("Did not find a PersonIdent in request headers or in Request param");
+        } else {
+            return requestedPersonIdent;
         }
     }
 
