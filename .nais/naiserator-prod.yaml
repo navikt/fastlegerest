@@ -46,6 +46,9 @@ spec:
         - application: finnfastlege
           namespace: teamsykefravr
           cluster: prod-fss
+        - application: isdialogmelding
+          namespace: teamsykefravr
+          cluster: prod-gcp
   azure:
     application:
       enabled: true
