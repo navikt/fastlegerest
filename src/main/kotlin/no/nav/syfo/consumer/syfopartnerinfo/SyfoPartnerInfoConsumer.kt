@@ -38,7 +38,7 @@ class SyfoPartnerInfoConsumer(
     }
 
     fun entity(): HttpEntity<MultiValueMap<String, String>> {
-        val azureADSystemToken = azureAdV2TokenConsumer.getToken(syfopartnerinfoClientId)
+        val azureADSystemToken = azureAdV2TokenConsumer.getSystemToken(syfopartnerinfoClientId)
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
         headers.setBearerAuth(azureADSystemToken)

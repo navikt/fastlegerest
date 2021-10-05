@@ -78,7 +78,7 @@ public class DialogService {
     private HttpHeaders lagHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(org.springframework.http.MediaType.APPLICATION_JSON));
-        headers.setBearerAuth(azureAdV2TokenConsumer.getToken(isdialogmeldingIdentifier, null));
+        headers.setBearerAuth(azureAdV2TokenConsumer.getSystemToken(isdialogmeldingIdentifier));
         return headers;
     }
 }
