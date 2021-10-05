@@ -55,7 +55,7 @@ class PdlConsumer(
     }
 
     private fun createRequestEntity(request: PdlRequest): HttpEntity<PdlRequest> {
-        val azureADSystemToken = azureAdV2TokenConsumer.getToken(pdlClientId)
+        val azureADSystemToken = azureAdV2TokenConsumer.getSystemToken(pdlClientId)
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
         headers.set(TEMA_HEADER, ALLE_TEMA_HEADERVERDI)

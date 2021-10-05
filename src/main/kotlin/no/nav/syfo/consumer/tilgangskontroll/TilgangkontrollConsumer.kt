@@ -3,6 +3,8 @@ package no.nav.syfo.consumer.tilgangskontroll
 import com.fasterxml.jackson.databind.ObjectMapper
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.syfo.api.auth.OIDCIssuer
+import no.nav.syfo.api.auth.OIDCUtil.getConsumerClientIdFraOIDC
+import no.nav.syfo.api.auth.OIDCUtil.getNAVIdentFraOIDC
 import no.nav.syfo.api.auth.OIDCUtil.tokenFraOIDC
 import no.nav.syfo.consumer.azuread.v2.AzureAdV2TokenConsumer
 import no.nav.syfo.util.*
@@ -30,9 +32,15 @@ class TilgangkontrollConsumer @Inject constructor(
 
     fun accessAzureAdV2(fnr: String): Tilgang {
         val token = tokenFraOIDC(contextHolder, OIDCIssuer.VEILEDER_AZURE_V2)
-        val oboToken = azureAdV2TokenConsumer.getToken(
+        val veilederId = getNAVIdentFraOIDC(contextHolder)
+            ?: throw RuntimeException("Missing veilederId in OIDC-context")
+        val azp = getConsumerClientIdFraOIDC(contextHolder)
+            ?: throw RuntimeException("Missing azp in OIDC-context")
+        val oboToken = azureAdV2TokenConsumer.getOboToken(
             scopeClientId = syfotilgangskontrollClientId,
-            token = token
+            token = token,
+            veilederId = veilederId,
+            azp = azp,
         )
         try {
             return restTemplate.exchange(
