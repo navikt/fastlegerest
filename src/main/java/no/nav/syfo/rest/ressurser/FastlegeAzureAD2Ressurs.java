@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 import java.util.List;
 
-import static java.util.Collections.emptyList;
 import static no.nav.syfo.api.auth.OIDCIssuer.VEILEDER_AZURE_V2;
 import static no.nav.syfo.util.RequestUtilKt.NAV_PERSONIDENT_HEADER;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -70,11 +69,7 @@ public class FastlegeAzureAD2Ressurs {
 
         kastExceptionHvisIkkeTilgang(requestedPersonIdent);
 
-        try {
-            return fastlegeService.hentBrukersFastleger(requestedPersonIdent);
-        } catch (FastlegeIkkeFunnet e) {
-            return emptyList();
-        }
+        return fastlegeService.hentBrukersFastleger(requestedPersonIdent);
     }
 
     private String getRequestPersonIdent(
