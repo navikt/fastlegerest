@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @Service
 class TilgangkontrollConsumer @Inject constructor(
-    @Value("\${syfotilgangskontroll.url}") private val syfotilgangskontrollUrl: String,
+    @Value("\${tilgangskontrollapi.url}") private val syfotilgangskontrollUrl: String,
     @Value("\${syfotilgangskontroll.client.id}") private val syfotilgangskontrollClientId: String,
     @Qualifier("default") private val restTemplate: RestTemplate,
     private val azureAdV2TokenConsumer: AzureAdV2TokenConsumer,

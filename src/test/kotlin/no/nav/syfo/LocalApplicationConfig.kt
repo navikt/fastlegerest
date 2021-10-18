@@ -2,6 +2,8 @@ package no.nav.syfo
 
 import no.nav.security.token.support.test.spring.TokenGeneratorConfiguration
 import no.nav.syfo.api.exception.RestTemplateErrorHandler
+import no.nav.syfo.consumer.ws.adresseregister.AdresseregisterConfig
+import no.nav.syfo.consumer.ws.fastlege.FastlegeInformasjonConfig
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.web.client.RestTemplateBuilder
 import org.springframework.context.annotation.*
@@ -12,6 +14,8 @@ import java.util.*
 @Configuration
 @EnableAspectJAutoProxy
 @Import(
+    AdresseregisterConfig::class,
+    FastlegeInformasjonConfig::class,
     TokenGeneratorConfiguration::class
 )
 @Profile("local")

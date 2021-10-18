@@ -28,6 +28,7 @@ class SyfoPartnerInfoConsumer(
                 entity(),
                 object : ParameterizedTypeReference<List<PartnerInfoResponse>>() {}
             )
+            LOG.info("Got response from syfopartnerinfo ")
             metrikk.countEvent(CALL_SYFOPARTNERINFO_BEHANDLER_SUCCESS)
             return response.body ?: emptyList()
         } catch (e: RestClientResponseException) {
@@ -47,7 +48,7 @@ class SyfoPartnerInfoConsumer(
 
     companion object {
         private val LOG = LoggerFactory.getLogger(SyfoPartnerInfoConsumer::class.java)
-        private const val CALL_SYFOPARTNERINFO_BEHANDLER_SUCCESS = "call_syfopartnerinfo_behandler_success"
+        private const val CALL_SYFOPARTNERINFO_BEHANDLER_SUCCESS = "call_azuread_token_system_success"
     }
 
 }
