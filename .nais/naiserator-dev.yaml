@@ -74,14 +74,22 @@ spec:
       value: '443'
     - name: APPDYNAMICS_CONTROLLER_SSL_ENABLED
       value: 'true'
+    - name: SECURITYTOKENSERVICE_URL
+      value: https://sts-q1.preprod.local/SecurityTokenServiceProvider/
+    - name: EKSTERN_HELSE_FASTLEGEINFORMASJON_URL
+      value: https://pep-gw-q4.oera-q.local:9443/ekstern/helse/fastlegeinformasjon
+    - name: EKSTERN_HELSE_ADRESSEREGISTERET_V1_URL
+      value: https://pep-gw-q4.oera-q.local:9443/ekstern/helse/adresseregisteret/v1
+    - name: PARTNER_WS_URL
+      value: https://wasapp-q1.adeo.no/emottak-partnerweb/partnerService/
+    - name: TILGANGSKONTROLLAPI_URL
+      value: https://syfo-tilgangskontroll.nais.preprod.local/syfo-tilgangskontroll/api/tilgang
+    - name: SYFOTILGANGSKONTROLL_CLIENT_ID
+      value: "dev-fss.teamsykefravr.syfo-tilgangskontroll"
     - name: NO_NAV_SECURITY_JWT_ISSUER_STS_DISCOVERYURL
       value: https://security-token-service.nais.preprod.local/rest/v1/sts/.well-known/openid-configuration
     - name: NO_NAV_SECURITY_JWT_ISSUER_STS_ACCEPTEDAUDIENCE
       value: srvsyfooppfolgings
-    - name: SYFOTILGANGSKONTROLL_CLIENT_ID
-      value: "dev-fss.teamsykefravr.syfo-tilgangskontroll"
-    - name: SYFOTILGANGSKONTROLL_URL
-      value: https://syfo-tilgangskontroll.nais.preprod.local/syfo-tilgangskontroll/api/tilgang
     - name: SYFOPARTNERINFO_CLIENT_ID
       value: "dev-fss.teamsykefravr.syfopartnerinfo"
     - name: SYFOPARTNERINFO_URL
@@ -94,7 +102,3 @@ spec:
       value: dev-gcp.teamsykefravr.isdialogmelding
     - name: ISDIALOGMELDING_URL
       value: https://isdialogmelding.dev.intern.nav.no
-    - name: ISPROXY_CLIENT_ID
-      value: dev-fss.teamsykefravr.isproxy
-    - name: ISPROXY_URL
-      value: https://isproxy.dev.intern.nav.no

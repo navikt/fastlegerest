@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GetPatientGPDetailsResponse xmlns="http://schemas.nhn.no/reg/flr">
+    <GetPatientGPDetailsResult xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <BeginCode xmlns:a="http://register.nhn.no/Common">
+            <a:Active>true</a:Active>
+            <a:CodeText>Ordin&#230;rt bytte</a:CodeText>
+            <a:CodeValue>OTOB</a:CodeValue>
+            <a:OID>7777</a:OID>
+            <a:SimpleType>flrv2_beginreason</a:SimpleType>
+        </BeginCode>
+        <DoctorCycles>
+            <GPOnContractAssociation>
+                <GP>
+                    <DateOfBirth>1981-02-25T00:00:00</DateOfBirth>
+                    <DateOfDeath i:nil="true"/>
+                    <FirstName>TESTNAVN</FirstName>
+                    <LastName>TESTTERNAVN</LastName>
+                    <MiddleName>MELLOMNAVN</MiddleName>
+                    <NIN>99999900000</NIN>
+                    <PhysicalAddresses i:nil="true" xmlns:a="http://register.nhn.no/Common"/>
+                    <Sex xmlns:a="http://register.nhn.no/Common">
+                        <a:Active>true</a:Active>
+                        <a:CodeText>Kvinne</a:CodeText>
+                        <a:CodeValue>2</a:CodeValue>
+                        <a:OID>1234</a:OID>
+                        <a:SimpleType>kjonn</a:SimpleType>
+                    </Sex>
+                    <Status i:nil="true" xmlns:a="http://register.nhn.no/Common"/>
+                </GP>
+                <GPContract i:nil="true"/>
+                <GPContractId>9999</GPContractId>
+                <HprNumber>9900123</HprNumber>
+                <Id>2727</Id>
+                <Relationship xmlns:a="http://register.nhn.no/Common">
+                    <a:Active>true</a:Active>
+                    <a:CodeText>Fastlege</a:CodeText>
+                    <a:CodeValue>LPFL</a:CodeValue>
+                    <a:OID>4321</a:OID>
+                    <a:SimpleType>flrv2_relationship</a:SimpleType>
+                </Relationship>
+                <SubstituteForHprNumber i:nil="true"/>
+                <UpdatedOn>2016-06-02T03:42:27.65</UpdatedOn>
+                <Valid xmlns:a="http://schemas.nhn.no/reg/Common/en">
+                    <a:From>2015-03-01T00:00:00</a:From>
+                    <a:To>9999-12-31T00:00:00</a:To>
+                </Valid>
+                <WorkingOnDays xmlns:a="http://schemas.datacontract.org/2004/07/System"/>
+                <WorkingPercentage i:nil="true"/>
+            </GPOnContractAssociation>
+        </DoctorCycles>
+        <EndCode i:nil="true" xmlns:a="http://register.nhn.no/Common"/>
+        <GPContract>
+            <AgreementDate>2015-02-04T00:00:00</AgreementDate>
+            <CoopMunicipalities xmlns:a="http://register.nhn.no/Common"/>
+            <DoctorCycles i:nil="true"/>
+            <EndReason i:nil="true" xmlns:a="http://register.nhn.no/Common"/>
+            <GPOffice>
+                <Children i:nil="true" xmlns="http://register.nhn.no/Corporate"/>
+                <DisplayName i:nil="true" xmlns="http://register.nhn.no/Corporate"/>
+                <ElectronicAddresses xmlns:a="http://register.nhn.no/Common"
+                                     xmlns="http://register.nhn.no/Corporate">
+                    <a:ElectronicAddress>
+                        <a:Address>00099911</a:Address>
+                        <a:Inherited>false</a:Inherited>
+                        <a:LastChanged>2016-05-26T15:50:30.823</a:LastChanged>
+                        <a:Type>
+                            <a:Active>true</a:Active>
+                            <a:CodeText>Telefonnummer</a:CodeText>
+                            <a:CodeValue>E_TLF</a:CodeValue>
+                            <a:OID>9876</a:OID>
+                            <a:SimpleType>type_adressekomponeneter</a:SimpleType>
+                        </a:Type>
+                        <a:TypeCodeValue>E_TLF</a:TypeCodeValue>
+                    </a:ElectronicAddress>
+                    <a:ElectronicAddress>
+                        <a:Address>00099911</a:Address>
+                        <a:Inherited>false</a:Inherited>
+                        <a:LastChanged>2016-05-26T15:50:30.823</a:LastChanged>
+                        <a:Type>
+                            <a:Active>true</a:Active>
+                            <a:CodeText>Sentralbordnummer</a:CodeText>
+                            <a:CodeValue>E_CEN</a:CodeValue>
+                            <a:OID>9876</a:OID>
+                            <a:SimpleType>type_adressekomponeneter</a:SimpleType>
+                        </a:Type>
+                        <a:TypeCodeValue>E_CEN</a:TypeCodeValue>
+                    </a:ElectronicAddress>
+                    <a:ElectronicAddress>
+                        <a:Address>
+                            ldap://ldap.buypass.no/dc=Buypass,dc=NO,CN=Buypass%20Class%203%20CA%203?usercertificate;binary?sub?(|(certificateSerialNumber=10173840228897053319246000)(certificateSerialNumber=10173852715972120201280709))
+                        </a:Address>
+                        <a:Inherited>false</a:Inherited>
+                        <a:LastChanged>2016-05-26T15:50:30.823</a:LastChanged>
+                        <a:Type>
+                            <a:Active>true</a:Active>
+                            <a:CodeText>Digital sertifikat</a:CodeText>
+                            <a:CodeValue>E_DS</a:CodeValue>
+                            <a:OID>9876</a:OID>
+                            <a:SimpleType>type_adressekomponeneter</a:SimpleType>
+                        </a:Type>
+                        <a:TypeCodeValue>E_DS</a:TypeCodeValue>
+                    </a:ElectronicAddress>
+                    <a:ElectronicAddress>
+                        <a:Address>svensedammen@edi.nhn.no</a:Address>
+                        <a:Inherited>false</a:Inherited>
+                        <a:LastChanged>2016-05-26T15:50:30.823</a:LastChanged>
+                        <a:Type>
+                            <a:Active>true</a:Active>
+                            <a:CodeText>EDI (Standardisert elektronisk melding)</a:CodeText>
+                            <a:CodeValue>E_EDI</a:CodeValue>
+                            <a:OID>9876</a:OID>
+                            <a:SimpleType>type_adressekomponeneter</a:SimpleType>
+                        </a:Type>
+                        <a:TypeCodeValue>E_EDI</a:TypeCodeValue>
+                    </a:ElectronicAddress>
+                </ElectronicAddresses>
+                <GeographicalCoordinates i:nil="true" xmlns:a="http://register.nhn.no/Common"
+                                         xmlns="http://register.nhn.no/Corporate"/>
+                <IndustryCodes i:nil="true" xmlns:a="http://register.nhn.no/Common"
+                               xmlns="http://register.nhn.no/Corporate"/>
+                <IsGovernmentCompany i:nil="true" xmlns="http://register.nhn.no/Corporate"/>
+                <LastChanged xmlns="http://register.nhn.no/Corporate">2016-05-28T23:30:58.92</LastChanged>
+                <Municipality xmlns:a="http://register.nhn.no/Common" xmlns="http://register.nhn.no/Corporate">
+                    <a:Active>true</a:Active>
+                    <a:CodeText>DRAMMEN</a:CodeText>
+                    <a:CodeValue>602</a:CodeValue>
+                    <a:OID>3402</a:OID>
+                    <a:SimpleType>kommune</a:SimpleType>
+                </Municipality>
+                <Name xmlns="http://register.nhn.no/Corporate">TEST LEGESENTER AS</Name>
+                <OpeningHours i:nil="true" xmlns:a="http://register.nhn.no/Common"
+                              xmlns="http://register.nhn.no/Corporate"/>
+                <OrganizationNumber xmlns="http://register.nhn.no/Corporate">999000999</OrganizationNumber>
+                <ParentOrganizationName i:nil="true" xmlns="http://register.nhn.no/Corporate"/>
+                <ParentOrganizationNumber i:nil="true" xmlns="http://register.nhn.no/Corporate"/>
+                <PhysicalAddresses xmlns:a="http://register.nhn.no/Common"
+                                   xmlns="http://register.nhn.no/Corporate">
+                    <a:PhysicalAddress>
+                        <a:City>DRAMMEN</a:City>
+                        <a:Country i:nil="true"/>
+                        <a:Description/>
+                        <a:Inherited>false</a:Inherited>
+                        <a:LastChanged>2016-05-26T15:50:30.823</a:LastChanged>
+                        <a:Municipality i:nil="true"/>
+                        <a:PostalCode>3006</a:PostalCode>
+                        <a:Postbox>9123</a:Postbox>
+                        <a:StreetAddress/>
+                        <a:Type>
+                            <a:Active>true</a:Active>
+                            <a:CodeText>Postadresse</a:CodeText>
+                            <a:CodeValue>PST</a:CodeValue>
+                            <a:OID>3456</a:OID>
+                            <a:SimpleType>adressetype</a:SimpleType>
+                        </a:Type>
+                    </a:PhysicalAddress>
+                    <a:PhysicalAddress>
+                        <a:City>DRAMMEN</a:City>
+                        <a:Country i:nil="true"/>
+                        <a:Description/>
+                        <a:Inherited>false</a:Inherited>
+                        <a:LastChanged>2016-05-26T15:50:30.823</a:LastChanged>
+                        <a:Municipality i:nil="true"/>
+                        <a:PostalCode>3032</a:PostalCode>
+                        <a:Postbox/>
+                        <a:StreetAddress>Testgata 3</a:StreetAddress>
+                        <a:Type>
+                            <a:Active>true</a:Active>
+                            <a:CodeText>Bes&#248;ksadresse</a:CodeText>
+                            <a:CodeValue>RES</a:CodeValue>
+                            <a:OID>3456</a:OID>
+                            <a:SimpleType>adressetype</a:SimpleType>
+                        </a:Type>
+                    </a:PhysicalAddress>
+                </PhysicalAddresses>
+                <Properties xmlns:a="http://register.nhn.no/Common" xmlns="http://register.nhn.no/Corporate">
+                    <a:Code>
+                        <a:Active>true</a:Active>
+                        <a:CodeText>AS</a:CodeText>
+                        <a:CodeValue>AS</a:CodeValue>
+                        <a:OID>0</a:OID>
+                        <a:SimpleType>bof_enhetstype</a:SimpleType>
+                    </a:Code>
+                    <a:Code>
+                        <a:Active>true</a:Active>
+                        <a:CodeText>Allmenn legetjeneste</a:CodeText>
+                        <a:CodeValue>86.211</a:CodeValue>
+                        <a:OID>0</a:OID>
+                        <a:SimpleType>naringskode</a:SimpleType>
+                    </a:Code>
+                    <a:Code>
+                        <a:Active>true</a:Active>
+                        <a:CodeText>Private aksjeselskaper mv.</a:CodeText>
+                        <a:CodeValue>2100</a:CodeValue>
+                        <a:OID>0</a:OID>
+                        <a:SimpleType>institusjonell_sektorkode</a:SimpleType>
+                    </a:Code>
+                </Properties>
+                <ResponsiblePerson xmlns="http://register.nhn.no/Corporate">Responsible Test Person
+                </ResponsiblePerson>
+                <SectorCode xmlns:a="http://register.nhn.no/Common" xmlns="http://register.nhn.no/Corporate">
+                    <a:Active>true</a:Active>
+                    <a:CodeText>Private aksjeselskaper mv.</a:CodeText>
+                    <a:CodeValue>2100</a:CodeValue>
+                    <a:OID>0</a:OID>
+                    <a:SimpleType>institusjonell_sektorkode</a:SimpleType>
+                </SectorCode>
+                <UpdatedOn xmlns="http://register.nhn.no/Corporate">2016-05-28T23:30:58.92</UpdatedOn>
+                <Valid xmlns:a="http://schemas.nhn.no/reg/Common/en" xmlns="http://register.nhn.no/Corporate">
+                    <a:From>2013-05-28T00:00:00</a:From>
+                    <a:To>2113-05-28T00:00:00</a:To>
+                </Valid>
+                <District i:nil="true" xmlns:a="http://register.nhn.no/Common"/>
+                <IsGroupOffice>true</IsGroupOffice>
+            </GPOffice>
+            <GPOfficeOrganizationNumber>999000999</GPOfficeOrganizationNumber>
+            <Id>9999</Id>
+            <IsFixedSalary>false</IsFixedSalary>
+            <MaxPatients>1000</MaxPatients>
+            <Municipality xmlns:a="http://register.nhn.no/Common">
+                <a:Active>true</a:Active>
+                <a:CodeText>DRAMMEN</a:CodeText>
+                <a:CodeValue>602</a:CodeValue>
+                <a:OID>3402</a:OID>
+                <a:SimpleType>kommune</a:SimpleType>
+            </Municipality>
+            <Name i:nil="true"/>
+            <OutOfOfficeOffices i:nil="true"/>
+            <ParticipatesOnCommonList>false</ParticipatesOnCommonList>
+            <PatientList i:nil="true"/>
+            <PatientsOnWaitingList>0</PatientsOnWaitingList>
+            <PlacesAvailable i:nil="true"/>
+            <RequiresMembership i:nil="true" xmlns:a="http://register.nhn.no/Common"/>
+            <Status xmlns:a="http://register.nhn.no/Common">
+                <a:Active>true</a:Active>
+                <a:CodeText>Lukket</a:CodeText>
+                <a:CodeValue>FALU</a:CodeValue>
+                <a:OID>7777</a:OID>
+                <a:SimpleType>flrv2_statuscode</a:SimpleType>
+            </Status>
+            <UpdatedOn>2017-10-26T01:09:49.46</UpdatedOn>
+            <Valid xmlns:a="http://schemas.nhn.no/reg/Common/en">
+                <a:From>2015-03-01T00:00:00</a:From>
+                <a:To>9999-12-31T00:00:00</a:To>
+            </Valid>
+        </GPContract>
+        <GPContractId>9999</GPContractId>
+        <Id>100793403</Id>
+        <Patient i:nil="true"/>
+        <PatientNIN>12345678910</PatientNIN>
+        <Period xmlns:a="http://schemas.nhn.no/reg/Common/en">
+            <a:From>2017-04-01T00:00:00</a:From>
+            <a:To>9999-12-31T00:00:00</a:To>
+        </Period>
+        <UpdatedOn>2017-03-30T20:27:45.59</UpdatedOn>
+    </GetPatientGPDetailsResult>
+</GetPatientGPDetailsResponse>

@@ -20,21 +20,28 @@ azure:
       token:
         endpoint: "https://login.microsoftonline.com/id/oauth2/v2.0/token"
 
+ekstern.helse.fastlegeinformasjon.url: "https://fastlegeinformasjon.url"
+ekstern.helse.adresseregisteret.v1.url: "https://adresseregisteret.url"
+partner.ws.url: "https://emottak.url"
+mockEksternHelse: true
+mockAdresseregisteretV1: true
+mockPartnerEmottak: true
+
 srv.username: admin
 srv.password: admin
 
-syfotilgangskontroll.client.id: "syfotilgangskontrollId"
-syfotilgangskontroll.url: "https://syfotilgangskontrollurl"
+syfotilgangskontroll.client.id: "syfopartnerinfoId"
 syfopartnerinfo.client.id: "syfopartnerinfoId"
 syfopartnerinfo.url: "https://syfopartnerinfourl"
-isdialogmelding.identifier: "local.teamsykefravr.isdialogmelding"
 isdialogmelding.url: "https://isdialogmeldingurl"
-isproxy.client.id: "isproxyId"
-isproxy.url: "https://isproxyurl"
+isdialogmelding.identifier: "local.teamsykefravr.isdialogmelding"
+
+no.nav.modig.security.sts.url: "https://e34jbsl01816.devillo.no:8443/SecurityTokenServiceProvider/"
+isso-host.url: "https://isso-t.adeo.no/isso/oauth2"
+
 pdl.client.id: "pdl-client-id"
 pdl.url: "https://pdl.nais.no"
-
-isso-host.url: "https://isso-t.adeo.no/isso/oauth2"
+tilgangskontrollapi.url: "https://tilgangskontroll.url"
 
 environment.name: local
 
@@ -48,3 +55,5 @@ no.nav.security.jwt:
       discoveryurl: http://metadata
       accepted_audience: aud-localhost
       cookie_name: localhost-idtoken
+
+
