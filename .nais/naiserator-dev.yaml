@@ -49,6 +49,9 @@ spec:
         - application: isdialogmelding
           namespace: teamsykefravr
           cluster: dev-gcp
+        - application: syfooppfolgingsplanservice
+          namespace: team-esyfo
+          cluster: dev-fss
   azure:
     application:
       enabled: true
