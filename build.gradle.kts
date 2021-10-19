@@ -8,19 +8,12 @@ version = "1.0.0"
 
 val adal4jVersion = "1.6.4"
 val apacheHttpClientVersion = "4.5.13"
-val cxfVersion = "3.3.9"
-val javaxActivationVersion = "1.2.0"
-val javaxWsRsApiVersion = "2.1.1"
-val jaxRiVersion = "2.3.2"
 val kotlinJacksonVersion = "2.11.3"
 val logstashVersion = "6.3"
 val prometheusVersion = "1.5.5"
 val slf4jVersion = "1.7.25"
-val janinoVersion = "3.1.6"
 val swaggerVersion = "1.5.21"
 val tokenValidationSpringSupportVersion = "1.3.2"
-
-val syfotjenesterVersion = "1.2021.06.09-13.09-b3d30de9996e"
 
 plugins {
     id("java")
@@ -101,22 +94,8 @@ dependencies {
     implementation("no.nav.security:token-validation-spring:$tokenValidationSpringSupportVersion")
     implementation("com.microsoft.azure:adal4j:$adal4jVersion")
 
-    implementation( "no.nav.syfotjenester:adresseregisteretv1-tjenestespesifikasjon:$syfotjenesterVersion")
-    implementation( "no.nav.syfotjenester:fastlegeinformasjonv1-tjenestespesifikasjon:$syfotjenesterVersion")
-
-    implementation("org.apache.cxf:cxf-rt-features-logging:$cxfVersion")
-    implementation("org.apache.cxf:cxf-rt-ws-security:$cxfVersion")
-    implementation("org.apache.cxf:cxf-rt-ws-policy:$cxfVersion")
-    implementation("org.apache.cxf:cxf-rt-transports-http:$cxfVersion")
-    implementation("org.apache.cxf:cxf-rt-frontend-jaxws:$cxfVersion")
-
-    implementation("com.sun.xml.ws:jaxws-ri:$jaxRiVersion")
-    implementation("com.sun.activation:javax.activation:$javaxActivationVersion")
-
-    implementation("javax.ws.rs:javax.ws.rs-api:$javaxWsRsApiVersion")
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
     implementation("net.logstash.logback:logstash-logback-encoder:$logstashVersion")
-    implementation("org.codehaus.janino:janino:$janinoVersion")
 
     testImplementation("no.nav.security:token-validation-test-support:$tokenValidationSpringSupportVersion")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
