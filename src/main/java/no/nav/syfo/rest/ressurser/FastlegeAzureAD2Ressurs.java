@@ -9,6 +9,7 @@ import no.nav.syfo.metric.Metrikk;
 import no.nav.syfo.services.FastlegeService;
 import no.nav.syfo.services.exceptions.FastlegeIkkeFunnet;
 import no.nav.syfo.services.exceptions.HarIkkeTilgang;
+import no.nav.syfo.util.PersonIdentNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.MultiValueMap;
@@ -85,7 +86,7 @@ public class FastlegeAzureAD2Ressurs {
         if (requestedPersonIdent == null) {
             throw new IllegalArgumentException("Did not find a PersonIdent in request headers or in Request param");
         } else {
-            return requestedPersonIdent;
+            return new PersonIdentNumber(requestedPersonIdent).getValue();
         }
     }
 
