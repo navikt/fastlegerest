@@ -20,9 +20,6 @@ azure:
       token:
         endpoint: "https://login.microsoftonline.com/id/oauth2/v2.0/token"
 
-srv.username: admin
-srv.password: admin
-
 syfotilgangskontroll.client.id: "syfotilgangskontrollId"
 syfotilgangskontroll.url: "https://syfotilgangskontrollurl"
 syfopartnerinfo.client.id: "syfopartnerinfoId"

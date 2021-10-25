@@ -8,7 +8,6 @@ metadata:
 spec:
   image: {{ image }}
   port: 8080
-  team: teamsykefravr
   liveness:
     path: fastlegerest/internal/isAlive
     initialDelay: 60
@@ -35,8 +34,6 @@ spec:
     path: fastlegerest/internal/prometheus
   ingresses:
     - "https://fastlegerest.dev.intern.nav.no"
-    - "https://fastlegerest.dev-fss-pub.nais.io"
-    - "https://fastlegerest.nais.preprod.local"
   accessPolicy:
     inbound:
       rules:
@@ -52,6 +49,15 @@ spec:
         - application: syfooppfolgingsplanservice
           namespace: team-esyfo
           cluster: dev-fss
+    outbound:
+      external:
+        - host: "login.microsoftonline.com"
+        - host: "syfo-tilgangskontroll.dev-fss-pub.nais.io"
+        - host: "syfopartnerinfo.dev-fss-pub.nais.io"
+        - host: "isproxy.dev-fss-pub.nais.io"
+        - host: "pdl-api.dev-fss-pub.nais.io"
+      rules:
+        - application: isdialogmelding
   azure:
     application:
       enabled: true
@@ -61,38 +67,21 @@ spec:
       claims:
         extra:
           - "NAVident"
-  vault:
-    enabled: true
-    paths:
-      - kvPath: "/serviceuser/data/dev/srvfastlegerest"
-        mountPath: "/secrets/serviceuser/fastlegerest"
-      - kvPath: "/kv/preprod/fss/fastlegerest/default"
-        mountPath: "/secrets/vault"
   envFrom:
     - configmap: loginservice-idporten
   env:
-    - name: APPDYNAMICS_CONTROLLER_HOST_NAME
-      value: appdynamics.adeo.no
-    - name: APPDYNAMICS_CONTROLLER_PORT
-      value: '443'
-    - name: APPDYNAMICS_CONTROLLER_SSL_ENABLED
-      value: 'true'
-    - name: NO_NAV_SECURITY_JWT_ISSUER_STS_DISCOVERYURL
-      value: https://security-token-service.nais.preprod.local/rest/v1/sts/.well-known/openid-configuration
-    - name: NO_NAV_SECURITY_JWT_ISSUER_STS_ACCEPTEDAUDIENCE
-      value: srvsyfooppfolgings
     - name: SYFOTILGANGSKONTROLL_CLIENT_ID
       value: "dev-fss.teamsykefravr.syfo-tilgangskontroll"
     - name: SYFOTILGANGSKONTROLL_URL
-      value: https://syfo-tilgangskontroll.nais.preprod.local/syfo-tilgangskontroll/api/tilgang
+      value: https://syfo-tilgangskontroll.dev-fss-pub.nais.io/syfo-tilgangskontroll/api/tilgang
     - name: SYFOPARTNERINFO_CLIENT_ID
       value: "dev-fss.teamsykefravr.syfopartnerinfo"
     - name: SYFOPARTNERINFO_URL
-      value: "https://syfopartnerinfo.nais.preprod.local"
+      value: "https://syfopartnerinfo.dev-fss-pub.nais.io"
     - name: PDL_CLIENT_ID
       value: dev-fss.pdl.pdl-api
     - name: PDL_URL
-      value: https://pdl-api.dev.intern.nav.no/graphql
+      value: https://pdl-api.dev-fss-pub.nais.io/graphql
     - name: ISDIALOGMELDING_IDENTIFIER
       value: dev-gcp.teamsykefravr.isdialogmelding
     - name: ISDIALOGMELDING_URL
@@ -100,4 +89,4 @@ spec:
     - name: ISPROXY_CLIENT_ID
       value: dev-fss.teamsykefravr.isproxy
     - name: ISPROXY_URL
-      value: https://isproxy.dev.intern.nav.no
+      value: https://isproxy.dev-fss-pub.nais.io

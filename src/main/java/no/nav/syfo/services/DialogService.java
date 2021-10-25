@@ -26,7 +26,7 @@ public class DialogService {
     private final FastlegeService fastlegeService;
     private final Metrikk metrikk;
     private final PartnerService partnerService;
-    private final RestTemplate restTemplateWithProxy;
+    private final RestTemplate restTemplate;
     private final String isdialogmeldingIdentifier;
     private final String isdialogmeldingUrl;
 
@@ -36,14 +36,14 @@ public class DialogService {
             final FastlegeService fastlegeService,
             final Metrikk metrikk,
             final PartnerService partnerService,
-            final @Qualifier("restTemplateWithProxy") RestTemplate restTemplateWithProxy,
+            final @Qualifier("default") RestTemplate restTemplate,
             final @Value("${isdialogmelding.identifier}") String isdialogmeldingIdentifier,
             final @Value("${isdialogmelding.url}") String isdialogmeldingUrl) {
         this.azureAdV2TokenConsumer = azureAdV2TokenConsumer;
         this.fastlegeService = fastlegeService;
         this.metrikk = metrikk;
         this.partnerService = partnerService;
-        this.restTemplateWithProxy = restTemplateWithProxy;
+        this.restTemplate = restTemplate;
         this.isdialogmeldingIdentifier = isdialogmeldingIdentifier;
         this.isdialogmeldingUrl = isdialogmeldingUrl;
     }
@@ -60,7 +60,7 @@ public class DialogService {
 
 
     private void send(RSHodemelding hodemelding) {
-        ResponseEntity<String> response = restTemplateWithProxy.exchange(
+        ResponseEntity<String> response = restTemplate.exchange(
                 isdialogmeldingUrl + "/api/v1/send/oppfolgingsplan",
                 HttpMethod.POST,
                 new HttpEntity<>(hodemelding, lagHeaders()),

@@ -36,14 +36,6 @@ public class DialogRessurs {
         sendPlan(oppfolgingsplan);
     }
 
-    @PostMapping(path = "/api/dialogmelding/v1/oppfolgingsplan/lps", consumes = APPLICATION_JSON_VALUE)
-    @ProtectedWithClaims(issuer = STS)
-    public void mottaOppfolgingsplanLPS(
-            @RequestBody @Valid RSOppfolgingsplan oppfolgingsplan
-    ) {
-        sendPlan(oppfolgingsplan);
-    }
-
     @PostMapping(path = "/api/dialogmelding/v2/oppfolgingsplan/lps", consumes = APPLICATION_JSON_VALUE)
     @ProtectedWithClaims(issuer = VEILEDER_AZURE_V2)
     public void mottaOppfolgingsplanLPSAzureAd(
