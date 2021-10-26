@@ -8,7 +8,6 @@ metadata:
 spec:
   image: {{ image }}
   port: 8080
-  team: teamsykefravr
   liveness:
     path: fastlegerest/internal/isAlive
     initialDelay: 60
@@ -52,6 +51,15 @@ spec:
         - application: syfooppfolgingsplanservice
           namespace: team-esyfo
           cluster: prod-fss
+    outbound:
+      external:
+        - host: "login.microsoftonline.com"
+        - host: "syfo-tilgangskontroll.prod-fss-pub.nais.io"
+        - host: "syfopartnerinfo.prod-fss-pub.nais.io"
+        - host: "isproxy.prod-fss-pub.nais.io"
+        - host: "pdl-api.prod-fss-pub.nais.io"
+      rules:
+        - application: isdialogmelding
   azure:
     application:
       enabled: true
@@ -61,38 +69,21 @@ spec:
       claims:
         extra:
           - "NAVident"
-  vault:
-    enabled: true
-    paths:
-      - kvPath: "/serviceuser/data/prod/srvfastlegerest"
-        mountPath: "/secrets/serviceuser/fastlegerest"
-      - kvPath: "/kv/prod/fss/fastlegerest/default"
-        mountPath: "/secrets/vault"
   envFrom:
     - configmap: loginservice-idporten
   env:
-    - name: APPDYNAMICS_CONTROLLER_HOST_NAME
-      value: appdynamics.adeo.no
-    - name: APPDYNAMICS_CONTROLLER_PORT
-      value: '443'
-    - name: APPDYNAMICS_CONTROLLER_SSL_ENABLED
-      value: 'true'
-    - name: NO_NAV_SECURITY_JWT_ISSUER_STS_DISCOVERYURL
-      value: https://security-token-service.nais.adeo.no/rest/v1/sts/.well-known/openid-configuration
-    - name: NO_NAV_SECURITY_JWT_ISSUER_STS_ACCEPTEDAUDIENCE
-      value: srvsyfooppfolgings
     - name: SYFOTILGANGSKONTROLL_CLIENT_ID
       value: "prod-fss.teamsykefravr.syfo-tilgangskontroll"
     - name: SYFOTILGANGSKONTROLL_URL
-      value: https://syfo-tilgangskontroll.nais.adeo.no/syfo-tilgangskontroll/api/tilgang
+      value: https://syfo-tilgangskontroll.prod-fss-pub.nais.io/syfo-tilgangskontroll/api/tilgang
     - name: SYFOPARTNERINFO_CLIENT_ID
       value: "prod-fss.teamsykefravr.syfopartnerinfo"
     - name: SYFOPARTNERINFO_URL
-      value: "https://syfopartnerinfo.nais.adeo.no"
+      value: "https://syfopartnerinfo.prod-fss-pub.nais.io"
     - name: PDL_CLIENT_ID
       value: prod-fss.pdl.pdl-api
     - name: PDL_URL
-      value: https://pdl-api.intern.nav.no/graphql
+      value: https://pdl-api.prod-fss-pub.nais.io/graphql
     - name: ISDIALOGMELDING_IDENTIFIER
       value: prod-gcp.teamsykefravr.isdialogmelding
     - name: ISDIALOGMELDING_URL
@@ -100,4 +91,4 @@ spec:
     - name: ISPROXY_CLIENT_ID
       value: prod-fss.teamsykefravr.isproxy
     - name: ISPROXY_URL
-      value: https://isproxy.intern.nav.no
+      value: https://isproxy.prod-fss-pub.nais.io

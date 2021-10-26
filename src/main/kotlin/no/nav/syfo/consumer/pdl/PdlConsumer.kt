@@ -21,7 +21,7 @@ class PdlConsumer(
     private val azureAdV2TokenConsumer: AzureAdV2TokenConsumer,
     @Value("\${pdl.client.id}") private val pdlClientId: String,
     @Value("\${pdl.url}") private val pdlUrl: String,
-    @Qualifier("restTemplateWithProxy") private val restTemplateWithProxy: RestTemplate
+    @Qualifier("default") private val restTemplate: RestTemplate
 ) {
     fun person(personIdentNumber: String): PdlHentPerson? {
         metric.countEvent("call_pdl")
@@ -29,7 +29,7 @@ class PdlConsumer(
         val query = this::class.java.getResource("/pdl/hentPerson.graphql").readText().replace("[\n\r]", "")
         val entity = createRequestEntity(PdlRequest(query, Variables(personIdentNumber)))
         try {
-            val pdlPerson = restTemplateWithProxy.exchange(
+            val pdlPerson = restTemplate.exchange(
                 pdlUrl,
                 HttpMethod.POST,
                 entity,

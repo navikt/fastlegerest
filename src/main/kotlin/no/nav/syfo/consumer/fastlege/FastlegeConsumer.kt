@@ -18,13 +18,13 @@ import org.springframework.web.client.RestTemplate
 class FastlegeConsumer(
     private val azureAdV2TokenConsumer: AzureAdV2TokenConsumer,
     private val metrikk: Metrikk,
-    @Qualifier("restTemplateWithProxy") private val restTemplateWithProxy: RestTemplate,
+    @Qualifier("default") private val restTemplate: RestTemplate,
     @Value("\${isproxy.client.id}") private val fastlegeClientId: String,
     @Value("\${isproxy.url}") private val fastlegeUrl: String
 ) {
     fun getFastleger(fnr: String): List<Fastlege> {
         try {
-            val response = restTemplateWithProxy.exchange(
+            val response = restTemplate.exchange(
                 "$fastlegeUrl/api/v1/fastlege",
                 HttpMethod.GET,
                 entity(fnr),
@@ -41,7 +41,7 @@ class FastlegeConsumer(
 
     fun getPraksisInfo(herId: Int): PraksisInfo? {
         try {
-            val response = restTemplateWithProxy.exchange(
+            val response = restTemplate.exchange(
                 "$fastlegeUrl/api/v1/fastlegepraksis/$herId",
                 HttpMethod.GET,
                 entity(null),
