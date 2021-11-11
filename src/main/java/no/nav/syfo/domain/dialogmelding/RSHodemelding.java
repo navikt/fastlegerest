@@ -37,7 +37,7 @@ public class RSHodemelding {
     private RSBehandler tilBehandler(Fastlege fastlege) {
         return new RSBehandler(
                 fastlege.fnr(),
-                fastlege.helsepersonellregisterId(),
+                Integer.parseInt(fastlege.helsepersonellregisterId()),
                 fastlege.fornavn(),
                 fastlege.mellomnavn(),
                 fastlege.etternavn());
