@@ -15,7 +15,7 @@ public class Fastlege {
     public String fnr;
     public Integer herId;
     public Integer foreldreEnhetHerId;
-    public String helsepersonellregisterId;
+    public Integer helsepersonellregisterId;
     public Pasient pasient;
     public Fastlegekontor fastlegekontor;
     public Pasientforhold pasientforhold;
