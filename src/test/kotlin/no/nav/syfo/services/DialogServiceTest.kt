@@ -129,7 +129,7 @@ class DialogServiceTest {
             .etternavn("Quinn")
             .fnr("10101012345")
             .herId(HER_ID)
-            .helsepersonellregisterId("123")
+            .helsepersonellregisterId(123)
             .fastlegekontor(
                 Fastlegekontor()
                     .navn("Pontypandy Legekontor")
