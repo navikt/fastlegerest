@@ -20,7 +20,7 @@ class SyfoPartnerInfoConsumer(
     @Value("\${syfopartnerinfo.client.id}") private val syfopartnerinfoClientId: String,
     @Value("\${syfopartnerinfo.url}") private val syfopartnerinfoUrl: String
 ) {
-    fun getPartnerId(herId: String): List<PartnerInfoResponse> {
+    fun getPartnerId(herId: Int): List<PartnerInfoResponse> {
         try {
             val response = restTemplate.exchange(
                 "$syfopartnerinfoUrl/api/v2/behandler?herid=$herId",

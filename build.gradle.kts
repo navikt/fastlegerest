@@ -16,8 +16,7 @@ val swaggerVersion = "1.5.21"
 val tokenValidationSpringSupportVersion = "1.3.2"
 
 plugins {
-    id("java")
-    kotlin("jvm") version "1.4.21"
+    kotlin("jvm") version "1.5.31"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.4.21"
     id("com.github.johnrengelman.shadow") version "6.1.0"
     id("org.springframework.boot") version "2.3.12.RELEASE"
@@ -39,9 +38,7 @@ allOpen {
     annotation("org.springframework.context.annotation.Configuration")
     annotation("org.springframework.stereotype.Service")
     annotation("org.springframework.stereotype.Component")
-    annotation("lombok.extern.slf4j.Slf4j")
     annotation("org.springframework.boot.autoconfigure.SpringBootApplication")
-    annotation("lombok.AllArgsConstructor")
 }
 
 val githubUser: String by project
@@ -86,9 +83,6 @@ dependencies {
 
     implementation("org.apache.httpcomponents:httpclient:$apacheHttpClientVersion")
 
-    implementation("org.projectlombok:lombok")
-    annotationProcessor("org.projectlombok:lombok")
-
     implementation("io.micrometer:micrometer-registry-prometheus:$prometheusVersion")
 
     implementation("no.nav.security:token-validation-spring:$tokenValidationSpringSupportVersion")
@@ -102,10 +96,6 @@ dependencies {
 }
 
 tasks {
-    withType<JavaCompile> {
-        options.encoding = "UTF-8"
-    }
-
     withType<Jar> {
         manifest.attributes["Main-Class"] = "no.nav.syfo.ApplicationKt"
     }

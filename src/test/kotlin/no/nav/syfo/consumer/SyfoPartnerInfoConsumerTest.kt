@@ -67,7 +67,7 @@ class SyfoPartnerInfoConsumerTest {
 
     @Test
     fun empty() {
-        syfoPartnerInfoConsumer.getPartnerId(HER_ID.toString())
+        syfoPartnerInfoConsumer.getPartnerId(HER_ID)
     }
 
     @After

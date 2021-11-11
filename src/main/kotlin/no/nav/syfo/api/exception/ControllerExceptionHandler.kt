@@ -1,8 +1,10 @@
 package no.nav.syfo.api.exception
 
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException
+import no.nav.syfo.dialogmelding.exception.InnsendingFeiletException
+import no.nav.syfo.dialogmelding.exception.PartnerinformasjonIkkeFunnet
+import no.nav.syfo.fastlege.expection.*
 import no.nav.syfo.metric.Metrikk
-import no.nav.syfo.services.exceptions.*
 import org.slf4j.LoggerFactory
 import org.springframework.http.*
 import org.springframework.web.bind.annotation.ControllerAdvice

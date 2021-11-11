@@ -1,7 +1,6 @@
 package no.nav.syfo.consumer.fastlege
 
 import no.nav.syfo.consumer.azuread.v2.AzureAdV2TokenConsumer
-import no.nav.syfo.domain.Fastlege
 import no.nav.syfo.metric.Metrikk
 import no.nav.syfo.util.NAV_PERSONIDENT_HEADER
 import org.slf4j.LoggerFactory
@@ -22,13 +21,13 @@ class FastlegeConsumer(
     @Value("\${isproxy.client.id}") private val fastlegeClientId: String,
     @Value("\${isproxy.url}") private val fastlegeUrl: String
 ) {
-    fun getFastleger(fnr: String): List<Fastlege> {
+    fun getFastleger(fnr: String): List<FastlegeProxyDTO> {
         try {
             val response = restTemplate.exchange(
                 "$fastlegeUrl/api/v1/fastlege",
                 HttpMethod.GET,
                 entity(fnr),
-                object : ParameterizedTypeReference<List<Fastlege>>() {}
+                object : ParameterizedTypeReference<List<FastlegeProxyDTO>>() {}
             )
             metrikk.countEvent(CALL_FASTLEGE_SUCCESS)
             return response.body ?: emptyList()

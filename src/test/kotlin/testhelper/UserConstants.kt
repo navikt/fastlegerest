@@ -1,12 +1,9 @@
 package testhelper
 
 object UserConstants {
-    @JvmStatic
-    val ARBEIDSTAKER_NAME_FIRST = "First"
-    @JvmStatic
-    val ARBEIDSTAKER_NAME_MIDDLE = "Middle"
-    @JvmStatic
-    val ARBEIDSTAKER_NAME_LAST = "Last"
+    const val ARBEIDSTAKER_NAME_FIRST = "First"
+    const val ARBEIDSTAKER_NAME_MIDDLE = "Middle"
+    const val ARBEIDSTAKER_NAME_LAST = "Last"
 
     const val VEILEDER_ID = "Z999999"
 }
