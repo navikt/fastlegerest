@@ -1,8 +1,8 @@
 package no.nav.syfo.fastlege.domain
 
 data class Pasient(
-    val fnr: String? = null,
-    val fornavn: String? = null,
+    val fnr: String,
+    val fornavn: String,
     val mellomnavn: String? = null,
-    val etternavn: String? = null,
+    val etternavn: String,
 )
