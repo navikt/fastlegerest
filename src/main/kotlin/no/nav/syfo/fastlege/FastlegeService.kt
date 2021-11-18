@@ -29,14 +29,14 @@ class FastlegeService @Inject constructor(
     fun hentBrukersFastleger(brukersFnr: String): List<Fastlege> {
         return try {
             val maybePerson = pdlConsumer.person(brukersFnr)
-            val pasient = toPasient(maybePerson)
+            val pasient = toPasient(brukersFnr, maybePerson)
             fastlegeConsumer.getFastleger(brukersFnr).map { fastlege ->
                 fastlege.toFastlege(
                     pasient = Pasient(
                         fnr = brukersFnr,
-                        fornavn = pasient.fornavn,
-                        mellomnavn = pasient.mellomnavn,
-                        etternavn = pasient.etternavn,
+                        fornavn = pasient?.fornavn ?: "",
+                        mellomnavn = pasient?.mellomnavn,
+                        etternavn = pasient?.etternavn ?: "",
                     ),
                     foreldreEnhetHerId = hentForeldreEnhetHerId(fastlege.herId),
                 )
@@ -47,16 +47,17 @@ class FastlegeService @Inject constructor(
         }
     }
 
-    private fun toPasient(maybePerson: PdlHentPerson?): Pasient {
+    private fun toPasient(fnr: String, maybePerson: PdlHentPerson?): Pasient? {
         return maybePerson?.hentPerson?.let { pdlPerson ->
             pdlPerson.navn.firstOrNull()?.let { pdlPersonNavn ->
                 Pasient(
+                    fnr = fnr,
                     fornavn = pdlPersonNavn.fornavn.lowerCapitalize(),
                     mellomnavn = pdlPersonNavn.mellomnavn?.lowerCapitalize(),
                     etternavn = pdlPersonNavn.etternavn.lowerCapitalize(),
                 )
-            } ?: Pasient()
-        } ?: Pasient()
+            }
+        }
     }
 
     private fun hentForeldreEnhetHerId(fastlegeHerId: Int?): Int? {
