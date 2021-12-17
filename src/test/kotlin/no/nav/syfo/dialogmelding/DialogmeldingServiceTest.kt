@@ -10,8 +10,8 @@ import no.nav.syfo.dialogmelding.api.RSOppfolgingsplan
 import no.nav.syfo.dialogmelding.domain.RSHodemelding
 import no.nav.syfo.dialogmelding.domain.createRSHodemelding
 import no.nav.syfo.fastlege.domain.*
-import org.junit.*
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.*
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.*
@@ -20,7 +20,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.context.junit4.SpringRunner
+import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.client.ExpectedCount.once
 import org.springframework.test.web.client.MockRestServiceServer
 import org.springframework.test.web.client.match.MockRestRequestMatchers
@@ -33,7 +33,7 @@ import testhelper.generatePdlHentPerson
 import java.time.LocalDate
 import javax.inject.Inject
 
-@RunWith(SpringRunner::class)
+@ExtendWith(SpringExtension::class)
 @SpringBootTest(classes = [LocalApplication::class])
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class DialogmeldingServiceTest {
@@ -62,7 +62,7 @@ class DialogmeldingServiceTest {
     lateinit var fastlegeConsumer: FastlegeConsumer
 
 
-    @Before
+    @BeforeEach
     fun setUp() {
         mockRestServiceServer = MockRestServiceServer
             .bindTo(defaultRestTemplate)
@@ -78,7 +78,7 @@ class DialogmeldingServiceTest {
         mockIsdialogmelding()
     }
 
-    @After
+    @AfterEach
     fun cleanUp() {
         mockRestServiceServer.reset()
     }

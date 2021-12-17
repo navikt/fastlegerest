@@ -2,14 +2,14 @@ package no.nav.syfo.api.exception
 
 import no.nav.syfo.LocalApplication
 import org.assertj.core.api.Assertions
-import org.junit.*
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.*
+import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.context.junit4.SpringRunner
+import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.client.ExpectedCount
 import org.springframework.test.web.client.MockRestServiceServer
 import org.springframework.test.web.client.match.MockRestRequestMatchers
@@ -17,7 +17,7 @@ import org.springframework.test.web.client.response.MockRestResponseCreators
 import org.springframework.web.client.RestTemplate
 import javax.inject.Inject
 
-@RunWith(SpringRunner::class)
+@ExtendWith(SpringExtension::class)
 @SpringBootTest(classes = [LocalApplication::class])
 @DirtiesContext
 class RestTemplateErrorHandlerTest {
@@ -27,12 +27,12 @@ class RestTemplateErrorHandlerTest {
 
     private lateinit var mockRestServiceServer: MockRestServiceServer
 
-    @Before
+    @BeforeEach
     fun setUp() {
         mockRestServiceServer = MockRestServiceServer.bindTo(restTemplate).build()
     }
 
-    @After
+    @AfterEach
     fun tearDown() {
         mockRestServiceServer.reset()
     }
@@ -55,7 +55,7 @@ class RestTemplateErrorHandlerTest {
         } catch (e: RuntimeException) {
             Assertions.assertThat(e.message).isEqualTo("Fikk en server-error ved $method-kall til $url")
         } catch (e: Exception) {
-            Assert.fail("Got the wrong type of exception")
+            Assertions.fail("Got the wrong type of exception")
         }
     }
 
@@ -69,7 +69,7 @@ class RestTemplateErrorHandlerTest {
         } catch (e: RuntimeException) {
             Assertions.assertThat(e.message).isEqualTo("Noe gikk galt ved $method-kall til $url")
         } catch (e: Exception) {
-            Assert.fail("Got the wrong type of exception")
+            Assertions.fail("Got the wrong type of exception")
         }
     }
 
@@ -92,7 +92,7 @@ class RestTemplateErrorHandlerTest {
         } catch (e: RuntimeException) {
             Assertions.assertThat(e.message).isEqualTo("Fikk en server-error ved $method-kall til $urlWithHiddenFnr")
         } catch (e: Exception) {
-            Assert.fail("Got the wrong type of exception")
+            Assertions.fail("Got the wrong type of exception")
         }
     }
 
@@ -107,7 +107,7 @@ class RestTemplateErrorHandlerTest {
         } catch (e: RuntimeException) {
             Assertions.assertThat(e.message).isEqualTo("Fikk en server-error ved $method-kall til $urlWithHiddenFnr")
         } catch (e: Exception) {
-            Assert.fail("Got the wrong type of exception")
+            Assertions.fail("Got the wrong type of exception")
         }
     }
 
