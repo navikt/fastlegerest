@@ -3,20 +3,18 @@ package no.nav.syfo.consumer
 import com.fasterxml.jackson.databind.ObjectMapper
 import no.nav.syfo.LocalApplication
 import no.nav.syfo.consumer.azuread.v2.AzureAdV2TokenConsumer
-import no.nav.syfo.consumer.azuread.v2.AzureAdV2TokenResponse
 import no.nav.syfo.consumer.syfopartnerinfo.PartnerInfoResponse
 import no.nav.syfo.consumer.syfopartnerinfo.SyfoPartnerInfoConsumer
 import no.nav.syfo.metric.Metrikk
-import org.junit.*
-import org.junit.runner.RunWith
-import org.mockito.*
+import org.junit.jupiter.api.*
+import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.*
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.context.junit4.SpringRunner
+import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.client.ExpectedCount
 import org.springframework.test.web.client.MockRestServiceServer
 import org.springframework.test.web.client.match.MockRestRequestMatchers
@@ -24,7 +22,7 @@ import org.springframework.test.web.client.response.MockRestResponseCreators
 import org.springframework.web.client.RestTemplate
 import javax.inject.Inject
 
-@RunWith(SpringRunner::class)
+@ExtendWith(SpringExtension::class)
 @SpringBootTest(classes = [LocalApplication::class])
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class SyfoPartnerInfoConsumerTest {
@@ -48,7 +46,7 @@ class SyfoPartnerInfoConsumerTest {
     @Qualifier(value = "default")
     lateinit var restTemplate: RestTemplate
 
-    @Before
+    @BeforeEach
     fun setUp() {
         mockRestServiceServer = MockRestServiceServer
             .bindTo(restTemplate)
@@ -70,7 +68,7 @@ class SyfoPartnerInfoConsumerTest {
         syfoPartnerInfoConsumer.getPartnerId(HER_ID)
     }
 
-    @After
+    @AfterEach
     fun cleanUp() {
         mockRestServiceServer.reset()
     }
@@ -81,7 +79,12 @@ class SyfoPartnerInfoConsumerTest {
 
         mockRestServiceServer.expect(ExpectedCount.manyTimes(), MockRestRequestMatchers.requestTo(url))
             .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
-            .andRespond(MockRestResponseCreators.withSuccess(objectMapper.writeValueAsString(infoResponse), MediaType.APPLICATION_JSON))
+            .andRespond(
+                MockRestResponseCreators.withSuccess(
+                    objectMapper.writeValueAsString(infoResponse),
+                    MediaType.APPLICATION_JSON
+                )
+            )
     }
 
     companion object {

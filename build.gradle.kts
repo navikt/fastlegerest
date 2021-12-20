@@ -1,4 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer
 import com.github.jengelman.gradle.plugins.shadow.transformers.PropertiesFileTransformer
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -6,32 +5,20 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 group = "no.nav.syfo"
 version = "1.0.0"
 
-val adal4jVersion = "1.6.4"
 val apacheHttpClientVersion = "4.5.13"
-val kotlinJacksonVersion = "2.11.3"
-val logstashVersion = "6.3"
-val prometheusVersion = "1.5.5"
-val slf4jVersion = "1.7.25"
+val kotlinJacksonVersion = "2.13.0"
+val logstashVersion = "7.0.1"
+val prometheusVersion = "1.8.1"
+val slf4jVersion = "1.7.32"
 val swaggerVersion = "1.5.21"
-val tokenValidationSpringSupportVersion = "1.3.2"
+val tokenValidationSpringSupportVersion = "1.3.9"
 
 plugins {
-    kotlin("jvm") version "1.5.31"
-    id("org.jetbrains.kotlin.plugin.allopen") version "1.4.21"
-    id("com.github.johnrengelman.shadow") version "6.1.0"
-    id("org.springframework.boot") version "2.3.12.RELEASE"
-    id("io.spring.dependency-management") version "1.0.10.RELEASE"
-}
-
-buildscript {
-    dependencies {
-        classpath("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
-        classpath("org.glassfish.jaxb:jaxb-runtime:2.4.0-b180830.0438")
-        classpath("com.sun.activation:javax.activation:1.2.0")
-        classpath("com.sun.xml.ws:jaxws-tools:2.3.1") {
-            exclude(group = "com.sun.xml.ws", module = "policy")
-        }
-    }
+    kotlin("jvm") version "1.6.10"
+    id("org.jetbrains.kotlin.plugin.allopen") version "1.6.10"
+    id("com.github.johnrengelman.shadow") version "7.1.1"
+    id("org.springframework.boot") version "2.4.13"
+    id("io.spring.dependency-management") version "1.0.11.RELEASE"
 }
 
 allOpen {
@@ -44,10 +31,7 @@ allOpen {
 val githubUser: String by project
 val githubPassword: String by project
 repositories {
-    mavenLocal()
     mavenCentral()
-    jcenter()
-    maven(url = "https://dl.bintray.com/kotlin/kotlinx/")
     maven {
         url = uri("https://maven.pkg.github.com/navikt/syfotjenester")
         credentials {
@@ -79,14 +63,12 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-jersey")
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("org.springframework.boot:spring-boot-starter-jta-atomikos")
-    implementation("org.springframework:spring-context-support:5.1.20.RELEASE")
 
     implementation("org.apache.httpcomponents:httpclient:$apacheHttpClientVersion")
 
     implementation("io.micrometer:micrometer-registry-prometheus:$prometheusVersion")
 
     implementation("no.nav.security:token-validation-spring:$tokenValidationSpringSupportVersion")
-    implementation("com.microsoft.azure:adal4j:$adal4jVersion")
 
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
     implementation("net.logstash.logback:logstash-logback-encoder:$logstashVersion")
@@ -111,10 +93,6 @@ tasks {
     }
 
     withType<ShadowJar> {
-        transform(ServiceFileTransformer::class.java) {
-            setPath("META-INF/cxf")
-            include("bus-extensions.txt")
-        }
         transform(PropertiesFileTransformer::class.java) {
             paths = listOf("META-INF/spring.factories")
             mergeStrategy = "append"
@@ -122,11 +100,7 @@ tasks {
         mergeServiceFiles()
     }
 
-    named<KotlinCompile>("compileKotlin") {
-        kotlinOptions.jvmTarget = "11"
-    }
-
-    named<KotlinCompile>("compileTestKotlin") {
+    withType<KotlinCompile> {
         kotlinOptions.jvmTarget = "11"
     }
 }

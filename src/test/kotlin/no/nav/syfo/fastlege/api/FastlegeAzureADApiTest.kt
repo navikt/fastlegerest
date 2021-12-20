@@ -5,19 +5,19 @@ import no.nav.syfo.consumer.tilgangskontroll.Tilgang
 import no.nav.syfo.consumer.tilgangskontroll.TilgangkontrollConsumer
 import no.nav.syfo.fastlege.FastlegeService
 import no.nav.syfo.metric.Metrikk
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.context.junit4.SpringRunner
+import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 
-@RunWith(SpringRunner::class)
+@ExtendWith(SpringExtension::class)
 @SpringBootTest(classes = [LocalApplication::class])
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class FastlegeAzureADApiTest {
