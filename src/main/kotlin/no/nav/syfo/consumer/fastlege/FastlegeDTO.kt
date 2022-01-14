@@ -1,7 +1,9 @@
 package no.nav.syfo.consumer.fastlege
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import no.nav.syfo.fastlege.domain.*
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class FastlegeProxyDTO(
     val fornavn: String,
     val mellomnavn: String,
