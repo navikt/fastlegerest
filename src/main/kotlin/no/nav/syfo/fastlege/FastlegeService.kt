@@ -20,9 +20,7 @@ class FastlegeService @Inject constructor(
 ) {
     @Cacheable(value = ["fastlege"])
     fun hentBrukersFastlege(brukersFnr: String): Fastlege? {
-        return hentBrukersFastleger(brukersFnr).firstOrNull {
-            it.isAktiv()
-        }
+        return hentBrukersFastleger(brukersFnr).aktiv()
     }
 
     @Cacheable(value = ["fastlege"])
@@ -66,10 +64,13 @@ class FastlegeService @Inject constructor(
         }
     }
 
-    private fun Fastlege.isAktiv(): Boolean {
-        return this.pasientforhold.fom.isBefore(LocalDate.now()) && this.pasientforhold.tom.isAfter(
-            LocalDate.now()
-        )
+    private fun List<Fastlege>.aktiv(): Fastlege? {
+        return this.filter { fastlege ->
+            val tomorrow = LocalDate.now().plusDays(1)
+            fastlege.gyldighet.fom.isBefore(tomorrow)
+        }.maxByOrNull { fastlege ->
+            fastlege.gyldighet.fom
+        }
     }
 
     companion object {

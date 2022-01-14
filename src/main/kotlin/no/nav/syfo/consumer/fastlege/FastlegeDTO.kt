@@ -12,7 +12,9 @@ data class FastlegeProxyDTO(
     val herId: Int?,
     val helsepersonellregisterId: Int?,
     val fastlegekontor: Fastlegekontor,
-    val pasientforhold: Pasientforhold,
+    val pasientforhold: Periode,
+    val gyldighet: Periode,
+    val relasjon: Relasjon,
 )
 
 fun FastlegeProxyDTO.toFastlege(
@@ -29,6 +31,8 @@ fun FastlegeProxyDTO.toFastlege(
     pasientforhold = this.pasientforhold,
     foreldreEnhetHerId = foreldreEnhetHerId,
     pasient = pasient,
+    gyldighet = this.gyldighet,
+    relasjon = this.relasjon,
 )
 
 

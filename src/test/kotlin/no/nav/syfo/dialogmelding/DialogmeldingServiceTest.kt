@@ -150,10 +150,18 @@ class DialogmeldingServiceTest {
             epost = "",
             orgnummer = "88888888",
         ),
-        pasientforhold = Pasientforhold(
+        pasientforhold = Periode(
             fom = LocalDate.parse("2020-06-04"),
-            tom = LocalDate.parse("9999-12-31"),
+            tom = LocalDate.MAX,
         ),
+        gyldighet = Periode(
+            fom = LocalDate.parse("2020-06-04"),
+            tom = LocalDate.MAX,
+        ),
+        relasjon = Relasjon(
+            kodeVerdi = "LPFL",
+            kodeTekst = "Fastlege",
+        )
     )
 
     private fun mockSyfopartnerinfo() {
