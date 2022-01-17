@@ -152,11 +152,11 @@ class DialogmeldingServiceTest {
         ),
         pasientforhold = Periode(
             fom = LocalDate.parse("2020-06-04"),
-            tom = LocalDate.MAX,
+            tom = LocalDate.parse("9999-12-31"),
         ),
         gyldighet = Periode(
             fom = LocalDate.parse("2020-06-04"),
-            tom = LocalDate.MAX,
+            tom = LocalDate.parse("9999-12-31"),
         ),
         relasjon = Relasjon(
             kodeVerdi = "LPFL",
