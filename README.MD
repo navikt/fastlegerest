@@ -65,3 +65,9 @@ Evt. kan variablene kan også konfigureres som miljøvariabler eller brukes i ko
 ```
 ./gradlew -PgithubUser=x-access-token -PgithubPassword=[token]
 ```
+
+## Contact
+
+### For NAV employees
+
+We are available at the Slack channel `#isyfo`.
