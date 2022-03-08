@@ -8,6 +8,7 @@ import no.nav.syfo.dialogmelding.exception.InnsendingFeiletException
 import no.nav.syfo.fastlege.FastlegeService
 import no.nav.syfo.fastlege.expection.FastlegeIkkeFunnet
 import no.nav.syfo.metric.Metrikk
+import no.nav.syfo.util.PersonIdent
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
@@ -28,7 +29,7 @@ class DialogmeldingService @Inject constructor(
 ) {
     fun sendOppfolgingsplan(oppfolgingsplan: RSOppfolgingsplan) {
         val fastlege = fastlegeService.hentBrukersFastlege(
-            brukersFnr = oppfolgingsplan.sykmeldtFnr,
+            personIdent = PersonIdent(oppfolgingsplan.sykmeldtFnr),
         ) ?: throw FastlegeIkkeFunnet()
         val partnerinformasjon = partnerService.getPartnerinformasjon(
             fastlege = fastlege,

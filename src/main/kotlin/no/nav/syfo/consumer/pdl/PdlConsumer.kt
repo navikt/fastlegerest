@@ -2,8 +2,7 @@ package no.nav.syfo.consumer.pdl
 
 import no.nav.syfo.consumer.azuread.v2.AzureAdV2TokenConsumer
 import no.nav.syfo.metric.Metrikk
-import no.nav.syfo.util.ALLE_TEMA_HEADERVERDI
-import no.nav.syfo.util.TEMA_HEADER
+import no.nav.syfo.util.*
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
@@ -23,11 +22,11 @@ class PdlConsumer(
     @Value("\${pdl.url}") private val pdlUrl: String,
     @Qualifier("default") private val restTemplate: RestTemplate
 ) {
-    fun person(personIdentNumber: String): PdlHentPerson? {
+    fun person(personIdent: PersonIdent): PdlHentPerson? {
         metric.countEvent("call_pdl")
 
         val query = this::class.java.getResource("/pdl/hentPerson.graphql").readText().replace("[\n\r]", "")
-        val entity = createRequestEntity(PdlRequest(query, Variables(personIdentNumber)))
+        val entity = createRequestEntity(PdlRequest(query, Variables(personIdent.value)))
         try {
             val pdlPerson = restTemplate.exchange(
                 pdlUrl,

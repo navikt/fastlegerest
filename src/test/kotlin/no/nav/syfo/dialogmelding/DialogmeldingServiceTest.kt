@@ -29,6 +29,7 @@ import org.springframework.web.client.RestTemplate
 import testhelper.UserConstants.ARBEIDSTAKER_NAME_FIRST
 import testhelper.UserConstants.ARBEIDSTAKER_NAME_LAST
 import testhelper.UserConstants.ARBEIDSTAKER_NAME_MIDDLE
+import testhelper.UserConstants.ARBEIDSTAKER_PERSONIDENT
 import testhelper.generatePdlHentPerson
 import java.time.LocalDate
 import javax.inject.Inject
@@ -69,9 +70,9 @@ class DialogmeldingServiceTest {
             .build()
 
         mockSyfopartnerinfo()
-        Mockito.`when`(pdlConsumer.person(ArgumentMatchers.anyString()))
+        Mockito.`when`(pdlConsumer.person(ARBEIDSTAKER_PERSONIDENT))
             .thenReturn(generatePdlHentPerson(null))
-        Mockito.`when`(fastlegeConsumer.getFastleger(ArgumentMatchers.anyString()))
+        Mockito.`when`(fastlegeConsumer.getFastleger(ARBEIDSTAKER_PERSONIDENT))
             .thenReturn(listOf(generateFastlegeProxyDTO()))
         Mockito.`when`(fastlegeConsumer.getPraksisInfo(ArgumentMatchers.anyInt()))
             .thenReturn(PraksisInfo(PARENT_HER_ID))
@@ -87,7 +88,7 @@ class DialogmeldingServiceTest {
     fun sendOppfolgingsplanFraSBS() {
         val oppfolgingsplanPDF = ByteArray(20)
         val oppfolgingsplan = RSOppfolgingsplan(
-            sykmeldtFnr = "99999900000",
+            sykmeldtFnr = ARBEIDSTAKER_PERSONIDENT.value,
             oppfolgingsplanPdf = oppfolgingsplanPDF,
         )
 
@@ -112,7 +113,7 @@ class DialogmeldingServiceTest {
     private fun mockRsHodemelding(): RSHodemelding {
         val oppfolgingsplanPDF = ByteArray(20)
         val oppfolgingsplan = RSOppfolgingsplan(
-            sykmeldtFnr = "99999900000",
+            sykmeldtFnr = ARBEIDSTAKER_PERSONIDENT.value,
             oppfolgingsplanPdf = oppfolgingsplanPDF,
         )
         val partnerinformasjon = Partnerinformasjon(
@@ -125,7 +126,7 @@ class DialogmeldingServiceTest {
                 fornavn = ARBEIDSTAKER_NAME_FIRST,
                 mellomnavn = ARBEIDSTAKER_NAME_MIDDLE,
                 etternavn = ARBEIDSTAKER_NAME_LAST,
-                fnr = "99999900000",
+                fnr = ARBEIDSTAKER_PERSONIDENT.value,
             ),
         )
         return createRSHodemelding(
