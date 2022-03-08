@@ -9,8 +9,8 @@ import no.nav.syfo.fastlege.domain.Fastlege
 import no.nav.syfo.fastlege.expection.FastlegeIkkeFunnet
 import no.nav.syfo.fastlege.expection.HarIkkeTilgang
 import no.nav.syfo.metric.Metrikk
-import no.nav.syfo.util.NAV_PERSONIDENT_HEADER
 import no.nav.syfo.util.PersonIdent
+import no.nav.syfo.util.getPersonIdent
 import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
 import org.springframework.util.MultiValueMap
@@ -29,10 +29,13 @@ class FastlegeAzureADApi @Inject constructor(
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun finnFastlegeAazure(
         @RequestHeader headers: MultiValueMap<String, String>,
-        @RequestParam(value = "fnr", required = false) fnr: String?
     ): Fastlege {
         metrikk.tellHendelse("finn_fastlege")
-        val requestedPersonIdent = getRequestPersonIdent(headers, fnr)
+
+        val requestedPersonIdent = headers.getPersonIdent()?.let { personIdent ->
+            PersonIdent(personIdent)
+        } ?: throw IllegalArgumentException("No PersonIdent supplied")
+
         kastExceptionHvisIkkeTilgang(requestedPersonIdent)
         return fastlegeService.hentBrukersFastlege(requestedPersonIdent)
             ?: throw FastlegeIkkeFunnet()
@@ -41,24 +44,15 @@ class FastlegeAzureADApi @Inject constructor(
     @GetMapping(path = ["/fastleger"], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getFastleger(
         @RequestHeader headers: MultiValueMap<String, String>,
-        @RequestParam(value = "fnr", required = false) fnr: String?
     ): List<Fastlege> {
         metrikk.tellHendelse("get_fastleger")
-        val requestedPersonIdent = getRequestPersonIdent(headers, fnr)
+
+        val requestedPersonIdent = headers.getPersonIdent()?.let { personIdent ->
+            PersonIdent(personIdent)
+        } ?: throw IllegalArgumentException("No PersonIdent supplied")
+
         kastExceptionHvisIkkeTilgang(requestedPersonIdent)
         return fastlegeService.hentBrukersFastleger(requestedPersonIdent)
-    }
-
-    private fun getRequestPersonIdent(
-        headers: MultiValueMap<String, String>,
-        fnr: String?
-    ): PersonIdent {
-        val requestedPersonIdent: String? = fnr ?: headers.getFirst(NAV_PERSONIDENT_HEADER)
-        return if (requestedPersonIdent == null) {
-            throw IllegalArgumentException("Did not find a PersonIdent in request headers or in Request param")
-        } else {
-            PersonIdent(requestedPersonIdent)
-        }
     }
 
     private fun kastExceptionHvisIkkeTilgang(personIdent: PersonIdent) {
