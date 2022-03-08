@@ -16,6 +16,7 @@ import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
+import testhelper.UserConstants.ARBEIDSTAKER_PERSONIDENT
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(classes = [LocalApplication::class])
@@ -62,16 +63,15 @@ class FastlegeAzureADApiTest {
     fun testFnrMedWhitespace() {
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         assertThrows<IllegalArgumentException> {
-            fastlegeAzureADApi.getFastleger(headers, "  12121212345  ")
+            fastlegeAzureADApi.getFastleger(headers, "  ${ARBEIDSTAKER_PERSONIDENT.value}  ")
         }
     }
 
     @Test
     fun testFnrRiktigAntallSiffer() {
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
-        val fnr = "12121212345"
-        Mockito.`when`(tilgangkontrollConsumer.accessAzureAdV2(fnr))
+        Mockito.`when`(tilgangkontrollConsumer.accessAzureAdV2(ARBEIDSTAKER_PERSONIDENT))
             .thenReturn(Tilgang(true))
-        fastlegeAzureADApi.getFastleger(headers, fnr)
+        fastlegeAzureADApi.getFastleger(headers, ARBEIDSTAKER_PERSONIDENT.value)
     }
 }

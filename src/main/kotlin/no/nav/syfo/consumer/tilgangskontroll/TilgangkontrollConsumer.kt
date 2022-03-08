@@ -30,7 +30,7 @@ class TilgangkontrollConsumer @Inject constructor(
         tilgangskontrollPersonUrl = "$syfotilgangskontrollUrl$TILGANGSKONTROLL_PERSON_PATH"
     }
 
-    fun accessAzureAdV2(fnr: String): Tilgang {
+    fun accessAzureAdV2(personIdent: PersonIdent): Tilgang {
         val token = tokenFraOIDC(contextHolder, OIDCIssuer.VEILEDER_AZURE_V2)
         val veilederId = getNAVIdentFraOIDC(contextHolder)
             ?: throw RuntimeException("Missing veilederId in OIDC-context")
@@ -47,7 +47,7 @@ class TilgangkontrollConsumer @Inject constructor(
                 tilgangskontrollPersonUrl,
                 HttpMethod.GET,
                 lagRequest(
-                    personIdentNumber = fnr,
+                    personIdent = personIdent,
                     token = oboToken,
                 ),
                 Tilgang::class.java
@@ -66,13 +66,13 @@ class TilgangkontrollConsumer @Inject constructor(
     }
 
     private fun lagRequest(
-        personIdentNumber: String,
+        personIdent: PersonIdent,
         token: String
     ): HttpEntity<String> {
         val headers = HttpHeaders()
         headers.accept = listOf(MediaType.APPLICATION_JSON)
         headers.setBearerAuth(token)
-        headers[NAV_PERSONIDENT_HEADER] = personIdentNumber
+        headers[NAV_PERSONIDENT_HEADER] = personIdent.value
         headers[NAV_CALL_ID_HEADER] = createCallId()
         headers[NAV_CONSUMER_ID_HEADER] = APP_CONSUMER_ID
         return HttpEntity(headers)

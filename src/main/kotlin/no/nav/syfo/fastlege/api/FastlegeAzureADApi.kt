@@ -10,7 +10,7 @@ import no.nav.syfo.fastlege.expection.FastlegeIkkeFunnet
 import no.nav.syfo.fastlege.expection.HarIkkeTilgang
 import no.nav.syfo.metric.Metrikk
 import no.nav.syfo.util.NAV_PERSONIDENT_HEADER
-import no.nav.syfo.util.PersonIdentNumber
+import no.nav.syfo.util.PersonIdent
 import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
 import org.springframework.util.MultiValueMap
@@ -52,17 +52,17 @@ class FastlegeAzureADApi @Inject constructor(
     private fun getRequestPersonIdent(
         headers: MultiValueMap<String, String>,
         fnr: String?
-    ): String {
+    ): PersonIdent {
         val requestedPersonIdent: String? = fnr ?: headers.getFirst(NAV_PERSONIDENT_HEADER)
         return if (requestedPersonIdent == null) {
             throw IllegalArgumentException("Did not find a PersonIdent in request headers or in Request param")
         } else {
-            PersonIdentNumber(requestedPersonIdent).value
+            PersonIdent(requestedPersonIdent)
         }
     }
 
-    private fun kastExceptionHvisIkkeTilgang(fnr: String) {
-        val (harTilgang, begrunnelse) = tilgangkontrollConsumer.accessAzureAdV2(fnr)
+    private fun kastExceptionHvisIkkeTilgang(personIdent: PersonIdent) {
+        val (harTilgang, begrunnelse) = tilgangkontrollConsumer.accessAzureAdV2(personIdent)
         if (!harTilgang) {
             log.info("Har ikke tilgang til å se fastlegeinformasjon om brukeren")
             throw HarIkkeTilgang(begrunnelse)

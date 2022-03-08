@@ -6,6 +6,7 @@ import no.nav.syfo.consumer.pdl.PdlConsumer
 import no.nav.syfo.consumer.pdl.PdlHentPerson
 import no.nav.syfo.fastlege.domain.Fastlege
 import no.nav.syfo.fastlege.domain.Pasient
+import no.nav.syfo.util.PersonIdent
 import no.nav.syfo.util.lowerCapitalize
 import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.Cacheable
@@ -19,19 +20,19 @@ class FastlegeService @Inject constructor(
     private val fastlegeConsumer: FastlegeConsumer
 ) {
     @Cacheable(value = ["fastlege"])
-    fun hentBrukersFastlege(brukersFnr: String): Fastlege? {
-        return hentBrukersFastleger(brukersFnr).aktiv()
+    fun hentBrukersFastlege(personIdent: PersonIdent): Fastlege? {
+        return hentBrukersFastleger(personIdent).aktiv()
     }
 
     @Cacheable(value = ["fastlege"])
-    fun hentBrukersFastleger(brukersFnr: String): List<Fastlege> {
+    fun hentBrukersFastleger(personIdent: PersonIdent): List<Fastlege> {
         return try {
-            val maybePerson = pdlConsumer.person(brukersFnr)
-            val pasient = toPasient(brukersFnr, maybePerson)
-            fastlegeConsumer.getFastleger(brukersFnr).map { fastlege ->
+            val maybePerson = pdlConsumer.person(personIdent)
+            val pasient = toPasient(personIdent, maybePerson)
+            fastlegeConsumer.getFastleger(personIdent).map { fastlege ->
                 fastlege.toFastlege(
                     pasient = Pasient(
-                        fnr = brukersFnr,
+                        fnr = personIdent.value,
                         fornavn = pasient?.fornavn ?: "",
                         mellomnavn = pasient?.mellomnavn,
                         etternavn = pasient?.etternavn ?: "",
@@ -45,11 +46,14 @@ class FastlegeService @Inject constructor(
         }
     }
 
-    private fun toPasient(fnr: String, maybePerson: PdlHentPerson?): Pasient? {
+    private fun toPasient(
+        personIdent: PersonIdent,
+        maybePerson: PdlHentPerson?,
+    ): Pasient? {
         return maybePerson?.hentPerson?.let { pdlPerson ->
             pdlPerson.navn.firstOrNull()?.let { pdlPersonNavn ->
                 Pasient(
-                    fnr = fnr,
+                    fnr = personIdent.value,
                     fornavn = pdlPersonNavn.fornavn.lowerCapitalize(),
                     mellomnavn = pdlPersonNavn.mellomnavn?.lowerCapitalize(),
                     etternavn = pdlPersonNavn.etternavn.lowerCapitalize(),

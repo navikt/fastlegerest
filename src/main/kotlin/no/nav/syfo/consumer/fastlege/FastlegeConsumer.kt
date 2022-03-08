@@ -3,6 +3,7 @@ package no.nav.syfo.consumer.fastlege
 import no.nav.syfo.consumer.azuread.v2.AzureAdV2TokenConsumer
 import no.nav.syfo.metric.Metrikk
 import no.nav.syfo.util.NAV_PERSONIDENT_HEADER
+import no.nav.syfo.util.PersonIdent
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
@@ -21,12 +22,12 @@ class FastlegeConsumer(
     @Value("\${isproxy.client.id}") private val fastlegeClientId: String,
     @Value("\${isproxy.url}") private val fastlegeUrl: String
 ) {
-    fun getFastleger(fnr: String): List<FastlegeProxyDTO> {
+    fun getFastleger(personIdent: PersonIdent): List<FastlegeProxyDTO> {
         try {
             val response = restTemplate.exchange(
                 "$fastlegeUrl/api/v1/fastlege",
                 HttpMethod.GET,
-                entity(fnr),
+                entity(personIdent),
                 object : ParameterizedTypeReference<List<FastlegeProxyDTO>>() {}
             )
             metrikk.countEvent(CALL_FASTLEGE_SUCCESS)
@@ -55,13 +56,13 @@ class FastlegeConsumer(
         }
     }
 
-    fun entity(fnr: String?): HttpEntity<MultiValueMap<String, String>> {
+    fun entity(personIdent: PersonIdent?): HttpEntity<MultiValueMap<String, String>> {
         val azureADSystemToken = azureAdV2TokenConsumer.getSystemToken(fastlegeClientId)
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_FORM_URLENCODED
         headers.setBearerAuth(azureADSystemToken)
-        if (fnr != null) {
-            headers.add(NAV_PERSONIDENT_HEADER, fnr)
+        if (personIdent != null) {
+            headers.add(NAV_PERSONIDENT_HEADER, personIdent.value)
         }
 
         return HttpEntity(headers)
