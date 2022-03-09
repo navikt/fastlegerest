@@ -1,6 +1,6 @@
 package no.nav.syfo.fastlege.domain
 
-data class Fastlegekontor (
+data class Fastlegekontor(
     val navn: String,
     val besoeksadresse: Adresse?,
     val postadresse: Adresse?,

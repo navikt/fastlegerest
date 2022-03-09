@@ -10,6 +10,9 @@ Start opp appen fra [LocalApplication.java](../fastlegerest/src/test/java/no/nav
 
 Appen kjører da på localhost:8899/
 
+### Lint
+
+Kjør `./gradlew --continue ktlintCheck`
 
 ### Testing
 

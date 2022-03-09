@@ -28,7 +28,8 @@ class Metrikk @Inject constructor(
             addPrefix("httpstatus"),
             Tags.of(
                 "type", "info",
-                "kode", kode.toString())
+                "kode", kode.toString()
+            )
         ).increment()
     }
 

@@ -62,7 +62,6 @@ class DialogmeldingServiceTest {
     @MockBean
     lateinit var fastlegeConsumer: FastlegeConsumer
 
-
     @BeforeEach
     fun setUp() {
         mockRestServiceServer = MockRestServiceServer
@@ -97,7 +96,6 @@ class DialogmeldingServiceTest {
         )
 
         mockRestServiceServer.verify()
-
     }
 
     private fun mockIsdialogmelding() {
