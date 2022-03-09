@@ -4,14 +4,12 @@ import no.nav.syfo.consumer.fastlege.FastlegeConsumer
 import no.nav.syfo.consumer.fastlege.toFastlege
 import no.nav.syfo.consumer.pdl.PdlConsumer
 import no.nav.syfo.consumer.pdl.PdlHentPerson
-import no.nav.syfo.fastlege.domain.Fastlege
-import no.nav.syfo.fastlege.domain.Pasient
+import no.nav.syfo.fastlege.domain.*
 import no.nav.syfo.util.PersonIdent
 import no.nav.syfo.util.lowerCapitalize
 import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
-import java.time.LocalDate
 import javax.inject.Inject
 
 @Service
@@ -70,8 +68,7 @@ class FastlegeService @Inject constructor(
 
     private fun List<Fastlege>.aktiv(): Fastlege? {
         return this.filter { fastlege ->
-            val tomorrow = LocalDate.now().plusDays(1)
-            fastlege.gyldighet.fom.isBefore(tomorrow)
+            fastlege.relasjon.kodeVerdi == RelasjonKodeVerdi.FASTLEGE.kodeVerdi
         }.maxByOrNull { fastlege ->
             fastlege.gyldighet.fom
         }
