@@ -9,4 +9,6 @@ object UserConstants {
     const val ARBEIDSTAKER_NAME_LAST = "Last"
 
     const val VEILEDER_ID = "Z999999"
+
+    val FASTLEGE_FNR = PersonIdent("12125678911")
 }
