@@ -5,6 +5,7 @@ import no.nav.syfo.consumer.tilgangskontroll.Tilgang
 import no.nav.syfo.consumer.tilgangskontroll.TilgangkontrollConsumer
 import no.nav.syfo.fastlege.FastlegeService
 import no.nav.syfo.metric.Metrikk
+import no.nav.syfo.util.NAV_PERSONIDENT_HEADER
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
@@ -38,8 +39,9 @@ class FastlegeAzureADApiTest {
     @Test
     fun testUgyldigFnr() {
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
+        headers.add(NAV_PERSONIDENT_HEADER, "123")
         assertThrows<IllegalArgumentException> {
-            fastlegeAzureADApi.getFastleger(headers, "123")
+            fastlegeAzureADApi.getFastleger(headers)
         }
     }
 
@@ -47,31 +49,34 @@ class FastlegeAzureADApiTest {
     fun testNullFnr() {
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
         assertThrows<IllegalArgumentException> {
-            fastlegeAzureADApi.getFastleger(headers, null)
+            fastlegeAzureADApi.getFastleger(headers)
         }
     }
 
     @Test
     fun testFnrMedEkstraTegn() {
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
+        headers.add(NAV_PERSONIDENT_HEADER, "12121212345abc")
         assertThrows<IllegalArgumentException> {
-            fastlegeAzureADApi.getFastleger(headers, "12121212345abc")
+            fastlegeAzureADApi.getFastleger(headers)
         }
     }
 
     @Test
     fun testFnrMedWhitespace() {
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
+        headers.add(NAV_PERSONIDENT_HEADER, "  ${ARBEIDSTAKER_PERSONIDENT.value}  ")
         assertThrows<IllegalArgumentException> {
-            fastlegeAzureADApi.getFastleger(headers, "  ${ARBEIDSTAKER_PERSONIDENT.value}  ")
+            fastlegeAzureADApi.getFastleger(headers)
         }
     }
 
     @Test
     fun testFnrRiktigAntallSiffer() {
         val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
+        headers.add(NAV_PERSONIDENT_HEADER, ARBEIDSTAKER_PERSONIDENT.value)
         Mockito.`when`(tilgangkontrollConsumer.accessAzureAdV2(ARBEIDSTAKER_PERSONIDENT))
             .thenReturn(Tilgang(true))
-        fastlegeAzureADApi.getFastleger(headers, ARBEIDSTAKER_PERSONIDENT.value)
+        fastlegeAzureADApi.getFastleger(headers)
     }
 }
