@@ -1,6 +1,6 @@
 package no.nav.syfo.dialogmelding.api
 
-data class RSOppfolgingsplan (
+data class RSOppfolgingsplan(
     val sykmeldtFnr: String,
     val oppfolgingsplanPdf: ByteArray,
 )

@@ -34,8 +34,3 @@ fun FastlegeProxyDTO.toFastlege(
     gyldighet = this.gyldighet,
     relasjon = this.relasjon,
 )
-
-
-
-
-

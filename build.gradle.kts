@@ -17,6 +17,7 @@ plugins {
     kotlin("jvm") version "1.6.10"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.6.10"
     id("com.github.johnrengelman.shadow") version "7.1.1"
+    id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
     id("org.springframework.boot") version "2.4.13"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
 }

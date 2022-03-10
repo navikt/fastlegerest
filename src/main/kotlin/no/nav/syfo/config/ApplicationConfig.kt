@@ -17,7 +17,7 @@ class ApplicationConfig {
         return template
     }
 
-   @Bean(name = ["default"])
+    @Bean(name = ["default"])
     fun defaultRestTemplate(): RestTemplate {
         return RestTemplate()
     }

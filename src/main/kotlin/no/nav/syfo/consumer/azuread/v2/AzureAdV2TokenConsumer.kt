@@ -35,7 +35,10 @@ class AzureAdV2TokenConsumer @Autowired constructor(
                 metric.countEvent(CALL_AZUREAD_CACHE_MISS)
                 azureAdV2Token.accessToken
             } catch (e: RestClientResponseException) {
-                log.error("Call to get AzureADV2Token from AzureAD for scope: $scopeClientId with status: ${e.rawStatusCode} and message: ${e.responseBodyAsString}", e)
+                log.error(
+                    "Call to get AzureADV2Token from AzureAD for scope: $scopeClientId with status: ${e.rawStatusCode} and message: ${e.responseBodyAsString}",
+                    e
+                )
                 throw e
             }
         } else {
@@ -56,7 +59,10 @@ class AzureAdV2TokenConsumer @Autowired constructor(
                 metric.countEvent(CALL_AZUREAD_CACHE_MISS)
                 azureAdV2Token.accessToken
             } catch (e: RestClientResponseException) {
-                log.error("Call to get AzureADV2Token from AzureAD for scope: $scopeClientId with status: ${e.rawStatusCode} and message: ${e.responseBodyAsString}", e)
+                log.error(
+                    "Call to get AzureADV2Token from AzureAD for scope: $scopeClientId with status: ${e.rawStatusCode} and message: ${e.responseBodyAsString}",
+                    e
+                )
                 throw e
             }
         } else {
@@ -66,8 +72,8 @@ class AzureAdV2TokenConsumer @Autowired constructor(
     }
 
     private fun getToken(
-            requestEntity: HttpEntity<MultiValueMap<String, String>>
-        ): AzureAdV2Token {
+        requestEntity: HttpEntity<MultiValueMap<String, String>>
+    ): AzureAdV2Token {
         val response = restTemplate.exchange(
             azureTokenEndpoint,
             HttpMethod.POST,

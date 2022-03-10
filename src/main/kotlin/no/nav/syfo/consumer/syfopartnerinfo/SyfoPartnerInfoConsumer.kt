@@ -18,7 +18,7 @@ class SyfoPartnerInfoConsumer(
     private val metrikk: Metrikk,
     @Qualifier("default") private val restTemplate: RestTemplate,
     @Value("\${syfopartnerinfo.client.id}") private val syfopartnerinfoClientId: String,
-    @Value("\${syfopartnerinfo.url}") private val syfopartnerinfoUrl: String
+    @Value("\${syfopartnerinfo.url}") private val syfopartnerinfoUrl: String,
 ) {
     fun getPartnerId(herId: Int): List<PartnerInfoResponse> {
         try {
@@ -49,5 +49,4 @@ class SyfoPartnerInfoConsumer(
         private val LOG = LoggerFactory.getLogger(SyfoPartnerInfoConsumer::class.java)
         private const val CALL_SYFOPARTNERINFO_BEHANDLER_SUCCESS = "call_syfopartnerinfo_behandler_success"
     }
-
 }
