@@ -56,10 +56,10 @@ class FastlegeAzureADApi @Inject constructor(
     }
 
     private fun kastExceptionHvisIkkeTilgang(personIdent: PersonIdent) {
-        val (harTilgang, begrunnelse) = tilgangkontrollConsumer.accessAzureAdV2(personIdent)
+        val (harTilgang) = tilgangkontrollConsumer.accessAzureAdV2(personIdent)
         if (!harTilgang) {
             log.info("Har ikke tilgang til å se fastlegeinformasjon om brukeren")
-            throw HarIkkeTilgang(begrunnelse)
+            throw HarIkkeTilgang(null)
         }
     }
 
