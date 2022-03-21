@@ -6,5 +6,4 @@ import java.io.Serializable
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Tilgang(
     val harTilgang: Boolean = false,
-    val begrunnelse: String? = null
 ) : Serializable
