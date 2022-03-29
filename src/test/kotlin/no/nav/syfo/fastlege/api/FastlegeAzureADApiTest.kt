@@ -90,6 +90,7 @@ class FastlegeAzureADApiTest {
         val result: Fastlege = fastlegeAzureADApi.finnFastlegeAazure(headers)
 
         assertEquals(fastlege.relasjon.kodeVerdi, result.relasjon.kodeVerdi)
+        assertEquals(fastlege.stillingsprosent, result.stillingsprosent)
     }
 
     @Test

@@ -77,6 +77,7 @@ class FastlegeSystemApiTest {
         val result: Fastlege = fastlegeSystemApi.fastlege(headers)
 
         assertEquals(fastlege.relasjon.kodeVerdi, result.relasjon.kodeVerdi)
+        assertEquals(fastlege.stillingsprosent, result.stillingsprosent)
     }
 
     @Test

@@ -160,7 +160,8 @@ class DialogmeldingServiceTest {
         relasjon = Relasjon(
             kodeVerdi = "LPFL",
             kodeTekst = "Fastlege",
-        )
+        ),
+        stillingsprosent = 100,
     )
 
     private fun mockSyfopartnerinfo() {
