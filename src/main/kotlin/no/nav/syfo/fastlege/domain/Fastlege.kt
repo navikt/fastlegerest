@@ -13,4 +13,5 @@ data class Fastlege(
     val pasient: Pasient? = null,
     val gyldighet: Periode,
     val relasjon: Relasjon,
+    val stillingsprosent: Int?,
 )

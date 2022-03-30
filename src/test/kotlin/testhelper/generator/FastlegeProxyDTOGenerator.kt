@@ -34,4 +34,5 @@ fun generateFastlegeProxyDTO(
         kodeTekst = "Fastlege",
         kodeVerdi = relasjonKodeVerdi.kodeVerdi,
     ),
+    stillingsprosent = if (relasjonKodeVerdi == RelasjonKodeVerdi.FASTLEGE) 100 else 50,
 )

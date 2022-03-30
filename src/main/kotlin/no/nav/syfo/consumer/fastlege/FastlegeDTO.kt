@@ -15,6 +15,7 @@ data class FastlegeProxyDTO(
     val pasientforhold: Periode,
     val gyldighet: Periode,
     val relasjon: Relasjon,
+    val stillingsprosent: Int?,
 )
 
 fun FastlegeProxyDTO.toFastlege(
@@ -33,4 +34,5 @@ fun FastlegeProxyDTO.toFastlege(
     pasient = pasient,
     gyldighet = this.gyldighet,
     relasjon = this.relasjon,
+    stillingsprosent = this.stillingsprosent,
 )
