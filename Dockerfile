@@ -1,7 +1,8 @@
-FROM navikt/java:11
-ENV APP_NAME=fastlegerest
-
+FROM gcr.io/distroless/java17
+WORKDIR /app
 COPY build/libs/*.jar app.jar
-
-ENV JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom \
-               -Dspring.profiles.active=remote"
+ENV APP_NAME=fastlegerest
+ENV TZ="Europe/Oslo"
+EXPOSE 8080
+USER nonroot
+CMD [ "app.jar" ]
