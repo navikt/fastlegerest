@@ -1,7 +1,7 @@
 # Fastlegerest
 Fastlegerest er en backendapp som tilbyr integrasjon mot pasient- og helsejournalsystemene via [isdialogmelding](https://github.com/navikt/isdialogmelding). 
 
-Fastlegerest er en Spring boot-applikasjon i Nais, med hemmeligheter i vault. 
+Fastlegerest er en Spring boot-applikasjon i Nais. 
 ## Lokal utvikling
 
 ### Oppstart
