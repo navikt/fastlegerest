@@ -46,9 +46,6 @@ spec:
         - application: isdialogmelding
           namespace: teamsykefravr
           cluster: dev-gcp
-        - application: syfooppfolgingsplanservice
-          namespace: team-esyfo
-          cluster: dev-fss
     outbound:
       external:
         - host: "login.microsoftonline.com"
@@ -64,8 +61,6 @@ spec:
       claims:
         extra:
           - "NAVident"
-  envFrom:
-    - configmap: loginservice-idporten
   env:
     - name: SYFOTILGANGSKONTROLL_CLIENT_ID
       value: "dev-fss.teamsykefravr.syfo-tilgangskontroll"
