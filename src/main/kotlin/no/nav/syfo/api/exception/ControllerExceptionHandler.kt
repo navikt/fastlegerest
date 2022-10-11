@@ -1,8 +1,6 @@
 package no.nav.syfo.api.exception
 
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException
-import no.nav.syfo.dialogmelding.exception.InnsendingFeiletException
-import no.nav.syfo.dialogmelding.exception.PartnerinformasjonIkkeFunnet
 import no.nav.syfo.fastlege.expection.*
 import no.nav.syfo.metric.Metrikk
 import org.slf4j.LoggerFactory
@@ -27,8 +25,6 @@ class ControllerExceptionHandler @Inject constructor(
         ForbiddenException::class,
         IllegalArgumentException::class,
         JwtTokenUnauthorizedException::class,
-        PartnerinformasjonIkkeFunnet::class,
-        InnsendingFeiletException::class
     )
     fun handleException(ex: Exception, request: WebRequest): ResponseEntity<ApiError> {
         val headers = HttpHeaders()
@@ -47,12 +43,6 @@ class ControllerExceptionHandler @Inject constructor(
             }
             is FastlegeIkkeFunnet -> {
                 handleFastlegeIkkeFunnetException(ex, headers, request)
-            }
-            is PartnerinformasjonIkkeFunnet -> {
-                handlePartnerinformasjonIkkeFunnetException(ex, headers, request)
-            }
-            is InnsendingFeiletException -> {
-                handleInnsendingFeiletException(ex, headers, request)
             }
             else -> {
                 val status = HttpStatus.INTERNAL_SERVER_ERROR
@@ -102,24 +92,6 @@ class ControllerExceptionHandler @Inject constructor(
         request: WebRequest
     ): ResponseEntity<ApiError> {
         val status = HttpStatus.NOT_FOUND
-        return handleExceptionInternal(ex, ApiError(status.value(), ex.message!!), headers, status, request)
-    }
-
-    private fun handlePartnerinformasjonIkkeFunnetException(
-        ex: PartnerinformasjonIkkeFunnet,
-        headers: HttpHeaders,
-        request: WebRequest
-    ): ResponseEntity<ApiError> {
-        val status = HttpStatus.NOT_FOUND
-        return handleExceptionInternal(ex, ApiError(status.value(), ex.message!!), headers, status, request)
-    }
-
-    private fun handleInnsendingFeiletException(
-        ex: InnsendingFeiletException,
-        headers: HttpHeaders,
-        request: WebRequest
-    ): ResponseEntity<ApiError> {
-        val status = HttpStatus.INTERNAL_SERVER_ERROR
         return handleExceptionInternal(ex, ApiError(status.value(), ex.message!!), headers, status, request)
     }
 

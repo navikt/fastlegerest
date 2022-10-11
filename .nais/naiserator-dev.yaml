@@ -53,11 +53,8 @@ spec:
       external:
         - host: "login.microsoftonline.com"
         - host: "syfo-tilgangskontroll.dev-fss-pub.nais.io"
-        - host: "syfopartnerinfo.dev-fss-pub.nais.io"
         - host: "isproxy.dev-fss-pub.nais.io"
         - host: "pdl-api.dev-fss-pub.nais.io"
-      rules:
-        - application: isdialogmelding
   azure:
     application:
       enabled: true
@@ -74,10 +71,6 @@ spec:
       value: "dev-fss.teamsykefravr.syfo-tilgangskontroll"
     - name: SYFOTILGANGSKONTROLL_URL
       value: https://syfo-tilgangskontroll.dev-fss-pub.nais.io/syfo-tilgangskontroll/api/tilgang
-    - name: SYFOPARTNERINFO_CLIENT_ID
-      value: "dev-fss.teamsykefravr.syfopartnerinfo"
-    - name: SYFOPARTNERINFO_URL
-      value: "https://syfopartnerinfo.dev-fss-pub.nais.io"
     - name: PDL_CLIENT_ID
       value: dev-fss.pdl.pdl-api
     - name: PDL_URL
