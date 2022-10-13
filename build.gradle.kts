@@ -6,11 +6,11 @@ group = "no.nav.syfo"
 version = "1.0.0"
 
 val apacheHttpClientVersion = "4.5.13"
-val kotlinJacksonVersion = "2.13.3"
-val logstashVersion = "7.1.1"
-val prometheusVersion = "1.9.0"
+val kotlinJacksonVersion = "2.13.4"
+val logstashVersion = "7.2"
+val prometheusVersion = "1.9.5"
 val slf4jVersion = "1.7.36"
-val swaggerVersion = "1.6.6"
+val swaggerVersion = "1.6.7"
 val tokenValidationSpringSupportVersion = "1.3.9"
 
 plugins {
@@ -18,8 +18,8 @@ plugins {
     id("org.jetbrains.kotlin.plugin.allopen") version "1.7.0"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
-    id("org.springframework.boot") version "2.6.8"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE"
+    id("org.springframework.boot") version "2.6.12"
+    id("io.spring.dependency-management") version "1.0.14.RELEASE"
 }
 
 allOpen {
