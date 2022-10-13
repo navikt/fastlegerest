@@ -46,18 +46,12 @@ spec:
         - application: isdialogmelding
           namespace: teamsykefravr
           cluster: prod-gcp
-        - application: syfooppfolgingsplanservice
-          namespace: team-esyfo
-          cluster: prod-fss
     outbound:
       external:
         - host: "login.microsoftonline.com"
         - host: "syfo-tilgangskontroll.prod-fss-pub.nais.io"
-        - host: "syfopartnerinfo.prod-fss-pub.nais.io"
         - host: "isproxy.prod-fss-pub.nais.io"
         - host: "pdl-api.prod-fss-pub.nais.io"
-      rules:
-        - application: isdialogmelding
   azure:
     application:
       enabled: true
@@ -67,17 +61,11 @@ spec:
       claims:
         extra:
           - "NAVident"
-  envFrom:
-    - configmap: loginservice-idporten
   env:
     - name: SYFOTILGANGSKONTROLL_CLIENT_ID
       value: "prod-fss.teamsykefravr.syfo-tilgangskontroll"
     - name: SYFOTILGANGSKONTROLL_URL
       value: https://syfo-tilgangskontroll.prod-fss-pub.nais.io/syfo-tilgangskontroll/api/tilgang
-    - name: SYFOPARTNERINFO_CLIENT_ID
-      value: "prod-fss.teamsykefravr.syfopartnerinfo"
-    - name: SYFOPARTNERINFO_URL
-      value: "https://syfopartnerinfo.prod-fss-pub.nais.io"
     - name: PDL_CLIENT_ID
       value: prod-fss.pdl.pdl-api
     - name: PDL_URL
