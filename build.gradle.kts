@@ -58,12 +58,10 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$kotlinJacksonVersion")
 
     implementation("org.springframework.boot:spring-boot-starter-web")
-    constraints {
-        implementation("org.yaml:snakeyaml") {
-            because("org.springframework.boot:spring-boot-starter-web -> https://www.cve.org/CVERecord?id=CVE-2022-38749")
-            version {
-                require("1.32")
-            }
+    implementation("org.yaml:snakeyaml") {
+        because("org.springframework.boot:spring-boot-starter-web -> https://www.cve.org/CVERecord?id=CVE-2022-38749")
+        version {
+            require("1.32")
         }
     }
     implementation("org.springframework.boot:spring-boot-starter-actuator")
