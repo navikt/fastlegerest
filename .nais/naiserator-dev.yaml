@@ -70,10 +70,6 @@ spec:
       value: dev-fss.pdl.pdl-api
     - name: PDL_URL
       value: https://pdl-api.dev-fss-pub.nais.io/graphql
-    - name: ISDIALOGMELDING_IDENTIFIER
-      value: dev-gcp.teamsykefravr.isdialogmelding
-    - name: ISDIALOGMELDING_URL
-      value: https://isdialogmelding.dev.intern.nav.no
     - name: ISPROXY_CLIENT_ID
       value: dev-fss.teamsykefravr.isproxy
     - name: ISPROXY_URL

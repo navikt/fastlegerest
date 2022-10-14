@@ -28,10 +28,6 @@ azure:
 
 syfotilgangskontroll.client.id: "syfotilgangskontrollId"
 syfotilgangskontroll.url: "https://syfotilgangskontrollurl"
-syfopartnerinfo.client.id: "syfopartnerinfoId"
-syfopartnerinfo.url: "https://syfopartnerinfourl"
-isdialogmelding.identifier: "local.teamsykefravr.isdialogmelding"
-isdialogmelding.url: "https://isdialogmeldingurl"
 isproxy.client.id: "isproxyId"
 isproxy.url: "https://isproxyurl"
 pdl.client.id: "pdl-client-id"
