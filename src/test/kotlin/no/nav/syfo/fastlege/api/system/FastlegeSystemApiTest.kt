@@ -1,129 +1,121 @@
 package no.nav.syfo.fastlege.api.system
 
-import no.nav.security.token.support.core.context.TokenValidationContextHolder
-import no.nav.syfo.LocalApplication
-import no.nav.syfo.consumer.fastlege.FastlegeConsumer
-import no.nav.syfo.consumer.pdl.PdlConsumer
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
+import io.ktor.http.*
+import io.ktor.server.testing.*
 import no.nav.syfo.fastlege.domain.Fastlege
 import no.nav.syfo.fastlege.domain.RelasjonKodeVerdi
-import no.nav.syfo.fastlege.expection.FastlegeIkkeFunnet
-import no.nav.syfo.metric.Metrikk
-import no.nav.syfo.util.NAV_PERSONIDENT_HEADER
-import org.junit.jupiter.api.*
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.Mockito
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.test.annotation.DirtiesContext
-import org.springframework.test.context.junit.jupiter.SpringExtension
-import org.springframework.util.LinkedMultiValueMap
-import org.springframework.util.MultiValueMap
+import no.nav.syfo.util.*
+import org.amshove.kluent.shouldBeEqualTo
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
+import testhelper.*
 import testhelper.UserConstants.ARBEIDSTAKER_PERSONIDENT
-import testhelper.generatePdlHentPerson
-import testhelper.generator.generateFastlegeProxyDTO
-import testhelper.logInSystemConsumerClient
 
-@ExtendWith(SpringExtension::class)
-@SpringBootTest(classes = [LocalApplication::class])
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-class FastlegeSystemApiTest {
+class FastlegeSystemApiTest : Spek({
+    val objectMapper: ObjectMapper = configuredJacksonMapper()
 
-    @MockBean
-    lateinit var fastlegeConsumer: FastlegeConsumer
+    describe(FastlegeSystemApiTest::class.java.simpleName) {
 
-    @MockBean
-    lateinit var pdlConsumer: PdlConsumer
+        with(TestApplicationEngine()) {
+            start()
 
-    @MockBean
-    lateinit var metrikk: Metrikk
+            val externalMockEnvironment = ExternalMockEnvironment.getInstance()
 
-    @Autowired
-    private lateinit var oidcRequestContextHolder: TokenValidationContextHolder
+            application.testApiModule(
+                externalMockEnvironment = externalMockEnvironment,
+            )
 
-    @Autowired
-    lateinit var fastlegeSystemApi: FastlegeSystemApi
+            describe("Finn fastlege") {
+                val validToken = generateJWTSystem(
+                    externalMockEnvironment.environment.aadAppClient,
+                    externalMockEnvironment.wellKnownInternalAzureAD.issuer,
+                    azp = testIsdialogmoteClientId,
+                )
+                val invalidToken = generateJWTSystem(
+                    externalMockEnvironment.environment.aadAppClient,
+                    externalMockEnvironment.wellKnownInternalAzureAD.issuer,
+                    azp = testSyfomodiapersonClientId,
+                )
+                val fastlegeSystemPath = "$FASTLEGE_SYSTEM_PATH/aktiv/personident"
 
-    @AfterEach
-    fun tearDown() {
-        oidcRequestContextHolder.tokenValidationContext = null
-    }
+                describe("Happy path") {
+                    it("should return fastlege") {
 
-    @Test
-    fun `Hent aktiv Fastlege for PersonIdent med 2 Fastleger, 1 Fastlege og 1 Fastlegevikar`() {
-        logInSystemConsumerClient(oidcRequestContextHolder, "isdialogmelding-client-id")
+                        with(
+                            handleRequest(HttpMethod.Get, fastlegeSystemPath) {
+                                addHeader(HttpHeaders.Authorization, bearerHeader(validToken))
+                                addHeader(NAV_PERSONIDENT_HEADER, ARBEIDSTAKER_PERSONIDENT.value)
+                            }
+                        ) {
+                            response.status() shouldBeEqualTo HttpStatusCode.OK
+                            val fastlege = objectMapper.readValue<Fastlege>(response.content!!)
+                            fastlege.relasjon.kodeVerdi shouldBeEqualTo RelasjonKodeVerdi.FASTLEGE.kodeVerdi
+                            fastlege.pasient!!.fnr shouldBeEqualTo ARBEIDSTAKER_PERSONIDENT.value
+                        }
+                    }
+                    it("should return fastlege when both fastlege and vikar") {
 
-        val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
-        headers.add(NAV_PERSONIDENT_HEADER, ARBEIDSTAKER_PERSONIDENT.value)
-
-        val fastlege = generateFastlegeProxyDTO(
-            relasjonKodeVerdi = RelasjonKodeVerdi.FASTLEGE,
-        )
-        val fastlegeVikar = generateFastlegeProxyDTO(
-            relasjonKodeVerdi = RelasjonKodeVerdi.VIKAR,
-        )
-        val fastlegeProxyDTOList = listOf(
-            fastlegeVikar,
-            fastlege,
-        )
-        val pdlPerson = generatePdlHentPerson(null)
-
-        Mockito.`when`(fastlegeConsumer.getFastleger(ARBEIDSTAKER_PERSONIDENT))
-            .thenReturn(fastlegeProxyDTOList)
-        Mockito.`when`(pdlConsumer.person(ARBEIDSTAKER_PERSONIDENT))
-            .thenReturn(pdlPerson)
-
-        val result: Fastlege = fastlegeSystemApi.fastlege(headers)
-
-        assertEquals(fastlege.relasjon.kodeVerdi, result.relasjon.kodeVerdi)
-        assertEquals(fastlege.stillingsprosent, result.stillingsprosent)
-    }
-
-    @Test
-    fun `Finner ikke aktiv fastlege for PersonIdent`() {
-        logInSystemConsumerClient(oidcRequestContextHolder, "isdialogmelding-client-id")
-
-        val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
-        headers.add(NAV_PERSONIDENT_HEADER, ARBEIDSTAKER_PERSONIDENT.value)
-
-        assertThrows<FastlegeIkkeFunnet> {
-            fastlegeSystemApi.fastlege(headers)
+                        with(
+                            handleRequest(HttpMethod.Get, fastlegeSystemPath) {
+                                addHeader(HttpHeaders.Authorization, bearerHeader(validToken))
+                                addHeader(NAV_PERSONIDENT_HEADER, UserConstants.ARBEIDSTAKER_PERSONIDENT_FASTLEGE_AND_VIKAR.value)
+                            }
+                        ) {
+                            response.status() shouldBeEqualTo HttpStatusCode.OK
+                            val fastlege = objectMapper.readValue<Fastlege>(response.content!!)
+                            fastlege.relasjon.kodeVerdi shouldBeEqualTo RelasjonKodeVerdi.FASTLEGE.kodeVerdi
+                            fastlege.pasient!!.fnr shouldBeEqualTo UserConstants.ARBEIDSTAKER_PERSONIDENT_FASTLEGE_AND_VIKAR.value
+                        }
+                    }
+                }
+                describe("Unhappy paths") {
+                    it("no fastlege") {
+                        with(
+                            handleRequest(HttpMethod.Get, fastlegeSystemPath) {
+                                addHeader(HttpHeaders.Authorization, bearerHeader(validToken))
+                                addHeader(NAV_PERSONIDENT_HEADER, UserConstants.ARBEIDSTAKER_PERSONIDENT_NO_FASTLEGE.value)
+                            }
+                        ) {
+                            response.status() shouldBeEqualTo HttpStatusCode.InternalServerError
+                            response.content shouldBeEqualTo "Fant ikke aktiv fastlege"
+                        }
+                    }
+                    it("token from app with no access") {
+                        with(
+                            handleRequest(HttpMethod.Get, fastlegeSystemPath) {
+                                addHeader(HttpHeaders.Authorization, bearerHeader(invalidToken))
+                                addHeader(NAV_PERSONIDENT_HEADER, ARBEIDSTAKER_PERSONIDENT.value)
+                            }
+                        ) {
+                            response.status() shouldBeEqualTo HttpStatusCode.Forbidden
+                            response.content shouldBeEqualTo "Consumer with clientId=syfomodiaperson-client-id is denied access to API"
+                        }
+                    }
+                    it("invalid fnr") {
+                        with(
+                            handleRequest(HttpMethod.Get, fastlegeSystemPath) {
+                                addHeader(HttpHeaders.Authorization, bearerHeader(validToken))
+                                addHeader(NAV_PERSONIDENT_HEADER, "123")
+                            }
+                        ) {
+                            response.status() shouldBeEqualTo HttpStatusCode.BadRequest
+                            response.content shouldBeEqualTo "Value is not a valid PersonIdentNumber"
+                        }
+                    }
+                    it("no fnr") {
+                        with(
+                            handleRequest(HttpMethod.Get, fastlegeSystemPath) {
+                                addHeader(HttpHeaders.Authorization, bearerHeader(validToken))
+                            }
+                        ) {
+                            response.status() shouldBeEqualTo HttpStatusCode.BadRequest
+                            response.content shouldBeEqualTo "No PersonIdent supplied"
+                        }
+                    }
+                }
+            }
         }
     }
-
-    @Test
-    fun `Test ugyldig PersonIdent`() {
-        val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
-        headers.add(NAV_PERSONIDENT_HEADER, "123")
-        assertThrows<IllegalArgumentException> {
-            fastlegeSystemApi.fastlege(headers)
-        }
-    }
-
-    @Test
-    fun `Test PersonIdent som er null`() {
-        val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
-        assertThrows<IllegalArgumentException> {
-            fastlegeSystemApi.fastlege(headers)
-        }
-    }
-
-    @Test
-    fun `Test PersonIdent med ekstra tegn`() {
-        val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
-        headers.add(NAV_PERSONIDENT_HEADER, "12121212345abc")
-        assertThrows<IllegalArgumentException> {
-            fastlegeSystemApi.fastlege(headers)
-        }
-    }
-
-    @Test
-    fun `Test PersonIdent med whitespace`() {
-        val headers: MultiValueMap<String, String> = LinkedMultiValueMap()
-        headers.add(NAV_PERSONIDENT_HEADER, "  ${ARBEIDSTAKER_PERSONIDENT.value}  ")
-        assertThrows<IllegalArgumentException> {
-            fastlegeSystemApi.fastlege(headers)
-        }
-    }
-}
+})

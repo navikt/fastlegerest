@@ -1,6 +1,6 @@
 package testhelper.generator
 
-import no.nav.syfo.consumer.fastlege.FastlegeProxyDTO
+import no.nav.syfo.client.fastlege.FastlegeProxyDTO
 import no.nav.syfo.fastlege.domain.*
 import testhelper.UserConstants
 import java.time.LocalDate

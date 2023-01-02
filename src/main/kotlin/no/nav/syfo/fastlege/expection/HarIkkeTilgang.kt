@@ -1,5 +1,3 @@
 package no.nav.syfo.fastlege.expection
 
-import javax.ws.rs.ForbiddenException
-
-class HarIkkeTilgang(message: String?) : ForbiddenException(message)
+class HarIkkeTilgang(message: String? = "Denied NAVIdent access to personIdent") : RuntimeException(message)

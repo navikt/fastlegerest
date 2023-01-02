@@ -8,16 +8,21 @@ metadata:
 spec:
   image: {{ image }}
   port: 8080
+  startup:
+    path: /internal/is_ready
+    periodSeconds: 5
+    timeout: 5
+    failureThreshold: 30
   liveness:
-    path: fastlegerest/internal/isAlive
-    initialDelay: 60
-    timeout: 1
-    periodSeconds: 10
-    failureThreshold: 5
+    path: /internal/is_alive
+    periodSeconds: 5
+    timeout: 5
+    failureThreshold: 3
   readiness:
-    path: fastlegerest/internal/isReady
-    initialDelay: 60
-    timeout: 1
+    path: /internal/is_ready
+    periodSeconds: 5
+    timeout: 5
+    failureThreshold: 3
   resources:
     limits:
       cpu: 200m
@@ -31,7 +36,7 @@ spec:
     cpuThresholdPercentage: 70
   prometheus:
     enabled: true
-    path: fastlegerest/internal/prometheus
+    path: /internal/metrics
   ingresses:
     - "https://fastlegerest.dev.intern.nav.no"
   accessPolicy:
