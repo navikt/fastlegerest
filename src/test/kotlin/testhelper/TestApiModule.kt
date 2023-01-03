@@ -9,6 +9,6 @@ fun Application.testApiModule(
     this.apiModule(
         applicationState = externalMockEnvironment.applicationState,
         environment = externalMockEnvironment.environment,
-        wellKnownVeilederV2 = externalMockEnvironment.wellKnownInternalAzureAD,
+        wellKnownAzure = externalMockEnvironment.wellKnownInternalAzureAD,
     )
 }

@@ -18,7 +18,7 @@ import no.nav.syfo.fastlege.api.system.registrerFastlegeSystemApi
 fun Application.apiModule(
     applicationState: ApplicationState,
     environment: Environment,
-    wellKnownVeilederV2: WellKnown,
+    wellKnownAzure: WellKnown,
 ) {
     installMetrics()
     installCallId()
@@ -28,28 +28,28 @@ fun Application.apiModule(
             JwtIssuer(
                 acceptedAudienceList = listOf(environment.aadAppClient),
                 jwtIssuerType = JwtIssuerType.INTERNAL_AZUREAD,
-                wellKnown = wellKnownVeilederV2,
+                wellKnown = wellKnownAzure,
             ),
         ),
     )
     installStatusPages()
-    val azureAdV2Client = AzureAdClient(
+    val azureAdClient = AzureAdClient(
         azureAppClientId = environment.aadAppClient,
         azureAppClientSecret = environment.aadAppSecret,
         azureTokenEndpoint = environment.aadTokenEndpoint,
     )
     val tilgangskontrollClient = VeilederTilgangskontrollClient(
-        azureAdClient = azureAdV2Client,
+        azureAdClient = azureAdClient,
         syfotilgangskontrollClientId = environment.syfotilgangskontrollClientId,
         tilgangskontrollBaseUrl = environment.syfotilgangskontrollUrl,
     )
     val pdlClient = PdlClient(
-        azureAdClient = azureAdV2Client,
+        azureAdClient = azureAdClient,
         pdlClientId = environment.pdlClientId,
         pdlUrl = environment.pdlUrl,
     )
     val isproxyClient = FastlegeClient(
-        azureAdClient = azureAdV2Client,
+        azureAdClient = azureAdClient,
         fastlegeClientId = environment.isproxyClientId,
         fastlegeUrl = environment.isproxyUrl,
     )

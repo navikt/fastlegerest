@@ -43,12 +43,12 @@ fun Application.installJwtAuthentication(
 fun AuthenticationConfig.configureJwt(
     jwtIssuer: JwtIssuer,
 ) {
-    val jwkProviderSelvbetjening = JwkProviderBuilder(URL(jwtIssuer.wellKnown.jwks_uri))
+    val jwkProvider = JwkProviderBuilder(URL(jwtIssuer.wellKnown.jwks_uri))
         .cached(10, 24, TimeUnit.HOURS)
         .rateLimited(10, 1, TimeUnit.MINUTES)
         .build()
     jwt(name = jwtIssuer.jwtIssuerType.name) {
-        verifier(jwkProviderSelvbetjening, jwtIssuer.wellKnown.issuer)
+        verifier(jwkProvider, jwtIssuer.wellKnown.issuer)
         validate { credential ->
             if (hasExpectedAudience(credential, jwtIssuer.acceptedAudienceList)) {
                 JWTPrincipal(credential.payload)

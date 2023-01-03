@@ -29,7 +29,7 @@ fun main() {
             apiModule(
                 applicationState = applicationState,
                 environment = environment,
-                wellKnownVeilederV2 = getWellKnown(environment.azureAppWellKnownUrl),
+                wellKnownAzure = getWellKnown(environment.azureAppWellKnownUrl),
             )
         }
     }
