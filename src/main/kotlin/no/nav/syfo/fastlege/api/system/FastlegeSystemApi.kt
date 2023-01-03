@@ -8,7 +8,7 @@ import no.nav.syfo.fastlege.FastlegeService
 import no.nav.syfo.fastlege.expection.FastlegeIkkeFunnet
 import no.nav.syfo.util.*
 
-const val FASTLEGE_SYSTEM_PATH = "/api/system/v1/fastlege"
+const val FASTLEGE_SYSTEM_PATH = "/fastlegerest/api/system/v1/fastlege"
 
 fun Route.registrerFastlegeSystemApi(
     apiConsumerAccessService: APISystemConsumerAccessService,

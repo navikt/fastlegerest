@@ -9,7 +9,7 @@ import no.nav.syfo.fastlege.expection.FastlegeIkkeFunnet
 import no.nav.syfo.fastlege.expection.HarIkkeTilgang
 import no.nav.syfo.util.*
 
-const val FASTLEGE_PATH = "/api/v2/fastlege"
+const val FASTLEGE_PATH = "/fastlegerest/api/v2/fastlege"
 
 fun Route.registerFastlegeAzureADApi(
     fastlegeService: FastlegeService,
