@@ -70,12 +70,12 @@ spec:
     - name: SYFOTILGANGSKONTROLL_CLIENT_ID
       value: "dev-fss.teamsykefravr.syfo-tilgangskontroll"
     - name: SYFOTILGANGSKONTROLL_URL
-      value: https://syfo-tilgangskontroll.dev-fss-pub.nais.io/syfo-tilgangskontroll/api/tilgang
+      value: "https://syfo-tilgangskontroll.dev-fss-pub.nais.io"
     - name: PDL_CLIENT_ID
-      value: dev-fss.pdl.pdl-api
+      value: "dev-fss.pdl.pdl-api"
     - name: PDL_URL
-      value: https://pdl-api.dev-fss-pub.nais.io/graphql
+      value: "https://pdl-api.dev-fss-pub.nais.io/graphql"
     - name: ISPROXY_CLIENT_ID
-      value: dev-fss.teamsykefravr.isproxy
+      value: "dev-fss.teamsykefravr.isproxy"
     - name: ISPROXY_URL
-      value: https://isproxy.dev-fss-pub.nais.io
+      value: "https://isproxy.dev-fss-pub.nais.io"
