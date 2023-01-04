@@ -24,7 +24,7 @@ fun Route.registrerFastlegeSystemApi(
             } ?: throw IllegalArgumentException("No PersonIdent supplied")
 
             apiConsumerAccessService.validateSystemConsumerApplicationClientId(
-                authorizedApplicationNameList = listOf("isdialogmote"),
+                authorizedApplicationNameList = listOf("isdialogmelding"),
                 token = token,
             )
 
