@@ -26,7 +26,7 @@ fun Application.apiModule(
     installJwtAuthentication(
         jwtIssuerList = listOf(
             JwtIssuer(
-                acceptedAudienceList = listOf(environment.aadAppClient),
+                acceptedAudienceList = listOf(environment.azure.appClientId),
                 jwtIssuerType = JwtIssuerType.INTERNAL_AZUREAD,
                 wellKnown = wellKnownAzure,
             ),
@@ -34,24 +34,19 @@ fun Application.apiModule(
     )
     installStatusPages()
     val azureAdClient = AzureAdClient(
-        azureAppClientId = environment.aadAppClient,
-        azureAppClientSecret = environment.aadAppSecret,
-        azureTokenEndpoint = environment.aadTokenEndpoint,
+        azureEnvironment = environment.azure,
     )
     val tilgangskontrollClient = VeilederTilgangskontrollClient(
         azureAdClient = azureAdClient,
-        syfotilgangskontrollClientId = environment.syfotilgangskontrollClientId,
-        tilgangskontrollBaseUrl = environment.syfotilgangskontrollUrl,
+        clientEnvironment = environment.clients.syfotilgangskontroll,
     )
     val pdlClient = PdlClient(
         azureAdClient = azureAdClient,
-        pdlClientId = environment.pdlClientId,
-        pdlUrl = environment.pdlUrl,
+        clientEnvironment = environment.clients.pdl,
     )
     val isproxyClient = FastlegeClient(
         azureAdClient = azureAdClient,
-        fastlegeClientId = environment.isproxyClientId,
-        fastlegeUrl = environment.isproxyUrl,
+        clientEnvironment = environment.clients.isproxy,
     )
     val fastlegeService = FastlegeService(
         pdlClient = pdlClient,
@@ -70,7 +65,7 @@ fun Application.apiModule(
             )
             registrerFastlegeSystemApi(
                 apiConsumerAccessService = APISystemConsumerAccessService(
-                    azureAppPreAuthorizedApps = environment.azureAppPreAuthorizedApps,
+                    azureAppPreAuthorizedApps = environment.azure.appPreAuthorizedApps,
                 ),
                 fastlegeService = fastlegeService,
             )

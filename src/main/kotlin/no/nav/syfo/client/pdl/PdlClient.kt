@@ -4,6 +4,7 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import no.nav.syfo.client.ClientEnvironment
 import no.nav.syfo.client.azuread.*
 import no.nav.syfo.client.httpClientDefault
 import no.nav.syfo.util.*
@@ -14,8 +15,7 @@ const val ALLE_TEMA_HEADERVERDI = "GEN"
 
 class PdlClient(
     private val azureAdClient: AzureAdClient,
-    private val pdlClientId: String,
-    private val pdlUrl: String,
+    private val clientEnvironment: ClientEnvironment,
 ) {
     private val httpClient = httpClientDefault()
 
@@ -25,10 +25,10 @@ class PdlClient(
         val query = getPdlQuery("/pdl/hentPerson.graphql")
 
         val request = PdlRequest(query, Variables(personident.value))
-        val token = azureAdClient.getSystemToken(pdlClientId)?.accessToken
+        val token = azureAdClient.getSystemToken(clientEnvironment.clientId)?.accessToken
             ?: throw RuntimeException("PDL-call failed: Could not get system token from AzureAD")
 
-        val response: HttpResponse = httpClient.post(pdlUrl) {
+        val response: HttpResponse = httpClient.post(clientEnvironment.baseUrl) {
             setBody(request)
             header(HttpHeaders.ContentType, "application/json")
             header(HttpHeaders.Authorization, bearerHeader(token))
@@ -48,7 +48,7 @@ class PdlClient(
                 }
             }
             else -> {
-                logger.error("Request with url: $pdlUrl failed with reponse code ${response.status.value}")
+                logger.error("Request with url: ${clientEnvironment.baseUrl} failed with reponse code ${response.status.value}")
                 return null
             }
         }

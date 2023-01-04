@@ -29,7 +29,7 @@ fun main() {
             apiModule(
                 applicationState = applicationState,
                 environment = environment,
-                wellKnownAzure = getWellKnown(environment.azureAppWellKnownUrl),
+                wellKnownAzure = getWellKnown(environment.azure.appWellKnownUrl),
             )
         }
     }

@@ -13,9 +13,7 @@ import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentHashMap
 
 class AzureAdClient(
-    private val azureAppClientId: String,
-    private val azureAppClientSecret: String,
-    private val azureTokenEndpoint: String,
+    private val azureEnvironment: AzureEnvironment,
 ) {
     private val httpClient = httpClientProxy()
 
@@ -35,8 +33,8 @@ class AzureAdClient(
             val scope = "api://$scopeClientId/.default"
             val azureAdTokenResponse = getAccessToken(
                 Parameters.build {
-                    append("client_id", azureAppClientId)
-                    append("client_secret", azureAppClientSecret)
+                    append("client_id", azureEnvironment.appClientId)
+                    append("client_secret", azureEnvironment.appClientSecret)
                     append("client_assertion_type", "urn:ietf:params:oauth:grant-type:jwt-bearer")
                     append("grant_type", "urn:ietf:params:oauth:grant-type:jwt-bearer")
                     append("assertion", token)
@@ -61,8 +59,8 @@ class AzureAdClient(
         } else {
             val azureAdTokenResponse = getAccessToken(
                 Parameters.build {
-                    append("client_id", azureAppClientId)
-                    append("client_secret", azureAppClientSecret)
+                    append("client_id", azureEnvironment.appClientId)
+                    append("client_secret", azureEnvironment.appClientSecret)
                     append("grant_type", "client_credentials")
                     append("scope", "api://$scopeClientId/.default")
                 }
@@ -78,7 +76,7 @@ class AzureAdClient(
         formParameters: Parameters,
     ): AzureAdTokenResponse? {
         return try {
-            val response: HttpResponse = httpClient.post(azureTokenEndpoint) {
+            val response: HttpResponse = httpClient.post(azureEnvironment.openidConfigTokenEndpoint) {
                 accept(ContentType.Application.Json)
                 setBody(FormDataContent(formParameters))
             }

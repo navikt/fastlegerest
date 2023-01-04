@@ -33,7 +33,7 @@ class FastlegeAzureADApiTest : Spek({
 
             describe("Finn fastlege") {
                 val validToken = generateJWTNavIdent(
-                    externalMockEnvironment.environment.aadAppClient,
+                    externalMockEnvironment.environment.azure.appClientId,
                     externalMockEnvironment.wellKnownInternalAzureAD.issuer,
                     VEILEDER_IDENT,
                 )
