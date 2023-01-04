@@ -55,8 +55,8 @@ dependencies {
     testImplementation("io.mockk:mockk:${Versions.mockk}")
     testImplementation("org.amshove.kluent:kluent:${Versions.kluent}")
     testImplementation("org.spekframework.spek2:spek-dsl-jvm:${Versions.spek}")
+    testImplementation("com.nimbusds:nimbus-jose-jwt:${Versions.nimbusjosejwt}")
     testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:${Versions.spek}")
-    implementation("com.nimbusds:nimbus-jose-jwt:${Versions.nimbusjosejwt}")
 }
 
 tasks {
