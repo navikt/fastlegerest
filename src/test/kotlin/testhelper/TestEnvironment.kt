@@ -28,7 +28,7 @@ fun testEnvironment(
         ),
         pdl = ClientEnvironment(
             clientId = "dev-fss.pdl.pdl-api",
-            baseUrl =  pdlUrl,
+            baseUrl = pdlUrl,
         ),
         syfotilgangskontroll = ClientEnvironment(
             clientId = "dev-gcp.teamsykefravr.syfotilgangskontroll",
