@@ -31,7 +31,7 @@ class FastlegeSystemApiTest : Spek({
                 val validToken = generateJWTSystem(
                     externalMockEnvironment.environment.aadAppClient,
                     externalMockEnvironment.wellKnownInternalAzureAD.issuer,
-                    azp = testIsdialogmoteClientId,
+                    azp = testIsdialogmeldingClientId,
                 )
                 val invalidToken = generateJWTSystem(
                     externalMockEnvironment.environment.aadAppClient,

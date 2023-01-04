@@ -33,13 +33,13 @@ fun getRandomPort() = ServerSocket(0).use {
     it.localPort
 }
 
-const val testIsdialogmoteClientId = "isdialogmote-client-id"
+const val testIsdialogmeldingClientId = "isdialogmelding-client-id"
 const val testSyfomodiapersonClientId = "syfomodiaperson-client-id"
 
 val testAzureAppPreAuthorizedApps = listOf(
     PreAuthorizedClient(
-        name = "dev-gcp:teamsykefravr:isdialogmote",
-        clientId = testIsdialogmoteClientId,
+        name = "dev-gcp:teamsykefravr:isdialogmelding",
+        clientId = testIsdialogmeldingClientId,
     ),
     PreAuthorizedClient(
         name = "dev-fss:teamsykefravr:syfomodiaperson",
