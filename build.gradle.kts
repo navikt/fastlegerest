@@ -1,96 +1,67 @@
-import com.github.jengelman.gradle.plugins.shadow.transformers.PropertiesFileTransformer
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 group = "no.nav.syfo"
-version = "1.0.0"
+version = "0.0.1"
 
-val apacheHttpClientVersion = "4.5.13"
-val kotlinJacksonVersion = "2.13.4"
-val logstashVersion = "7.2"
-val prometheusVersion = "1.9.5"
-val slf4jVersion = "1.7.36"
-val swaggerVersion = "1.6.7"
-val tokenValidationSpringSupportVersion = "1.3.9"
+object Versions {
+    const val jackson = "2.13.4"
+    const val kluent = "1.68"
+    const val ktor = "2.1.2"
+    const val logback = "1.4.4"
+    const val logstashEncoder = "7.2"
+    const val micrometerRegistry = "1.9.5"
+    const val mockk = "1.13.2"
+    const val spek = "2.0.19"
+    const val nimbusjosejwt = "9.25.1"
+}
 
 plugins {
-    kotlin("jvm") version "1.7.0"
-    id("org.jetbrains.kotlin.plugin.allopen") version "1.7.0"
+    kotlin("jvm") version "1.7.20"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
-    id("org.springframework.boot") version "2.6.12"
-    id("io.spring.dependency-management") version "1.0.14.RELEASE"
 }
 
-allOpen {
-    annotation("org.springframework.context.annotation.Configuration")
-    annotation("org.springframework.stereotype.Service")
-    annotation("org.springframework.stereotype.Component")
-    annotation("org.springframework.boot.autoconfigure.SpringBootApplication")
-}
-
-val githubUser: String by project
-val githubPassword: String by project
 repositories {
     mavenCentral()
-    maven {
-        url = uri("https://maven.pkg.github.com/navikt/syfotjenester")
-        credentials {
-            username = githubUser
-            password = githubPassword
-        }
-    }
-    maven {
-        url = uri("https://maven.pkg.github.com/navikt/tjenestespesifikasjoner")
-        credentials {
-            username = githubUser
-            password = githubPassword
-        }
-    }
 }
 
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(kotlin("reflect"))
 
-    implementation("io.swagger:swagger-annotations:$swaggerVersion")
+    implementation("io.ktor:ktor-client-apache:${Versions.ktor}")
+    implementation("io.ktor:ktor-client-content-negotiation:${Versions.ktor}")
+    implementation("io.ktor:ktor-serialization-jackson:${Versions.ktor}")
+    implementation("io.ktor:ktor-server-auth-jwt:${Versions.ktor}")
+    implementation("io.ktor:ktor-server-call-id:${Versions.ktor}")
+    implementation("io.ktor:ktor-server-content-negotiation:${Versions.ktor}")
+    implementation("io.ktor:ktor-server-netty:${Versions.ktor}")
+    implementation("io.ktor:ktor-server-status-pages:${Versions.ktor}")
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$kotlinJacksonVersion")
+    // Logging
+    implementation("ch.qos.logback:logback-classic:${Versions.logback}")
+    implementation("net.logstash.logback:logstash-logback-encoder:${Versions.logstashEncoder}")
 
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.yaml:snakeyaml") {
-        because("org.springframework.boot:spring-boot-starter-web -> https://www.cve.org/CVERecord?id=CVE-2022-38749")
-        version {
-            require("1.32")
-        }
-    }
-    implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springframework.boot:spring-boot-starter-logging")
-    implementation("org.springframework.boot:spring-boot-starter-aop")
-    implementation("org.springframework.boot:spring-boot-starter-jersey")
-    implementation("org.springframework.boot:spring-boot-starter-cache")
-    implementation("org.springframework.boot:spring-boot-starter-jta-atomikos")
+    // Metrics and Prometheus
+    implementation("io.ktor:ktor-server-metrics-micrometer:${Versions.ktor}")
+    implementation("io.micrometer:micrometer-registry-prometheus:${Versions.micrometerRegistry}")
 
-    implementation("org.apache.httpcomponents:httpclient:$apacheHttpClientVersion")
+    // (De-)serialization
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${Versions.jackson}")
 
-    implementation("io.micrometer:micrometer-registry-prometheus:$prometheusVersion")
-
-    implementation("no.nav.security:token-validation-spring:$tokenValidationSpringSupportVersion")
-
-    implementation("org.slf4j:slf4j-api:$slf4jVersion")
-    implementation("net.logstash.logback:logstash-logback-encoder:$logstashVersion")
-
-    testImplementation("no.nav.security:token-validation-test-support:$tokenValidationSpringSupportVersion")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    // Tests
+    testImplementation("io.ktor:ktor-server-tests:${Versions.ktor}")
+    testImplementation("io.mockk:mockk:${Versions.mockk}")
+    testImplementation("org.amshove.kluent:kluent:${Versions.kluent}")
+    testImplementation("org.spekframework.spek2:spek-dsl-jvm:${Versions.spek}")
+    testImplementation("com.nimbusds:nimbus-jose-jwt:${Versions.nimbusjosejwt}")
+    testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:${Versions.spek}")
 }
 
 tasks {
     withType<Jar> {
-        manifest.attributes["Main-Class"] = "no.nav.syfo.ApplicationKt"
-    }
-
-    withType<Test> {
-        useJUnitPlatform()
+        manifest.attributes["Main-Class"] = "no.nav.syfo.AppKt"
     }
 
     create("printVersion") {
@@ -99,15 +70,20 @@ tasks {
         }
     }
 
-    withType<ShadowJar> {
-        transform(PropertiesFileTransformer::class.java) {
-            paths = listOf("META-INF/spring.factories")
-            mergeStrategy = "append"
-        }
-        mergeServiceFiles()
-    }
-
     withType<KotlinCompile> {
         kotlinOptions.jvmTarget = "17"
+    }
+
+    withType<ShadowJar> {
+        archiveBaseName.set("app")
+        archiveClassifier.set("")
+        archiveVersion.set("")
+    }
+
+    withType<Test> {
+        useJUnitPlatform {
+            includeEngines("spek2")
+        }
+        testLogging.showStandardStreams = true
     }
 }

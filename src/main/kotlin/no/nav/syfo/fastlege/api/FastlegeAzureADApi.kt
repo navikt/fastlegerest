@@ -1,69 +1,51 @@
 package no.nav.syfo.fastlege.api
 
-import io.swagger.annotations.Api
-import no.nav.security.token.support.core.api.ProtectedWithClaims
-import no.nav.syfo.api.auth.OIDCIssuer.VEILEDER_AZURE_V2
-import no.nav.syfo.consumer.tilgangskontroll.TilgangkontrollConsumer
+import io.ktor.server.application.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import no.nav.syfo.client.tilgangskontroll.VeilederTilgangskontrollClient
 import no.nav.syfo.fastlege.FastlegeService
-import no.nav.syfo.fastlege.domain.Fastlege
 import no.nav.syfo.fastlege.expection.FastlegeIkkeFunnet
 import no.nav.syfo.fastlege.expection.HarIkkeTilgang
-import no.nav.syfo.metric.Metrikk
-import no.nav.syfo.util.PersonIdent
-import no.nav.syfo.util.getPersonIdent
-import org.slf4j.LoggerFactory
-import org.springframework.http.MediaType
-import org.springframework.util.MultiValueMap
-import org.springframework.web.bind.annotation.*
-import javax.inject.Inject
+import no.nav.syfo.util.*
 
-@RestController
-@Api(value = "fastlege", description = "Endepunkt for henting av fastlege")
-@ProtectedWithClaims(issuer = VEILEDER_AZURE_V2)
-@RequestMapping(value = ["/api/v2/fastlege"])
-class FastlegeAzureADApi @Inject constructor(
-    private val fastlegeService: FastlegeService,
-    private val metrikk: Metrikk,
-    private val tilgangkontrollConsumer: TilgangkontrollConsumer,
+const val FASTLEGE_PATH = "/fastlegerest/api/v2/fastlege"
+
+fun Route.registerFastlegeAzureADApi(
+    fastlegeService: FastlegeService,
+    tilgangkontrollClient: VeilederTilgangskontrollClient,
 ) {
-    @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun finnFastlegeAazure(
-        @RequestHeader headers: MultiValueMap<String, String>,
-    ): Fastlege {
-        metrikk.tellHendelse("finn_fastlege")
+    route(FASTLEGE_PATH) {
+        get("") {
+            val callId = getCallId()
+            val token = getBearerHeader()
+                ?: throw IllegalArgumentException("No Authorization header supplied to system api when getting fastlege, callID=$callId")
+            val requestedPersonIdent = getPersonIdentHeader()?.let { personIdent ->
+                PersonIdent(personIdent)
+            } ?: throw IllegalArgumentException("No PersonIdent supplied")
 
-        val requestedPersonIdent = headers.getPersonIdent()?.let { personIdent ->
-            PersonIdent(personIdent)
-        } ?: throw IllegalArgumentException("No PersonIdent supplied")
+            if (!tilgangkontrollClient.hasAccess(callId, requestedPersonIdent, token)) {
+                throw HarIkkeTilgang()
+            }
 
-        kastExceptionHvisIkkeTilgang(requestedPersonIdent)
-        return fastlegeService.hentBrukersFastlege(requestedPersonIdent)
-            ?: throw FastlegeIkkeFunnet()
-    }
-
-    @GetMapping(path = ["/fastleger"], produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getFastleger(
-        @RequestHeader headers: MultiValueMap<String, String>,
-    ): List<Fastlege> {
-        metrikk.tellHendelse("get_fastleger")
-
-        val requestedPersonIdent = headers.getPersonIdent()?.let { personIdent ->
-            PersonIdent(personIdent)
-        } ?: throw IllegalArgumentException("No PersonIdent supplied")
-
-        kastExceptionHvisIkkeTilgang(requestedPersonIdent)
-        return fastlegeService.hentBrukersFastleger(requestedPersonIdent)
-    }
-
-    private fun kastExceptionHvisIkkeTilgang(personIdent: PersonIdent) {
-        val (harTilgang) = tilgangkontrollConsumer.accessAzureAdV2(personIdent)
-        if (!harTilgang) {
-            log.info("Har ikke tilgang til å se fastlegeinformasjon om brukeren")
-            throw HarIkkeTilgang(null)
+            val fastlege = fastlegeService.hentBrukersFastlege(requestedPersonIdent, callId)
+                ?: throw FastlegeIkkeFunnet()
+            call.respond(fastlege)
         }
-    }
+        get("/fastleger") {
+            val callId = getCallId()
+            val token = getBearerHeader()
+                ?: throw IllegalArgumentException("No Authorization header supplied to system api when getting fastlege, callID=$callId")
+            val requestedPersonIdent = getPersonIdentHeader()?.let { personIdent ->
+                PersonIdent(personIdent)
+            } ?: throw IllegalArgumentException("No PersonIdent supplied")
 
-    companion object {
-        private val log = LoggerFactory.getLogger(FastlegeAzureADApi::class.java)
+            if (!tilgangkontrollClient.hasAccess(callId, requestedPersonIdent, token)) {
+                throw HarIkkeTilgang()
+            }
+
+            val fastleger = fastlegeService.hentBrukersFastleger(requestedPersonIdent, callId)
+            call.respond(fastleger)
+        }
     }
 }

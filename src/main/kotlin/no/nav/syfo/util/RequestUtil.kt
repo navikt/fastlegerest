@@ -1,21 +1,41 @@
 package no.nav.syfo.util
 
-import org.springframework.util.MultiValueMap
-import java.util.*
-
-const val NAV_CONSUMER_TOKEN_HEADER = "Nav-Consumer-Token"
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.util.pipeline.*
 
 const val NAV_CONSUMER_ID_HEADER = "Nav-Consumer-Id"
-const val APP_CONSUMER_ID = "syfoperson"
 
 const val NAV_PERSONIDENT_HEADER = "nav-personident"
 
-const val TEMA_HEADER = "Tema"
-const val ALLE_TEMA_HEADERVERDI = "GEN"
-
 const val NAV_CALL_ID_HEADER = "Nav-Call-Id"
 
-fun createCallId(): String = UUID.randomUUID().toString()
+fun bearerHeader(token: String) = "Bearer $token"
 
-fun MultiValueMap<String, String>.getPersonIdent(): String? =
-    this.getFirst(NAV_PERSONIDENT_HEADER.toLowerCase())
+fun PipelineContext<out Unit, ApplicationCall>.getCallId(): String {
+    return this.call.getCallId()
+}
+
+fun ApplicationCall.getCallId(): String {
+    return this.request.headers[NAV_CALL_ID_HEADER].toString()
+}
+
+fun ApplicationCall.getConsumerId(): String {
+    return this.request.headers[NAV_CONSUMER_ID_HEADER].toString()
+}
+
+fun ApplicationCall.getBearerHeader(): String? {
+    return getHeader(HttpHeaders.Authorization)?.removePrefix("Bearer ")
+}
+
+private fun ApplicationCall.getHeader(header: String): String? {
+    return this.request.headers[header]
+}
+
+fun PipelineContext<out Unit, ApplicationCall>.getBearerHeader(): String? {
+    return this.call.getBearerHeader()
+}
+
+fun PipelineContext<out Unit, ApplicationCall>.getPersonIdentHeader(): String? {
+    return this.call.getHeader(NAV_PERSONIDENT_HEADER)
+}

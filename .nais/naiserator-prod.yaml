@@ -8,16 +8,21 @@ metadata:
 spec:
   image: {{ image }}
   port: 8080
+  startup:
+    path: /internal/is_ready
+    periodSeconds: 5
+    timeout: 5
+    failureThreshold: 30
   liveness:
-    path: fastlegerest/internal/isAlive
-    initialDelay: 60
-    timeout: 1
-    periodSeconds: 10
-    failureThreshold: 5
+    path: /internal/is_alive
+    periodSeconds: 5
+    timeout: 5
+    failureThreshold: 3
   readiness:
-    path: fastlegerest/internal/isReady
-    initialDelay: 120
-    timeout: 1
+    path: /internal/is_ready
+    periodSeconds: 5
+    timeout: 5
+    failureThreshold: 3
   resources:
     limits:
       cpu: 200m
@@ -31,7 +36,7 @@ spec:
     cpuThresholdPercentage: 70
   prometheus:
     enabled: true
-    path: fastlegerest/internal/prometheus
+    path: /internal/metrics
   ingresses:
     - "https://fastlegerest.intern.nav.no"
   accessPolicy:
@@ -65,12 +70,12 @@ spec:
     - name: SYFOTILGANGSKONTROLL_CLIENT_ID
       value: "prod-fss.teamsykefravr.syfo-tilgangskontroll"
     - name: SYFOTILGANGSKONTROLL_URL
-      value: https://syfo-tilgangskontroll.prod-fss-pub.nais.io/syfo-tilgangskontroll/api/tilgang
+      value: "https://syfo-tilgangskontroll.prod-fss-pub.nais.io"
     - name: PDL_CLIENT_ID
-      value: prod-fss.pdl.pdl-api
+      value: "prod-fss.pdl.pdl-api"
     - name: PDL_URL
-      value: https://pdl-api.prod-fss-pub.nais.io/graphql
+      value: "https://pdl-api.prod-fss-pub.nais.io/graphql"
     - name: ISPROXY_CLIENT_ID
-      value: prod-fss.teamsykefravr.isproxy
+      value: "prod-fss.teamsykefravr.isproxy"
     - name: ISPROXY_URL
-      value: https://isproxy.prod-fss-pub.nais.io
+      value: "https://isproxy.prod-fss-pub.nais.io"

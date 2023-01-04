@@ -1,33 +1,26 @@
 package no.nav.syfo.fastlege
 
-import no.nav.syfo.consumer.fastlege.FastlegeConsumer
-import no.nav.syfo.consumer.fastlege.toFastlege
-import no.nav.syfo.consumer.pdl.PdlConsumer
-import no.nav.syfo.consumer.pdl.PdlHentPerson
+import no.nav.syfo.client.fastlege.FastlegeClient
+import no.nav.syfo.client.fastlege.toFastlege
+import no.nav.syfo.client.pdl.PdlClient
+import no.nav.syfo.client.pdl.PdlHentPerson
 import no.nav.syfo.fastlege.domain.*
 import no.nav.syfo.util.PersonIdent
 import no.nav.syfo.util.lowerCapitalize
 import org.slf4j.LoggerFactory
-import org.springframework.cache.annotation.Cacheable
-import org.springframework.stereotype.Service
-import javax.inject.Inject
 
-@Service
-class FastlegeService @Inject constructor(
-    private val pdlConsumer: PdlConsumer,
-    private val fastlegeConsumer: FastlegeConsumer
+class FastlegeService(
+    private val pdlClient: PdlClient,
+    private val fastlegeClient: FastlegeClient
 ) {
-    @Cacheable(value = ["fastlege"])
-    fun hentBrukersFastlege(personIdent: PersonIdent): Fastlege? {
-        return hentBrukersFastleger(personIdent).aktiv()
-    }
-
-    @Cacheable(value = ["fastlege"])
-    fun hentBrukersFastleger(personIdent: PersonIdent): List<Fastlege> {
+    suspend fun hentBrukersFastleger(
+        personIdent: PersonIdent,
+        callId: String,
+    ): List<Fastlege> {
         return try {
-            val maybePerson = pdlConsumer.person(personIdent)
+            val maybePerson = pdlClient.person(personIdent)
             val pasient = toPasient(personIdent, maybePerson)
-            fastlegeConsumer.getFastleger(personIdent).map { fastlege ->
+            fastlegeClient.getFastleger(personIdent, callId).map { fastlege ->
                 fastlege.toFastlege(
                     pasient = Pasient(
                         fnr = personIdent.value,
@@ -35,13 +28,23 @@ class FastlegeService @Inject constructor(
                         mellomnavn = pasient?.mellomnavn,
                         etternavn = pasient?.etternavn ?: "",
                     ),
-                    foreldreEnhetHerId = hentForeldreEnhetHerId(fastlege.herId),
+                    foreldreEnhetHerId = hentForeldreEnhetHerId(fastlege.herId, callId),
                 )
             }
         } catch (e: RuntimeException) {
             log.error("Søkte opp og fikk en feil fra fastlegetjenesten fordi tjenesten er nede", e)
             throw e
         }
+    }
+
+    suspend fun hentBrukersFastlege(
+        personIdent: PersonIdent,
+        callId: String,
+    ): Fastlege? {
+        return hentBrukersFastleger(
+            personIdent = personIdent,
+            callId = callId,
+        ).aktiv()
     }
 
     private fun toPasient(
@@ -60,9 +63,15 @@ class FastlegeService @Inject constructor(
         }
     }
 
-    private fun hentForeldreEnhetHerId(fastlegeHerId: Int?): Int? {
+    private suspend fun hentForeldreEnhetHerId(
+        fastlegeHerId: Int?,
+        callId: String,
+    ): Int? {
         return fastlegeHerId?.let { herId ->
-            fastlegeConsumer.getPraksisInfo(herId)?.foreldreEnhetHerId
+            fastlegeClient.getPraksisInfo(
+                herId = herId,
+                callId = callId,
+            )?.foreldreEnhetHerId
         }
     }
 
