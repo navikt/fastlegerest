@@ -78,7 +78,7 @@ class FastlegeSystemApiTest : Spek({
                                 addHeader(NAV_PERSONIDENT_HEADER, UserConstants.ARBEIDSTAKER_PERSONIDENT_NO_FASTLEGE.value)
                             }
                         ) {
-                            response.status() shouldBeEqualTo HttpStatusCode.NoContent
+                            response.status() shouldBeEqualTo HttpStatusCode.InternalServerError
                             response.content shouldBeEqualTo "Fant ikke aktiv fastlege"
                         }
                     }
