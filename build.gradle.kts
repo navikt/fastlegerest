@@ -6,12 +6,15 @@ version = "0.0.1"
 
 object Versions {
     const val jackson = "2.13.4"
+    const val jedis = "4.2.3"
     const val kluent = "1.68"
     const val ktor = "2.1.2"
     const val logback = "1.4.4"
     const val logstashEncoder = "7.2"
     const val micrometerRegistry = "1.9.5"
     const val mockk = "1.13.2"
+    const val redisEmbedded = "0.7.3"
+
     const val spek = "2.0.19"
     const val nimbusjosejwt = "9.25.1"
 }
@@ -49,6 +52,10 @@ dependencies {
 
     // (De-)serialization
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${Versions.jackson}")
+
+    // Cache
+    implementation("redis.clients:jedis:${Versions.jedis}")
+    testImplementation("it.ozimov:embedded-redis:${Versions.redisEmbedded}")
 
     // Tests
     testImplementation("io.ktor:ktor-server-tests:${Versions.ktor}")

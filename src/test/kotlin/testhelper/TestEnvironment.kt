@@ -35,6 +35,9 @@ fun testEnvironment(
             baseUrl = syfotilgangskontrollUrl,
         )
     ),
+    redisHost = "localhost",
+    redisPort = 6599,
+    redisSecret = "password",
 )
 
 fun testAppState() = ApplicationState(
