@@ -1,6 +1,9 @@
 package testhelper
 
 import no.nav.syfo.application.*
+import no.nav.syfo.client.ClientEnvironment
+import no.nav.syfo.client.ClientsEnvironment
+import no.nav.syfo.client.azuread.AzureEnvironment
 import no.nav.syfo.fastlege.api.system.access.PreAuthorizedClient
 import no.nav.syfo.util.configuredJacksonMapper
 import java.net.ServerSocket
@@ -11,17 +14,27 @@ fun testEnvironment(
     syfotilgangskontrollUrl: String = "tilgangskontroll",
     isproxyUrl: String = "isproxy",
 ) = Environment(
-    aadAppClient = "appClientId",
-    aadAppSecret = "appClientSecret",
-    azureAppPreAuthorizedApps = configuredJacksonMapper().writeValueAsString(testAzureAppPreAuthorizedApps),
-    aadTokenEndpoint = azureTokenEndpoint,
-    azureAppWellKnownUrl = "appWellKnownUrl",
-    pdlUrl = pdlUrl,
-    pdlClientId = "dev-fss.pdl.pdl-api",
-    syfotilgangskontrollUrl = syfotilgangskontrollUrl,
-    syfotilgangskontrollClientId = "dev-gcp.teamsykefravr.syfotilgangskontroll",
-    isproxyUrl = isproxyUrl,
-    isproxyClientId = "dev-fss.teamsykefravr.isproxy",
+    azure = AzureEnvironment(
+        appClientId = "appClientId",
+        appClientSecret = "appClientSecret",
+        appPreAuthorizedApps = configuredJacksonMapper().writeValueAsString(testAzureAppPreAuthorizedApps),
+        openidConfigTokenEndpoint = azureTokenEndpoint,
+        appWellKnownUrl = "appWellKnownUrl",
+    ),
+    clients = ClientsEnvironment(
+        isproxy = ClientEnvironment(
+            clientId = "dev-fss.teamsykefravr.isproxy",
+            baseUrl = isproxyUrl,
+        ),
+        pdl = ClientEnvironment(
+            clientId = "dev-fss.pdl.pdl-api",
+            baseUrl = pdlUrl,
+        ),
+        syfotilgangskontroll = ClientEnvironment(
+            clientId = "dev-gcp.teamsykefravr.syfotilgangskontroll",
+            baseUrl = syfotilgangskontrollUrl,
+        )
+    ),
 )
 
 fun testAppState() = ApplicationState(

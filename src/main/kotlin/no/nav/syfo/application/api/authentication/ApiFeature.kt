@@ -106,7 +106,7 @@ fun Application.installStatusPages() {
                     log.warn(logExceptionMessage, cause)
                 }
                 is FastlegeIkkeFunnet -> {
-                    log.info(logExceptionMessage)
+                    log.info(logExceptionMessage, cause)
                 }
                 else -> {
                     log.error(logExceptionMessage, cause)
