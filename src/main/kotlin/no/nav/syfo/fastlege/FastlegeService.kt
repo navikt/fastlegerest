@@ -23,7 +23,7 @@ class FastlegeService(
             val cacheKey = "fastleger-$personIdent"
             val cachedValue = cache.getListObject<Fastlege>(cacheKey)
             if (cachedValue != null) {
-                COUNT_CALL_CALL_FASTLEGER_CACHE_HIT.increment()
+                COUNT_CALL_FASTLEGER_CACHE_HIT.increment()
                 cachedValue
             } else {
                 val maybePerson = pdlClient.person(personIdent)
@@ -39,7 +39,7 @@ class FastlegeService(
                         foreldreEnhetHerId = hentForeldreEnhetHerId(fastlege.herId, callId),
                     )
                 }.also {
-                    COUNT_CALL_CALL_FASTLEGER_CACHE_MISS.increment()
+                    COUNT_CALL_FASTLEGER_CACHE_MISS.increment()
                     cache.setObject(cacheKey, it, 24 * 3600)
                 }
             }
