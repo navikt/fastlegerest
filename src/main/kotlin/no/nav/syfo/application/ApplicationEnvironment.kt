@@ -29,6 +29,9 @@ data class Environment(
             baseUrl = getEnvVar("SYFOTILGANGSKONTROLL_URL"),
         )
     ),
+    val redisHost: String = getEnvVar("REDIS_HOST"),
+    val redisPort: Int = getEnvVar("REDIS_PORT", "6379").toInt(),
+    val redisSecret: String = getEnvVar("REDIS_PASSWORD"),
 )
 
 fun getEnvVar(varName: String, defaultValue: String? = null) =

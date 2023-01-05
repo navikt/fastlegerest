@@ -9,7 +9,9 @@ import no.nav.syfo.application.ApplicationState
 import no.nav.syfo.application.Environment
 import no.nav.syfo.application.api.apiModule
 import no.nav.syfo.application.api.authentication.getWellKnown
+import no.nav.syfo.application.cache.RedisStore
 import org.slf4j.LoggerFactory
+import redis.clients.jedis.*
 import java.util.concurrent.TimeUnit
 
 const val applicationPort = 8080
@@ -18,7 +20,15 @@ fun main() {
     val applicationState = ApplicationState()
     val logger = LoggerFactory.getLogger("ktor.application")
     val environment = Environment()
-
+    val cache = RedisStore(
+        JedisPool(
+            JedisPoolConfig(),
+            environment.redisHost,
+            environment.redisPort,
+            Protocol.DEFAULT_TIMEOUT,
+            environment.redisSecret
+        )
+    )
     val applicationEngineEnvironment = applicationEngineEnvironment {
         log = logger
         config = HoconApplicationConfig(ConfigFactory.load())
@@ -30,6 +40,7 @@ fun main() {
                 applicationState = applicationState,
                 environment = environment,
                 wellKnownAzure = getWellKnown(environment.azure.appWellKnownUrl),
+                cache = cache,
             )
         }
     }

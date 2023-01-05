@@ -1,5 +1,6 @@
 package no.nav.syfo.fastlege
 
+import no.nav.syfo.application.cache.RedisStore
 import no.nav.syfo.client.fastlege.FastlegeClient
 import no.nav.syfo.client.fastlege.toFastlege
 import no.nav.syfo.client.pdl.PdlClient
@@ -11,25 +12,36 @@ import org.slf4j.LoggerFactory
 
 class FastlegeService(
     private val pdlClient: PdlClient,
-    private val fastlegeClient: FastlegeClient
+    private val fastlegeClient: FastlegeClient,
+    private val cache: RedisStore,
 ) {
     suspend fun hentBrukersFastleger(
         personIdent: PersonIdent,
         callId: String,
     ): List<Fastlege> {
         return try {
-            val maybePerson = pdlClient.person(personIdent)
-            val pasient = toPasient(personIdent, maybePerson)
-            fastlegeClient.getFastleger(personIdent, callId).map { fastlege ->
-                fastlege.toFastlege(
-                    pasient = Pasient(
-                        fnr = personIdent.value,
-                        fornavn = pasient?.fornavn ?: "",
-                        mellomnavn = pasient?.mellomnavn,
-                        etternavn = pasient?.etternavn ?: "",
-                    ),
-                    foreldreEnhetHerId = hentForeldreEnhetHerId(fastlege.herId, callId),
-                )
+            val cacheKey = "fastleger-$personIdent"
+            val cachedValue = cache.getListObject<Fastlege>(cacheKey)
+            if (cachedValue != null) {
+                COUNT_CALL_FASTLEGER_CACHE_HIT.increment()
+                cachedValue
+            } else {
+                val maybePerson = pdlClient.person(personIdent)
+                val pasient = toPasient(personIdent, maybePerson)
+                fastlegeClient.getFastleger(personIdent, callId).map { fastlege ->
+                    fastlege.toFastlege(
+                        pasient = Pasient(
+                            fnr = personIdent.value,
+                            fornavn = pasient?.fornavn ?: "",
+                            mellomnavn = pasient?.mellomnavn,
+                            etternavn = pasient?.etternavn ?: "",
+                        ),
+                        foreldreEnhetHerId = hentForeldreEnhetHerId(fastlege.herId, callId),
+                    )
+                }.also {
+                    COUNT_CALL_FASTLEGER_CACHE_MISS.increment()
+                    cache.setObject(cacheKey, it, 24 * 3600)
+                }
             }
         } catch (e: RuntimeException) {
             log.error("Søkte opp og fikk en feil fra fastlegetjenesten fordi tjenesten er nede", e)

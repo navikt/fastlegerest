@@ -28,6 +28,12 @@ class ExternalMockEnvironment {
 
     val wellKnownInternalAzureAD = wellKnownInternalAzureAD()
 
+    val redisServer = testRedis(environment)
+
+    protected fun finalize() {
+        this.stopExternalMocks()
+    }
+
     companion object {
         private val singletonInstance: ExternalMockEnvironment by lazy {
             ExternalMockEnvironment().also {
@@ -43,10 +49,12 @@ class ExternalMockEnvironment {
 
 fun ExternalMockEnvironment.startExternalMocks() {
     this.externalApplicationMockMap.start()
+    this.redisServer.start()
 }
 
 fun ExternalMockEnvironment.stopExternalMocks() {
     this.externalApplicationMockMap.stop()
+    this.redisServer.stop()
 }
 
 fun HashMap<String, NettyApplicationEngine>.start() {

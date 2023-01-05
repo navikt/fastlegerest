@@ -57,6 +57,8 @@ spec:
         - host: "syfo-tilgangskontroll.prod-fss-pub.nais.io"
         - host: "isproxy.prod-fss-pub.nais.io"
         - host: "pdl-api.prod-fss-pub.nais.io"
+      rules:
+        - application: fastlegerest-redis
   azure:
     application:
       enabled: true
@@ -66,7 +68,11 @@ spec:
       claims:
         extra:
           - "NAVident"
+  envFrom:
+    - secret: fastlegerest-redis-password
   env:
+    - name: REDIS_HOST
+      value: "fastlegerest-redis.teamsykefravr.svc.cluster.local"
     - name: SYFOTILGANGSKONTROLL_CLIENT_ID
       value: "prod-fss.teamsykefravr.syfo-tilgangskontroll"
     - name: SYFOTILGANGSKONTROLL_URL

@@ -6,6 +6,7 @@ import io.ktor.server.routing.*
 import no.nav.syfo.application.ApplicationState
 import no.nav.syfo.application.Environment
 import no.nav.syfo.application.api.authentication.*
+import no.nav.syfo.application.cache.RedisStore
 import no.nav.syfo.application.metric.registerMetricApi
 import no.nav.syfo.client.azuread.AzureAdClient
 import no.nav.syfo.client.fastlege.FastlegeClient
@@ -19,6 +20,7 @@ fun Application.apiModule(
     applicationState: ApplicationState,
     environment: Environment,
     wellKnownAzure: WellKnown,
+    cache: RedisStore,
 ) {
     installMetrics()
     installCallId()
@@ -35,6 +37,7 @@ fun Application.apiModule(
     installStatusPages()
     val azureAdClient = AzureAdClient(
         azureEnvironment = environment.azure,
+        cache = cache,
     )
     val tilgangskontrollClient = VeilederTilgangskontrollClient(
         azureAdClient = azureAdClient,
@@ -51,6 +54,7 @@ fun Application.apiModule(
     val fastlegeService = FastlegeService(
         pdlClient = pdlClient,
         fastlegeClient = isproxyClient,
+        cache = cache,
     )
 
     routing {
