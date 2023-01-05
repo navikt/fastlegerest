@@ -123,7 +123,7 @@ fun Application.installStatusPages() {
                     HttpStatusCode.BadRequest
                 }
                 is FastlegeIkkeFunnet -> {
-                    HttpStatusCode.InternalServerError
+                    HttpStatusCode.NotFound
                 }
                 is HarIkkeTilgang -> {
                     HttpStatusCode.Forbidden

@@ -75,7 +75,7 @@ class FastlegeAzureADApiTest : Spek({
                                 addHeader(NAV_PERSONIDENT_HEADER, ARBEIDSTAKER_PERSONIDENT_NO_FASTLEGE.value)
                             }
                         ) {
-                            response.status() shouldBeEqualTo HttpStatusCode.InternalServerError
+                            response.status() shouldBeEqualTo HttpStatusCode.NotFound
                             response.content shouldBeEqualTo "Fant ikke aktiv fastlege"
                         }
                     }
