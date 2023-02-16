@@ -61,6 +61,7 @@ spec:
         - application: fastlegerest-redis
   azure:
     application:
+      allowAllUsers: true
       enabled: true
       tenant: trygdeetaten.no
       replyURLs:
