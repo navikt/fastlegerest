@@ -48,6 +48,9 @@ spec:
         - application: finnfastlege
           namespace: teamsykefravr
           cluster: dev-fss
+        - application: finnfastlege
+          namespace: teamsykefravr
+          cluster: dev-gcp
         - application: isdialogmelding
           namespace: teamsykefravr
           cluster: dev-gcp
