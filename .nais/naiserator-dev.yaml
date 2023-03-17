@@ -68,8 +68,6 @@ spec:
       allowAllUsers: true
       enabled: true
       tenant: trygdeetaten.no
-      replyURLs:
-        - "https://fastlegerest.intern.dev.nav.no/oauth2/callback"
       claims:
         extra:
           - "NAVident"
