@@ -39,6 +39,7 @@ spec:
     path: /internal/metrics
   ingresses:
     - "https://fastlegerest.dev.intern.nav.no"
+    - "https://fastlegerest.intern.dev.nav.no"
   accessPolicy:
     inbound:
       rules:
@@ -68,7 +69,7 @@ spec:
       enabled: true
       tenant: trygdeetaten.no
       replyURLs:
-        - "https://fastlegerest.dev.intern.nav.no/oauth2/callback"
+        - "https://fastlegerest.intern.dev.nav.no/oauth2/callback"
       claims:
         extra:
           - "NAVident"
