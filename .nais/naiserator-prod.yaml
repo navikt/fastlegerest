@@ -45,9 +45,9 @@ spec:
         - application: syfomodiaperson
           namespace: teamsykefravr
           cluster: prod-fss
-        - application: finnfastlege
+        - application: syfomodiaperson
           namespace: teamsykefravr
-          cluster: prod-fss
+          cluster: prod-gcp
         - application: finnfastlege
           namespace: teamsykefravr
           cluster: prod-gcp
