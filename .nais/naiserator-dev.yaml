@@ -54,11 +54,11 @@ spec:
     outbound:
       external:
         - host: "login.microsoftonline.com"
-        - host: "syfo-tilgangskontroll.dev-fss-pub.nais.io"
         - host: "isproxy.dev-fss-pub.nais.io"
         - host: "pdl-api.dev-fss-pub.nais.io"
       rules:
         - application: fastlegerest-redis
+        - application: syfo-tilgangskontroll
   azure:
     application:
       allowAllUsers: true
@@ -73,9 +73,9 @@ spec:
     - name: REDIS_HOST
       value: "fastlegerest-redis.teamsykefravr.svc.cluster.local"
     - name: SYFOTILGANGSKONTROLL_CLIENT_ID
-      value: "dev-fss.teamsykefravr.syfo-tilgangskontroll"
+      value: "dev-gcp.teamsykefravr.syfo-tilgangskontroll"
     - name: SYFOTILGANGSKONTROLL_URL
-      value: "https://syfo-tilgangskontroll.dev-fss-pub.nais.io"
+      value: "http://syfo-tilgangskontroll"
     - name: PDL_CLIENT_ID
       value: "dev-fss.pdl.pdl-api"
     - name: PDL_URL
