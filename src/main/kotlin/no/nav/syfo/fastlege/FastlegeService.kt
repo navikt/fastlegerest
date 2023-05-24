@@ -6,9 +6,9 @@ import no.nav.syfo.client.fastlege.toFastlege
 import no.nav.syfo.client.pdl.PdlClient
 import no.nav.syfo.client.pdl.PdlHentPerson
 import no.nav.syfo.fastlege.domain.*
-import no.nav.syfo.util.PersonIdent
-import no.nav.syfo.util.lowerCapitalize
+import no.nav.syfo.util.*
 import org.slf4j.LoggerFactory
+import java.time.LocalDate
 
 class FastlegeService(
     private val pdlClient: PdlClient,
@@ -59,6 +59,16 @@ class FastlegeService(
         ).aktiv()
     }
 
+    suspend fun hentBrukersFastlegevikar(
+        personIdent: PersonIdent,
+        callId: String,
+    ): Fastlege? {
+        return hentBrukersFastleger(
+            personIdent = personIdent,
+            callId = callId,
+        ).vikar()
+    }
+
     private fun toPasient(
         personIdent: PersonIdent,
         maybePerson: PdlHentPerson?,
@@ -92,6 +102,17 @@ class FastlegeService(
             fastlege.relasjon.kodeVerdi == RelasjonKodeVerdi.FASTLEGE.kodeVerdi
         }.maxByOrNull { fastlege ->
             fastlege.gyldighet.fom
+        }
+    }
+
+    private fun List<Fastlege>.vikar(): Fastlege? {
+        val today = LocalDate.now()
+        return this.filter { fastlege ->
+            fastlege.relasjon.kodeVerdi == RelasjonKodeVerdi.VIKAR.kodeVerdi
+        }.filter { vikar ->
+            vikar.gyldighet.fom.isBeforeOrEqual(today) && vikar.gyldighet.tom.isAfterOrEqual(today)
+        }.maxByOrNull { vikar ->
+            vikar.gyldighet.fom
         }
     }
 

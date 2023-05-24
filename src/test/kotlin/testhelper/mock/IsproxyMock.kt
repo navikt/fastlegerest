@@ -30,9 +30,9 @@ fun generateFastlegeResponse(
     ),
     fnr = null,
     herId = null,
-    gyldighet = Periode(LocalDate.now().minusYears(1), LocalDate.now()),
+    gyldighet = Periode(LocalDate.now().minusYears(1), LocalDate.now().plusYears(1)),
     helsepersonellregisterId = null,
-    pasientforhold = Periode(LocalDate.now().minusYears(1), LocalDate.now()),
+    pasientforhold = Periode(LocalDate.now().minusYears(1), LocalDate.now().plusYears(1)),
     relasjon = Relasjon(relasjonKodeVerdi.kodeVerdi, ""),
     stillingsprosent = null,
 )
