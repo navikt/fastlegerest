@@ -36,7 +36,7 @@ fun Route.registrerFastlegeSystemApi(
         get("/vikar/personident") {
             val callId = getCallId()
             val token = getBearerHeader()
-                ?: throw IllegalArgumentException("No Authorization header supplied to system api when getting fastlege, callID=$callId")
+                ?: throw IllegalArgumentException("No Authorization header supplied to system api when getting vikar, callID=$callId")
             val requestedPersonIdent = getPersonIdentHeader()?.let { personIdent ->
                 PersonIdent(personIdent)
             } ?: throw IllegalArgumentException("No PersonIdent supplied")
