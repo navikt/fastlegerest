@@ -39,6 +39,7 @@ class FastlegeSystemApiTest : Spek({
                     azp = testSyfomodiapersonClientId,
                 )
                 val fastlegeSystemPath = "$FASTLEGE_SYSTEM_PATH/aktiv/personident"
+                val vikarSystemPath = "$FASTLEGE_SYSTEM_PATH/vikar/personident"
 
                 describe("Happy path") {
                     it("should return fastlege") {
@@ -66,6 +67,20 @@ class FastlegeSystemApiTest : Spek({
                             response.status() shouldBeEqualTo HttpStatusCode.OK
                             val fastlege = objectMapper.readValue<Fastlege>(response.content!!)
                             fastlege.relasjon.kodeVerdi shouldBeEqualTo RelasjonKodeVerdi.FASTLEGE.kodeVerdi
+                            fastlege.pasient!!.fnr shouldBeEqualTo UserConstants.ARBEIDSTAKER_PERSONIDENT_FASTLEGE_AND_VIKAR.value
+                        }
+                    }
+                    it("should return vikar") {
+
+                        with(
+                            handleRequest(HttpMethod.Get, vikarSystemPath) {
+                                addHeader(HttpHeaders.Authorization, bearerHeader(validToken))
+                                addHeader(NAV_PERSONIDENT_HEADER, UserConstants.ARBEIDSTAKER_PERSONIDENT_FASTLEGE_AND_VIKAR.value)
+                            }
+                        ) {
+                            response.status() shouldBeEqualTo HttpStatusCode.OK
+                            val fastlege = objectMapper.readValue<Fastlege>(response.content!!)
+                            fastlege.relasjon.kodeVerdi shouldBeEqualTo RelasjonKodeVerdi.VIKAR.kodeVerdi
                             fastlege.pasient!!.fnr shouldBeEqualTo UserConstants.ARBEIDSTAKER_PERSONIDENT_FASTLEGE_AND_VIKAR.value
                         }
                     }
