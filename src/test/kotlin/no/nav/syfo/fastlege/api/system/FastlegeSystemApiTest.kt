@@ -97,6 +97,17 @@ class FastlegeSystemApiTest : Spek({
                             response.content shouldBeEqualTo "Fant ikke aktiv fastlege"
                         }
                     }
+                    it("no fastlegevikar") {
+                        with(
+                            handleRequest(HttpMethod.Get, vikarSystemPath) {
+                                addHeader(HttpHeaders.Authorization, bearerHeader(validToken))
+                                addHeader(NAV_PERSONIDENT_HEADER, UserConstants.ARBEIDSTAKER_PERSONIDENT_NO_FASTLEGE.value)
+                            }
+                        ) {
+                            response.status() shouldBeEqualTo HttpStatusCode.NotFound
+                            response.content shouldBeEqualTo "Fant ikke fastlegevikar"
+                        }
+                    }
                     it("token from app with no access") {
                         with(
                             handleRequest(HttpMethod.Get, fastlegeSystemPath) {
