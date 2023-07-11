@@ -6,11 +6,11 @@ version = "0.0.1"
 object Versions {
     const val jackson = "2.13.4"
     const val jedis = "4.2.3"
-    const val kluent = "1.68"
-    const val ktor = "2.1.2"
-    const val logback = "1.4.4"
+    const val kluent = "1.72"
+    const val ktor = "2.3.2"
+    const val logback = "1.4.7"
     const val logstashEncoder = "7.2"
-    const val micrometerRegistry = "1.9.5"
+    const val micrometerRegistry = "1.10.3"
     const val mockk = "1.13.2"
     const val redisEmbedded = "0.7.3"
 
@@ -19,9 +19,9 @@ object Versions {
 }
 
 plugins {
-    kotlin("jvm") version "1.8.22"
+    kotlin("jvm") version "1.9.0"
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("org.jlleitschuh.gradle.ktlint") version "11.4.0"
+    id("org.jlleitschuh.gradle.ktlint") version "11.4.2"
 }
 
 repositories {
