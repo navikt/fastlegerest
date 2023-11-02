@@ -41,7 +41,7 @@ fun Application.apiModule(
     )
     val tilgangskontrollClient = VeilederTilgangskontrollClient(
         azureAdClient = azureAdClient,
-        clientEnvironment = environment.clients.syfotilgangskontroll,
+        clientEnvironment = environment.clients.istilgangskontroll,
     )
     val pdlClient = PdlClient(
         azureAdClient = azureAdClient,

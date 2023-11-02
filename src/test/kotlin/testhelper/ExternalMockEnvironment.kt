@@ -22,7 +22,7 @@ class ExternalMockEnvironment {
     val environment = testEnvironment(
         azureTokenEndpoint = azureAdMock.url,
         pdlUrl = pdlMock.url,
-        syfotilgangskontrollUrl = tilgangskontrollMock.url,
+        istilgangskontrollUrl = tilgangskontrollMock.url,
         isproxyUrl = isproxy.url,
     )
 

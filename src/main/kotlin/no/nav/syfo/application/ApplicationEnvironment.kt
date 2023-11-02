@@ -24,9 +24,9 @@ data class Environment(
             clientId = getEnvVar("PDL_CLIENT_ID"),
             baseUrl = getEnvVar("PDL_URL"),
         ),
-        syfotilgangskontroll = ClientEnvironment(
-            clientId = getEnvVar("SYFOTILGANGSKONTROLL_CLIENT_ID"),
-            baseUrl = getEnvVar("SYFOTILGANGSKONTROLL_URL"),
+        istilgangskontroll = ClientEnvironment(
+            clientId = getEnvVar("ISTILGANGSKONTROLL_CLIENT_ID"),
+            baseUrl = getEnvVar("ISTILGANGSKONTROLL_URL"),
         )
     ),
     val redisHost: String = getEnvVar("REDIS_HOST"),

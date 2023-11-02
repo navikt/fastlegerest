@@ -36,7 +36,7 @@ class VeilederTilgangskontrollClient(
                 header(NAV_CALL_ID_HEADER, callId)
                 accept(ContentType.Application.Json)
             }
-            response.body<Tilgang>().harTilgang
+            response.body<Tilgang>().erGodkjent
         } catch (e: ClientRequestException) {
             if (e.response.status != HttpStatusCode.Forbidden) {
                 handleUnexpectedResponseException(e.response, callId)
@@ -53,7 +53,7 @@ class VeilederTilgangskontrollClient(
         callId: String,
     ) {
         log.error(
-            "Error while requesting access to person from syfo-tilgangskontroll with {}, {}",
+            "Error while requesting access to person from istilgangskontroll with {}, {}",
             StructuredArguments.keyValue("statusCode", response.status.value.toString()),
             callId,
         )
@@ -62,6 +62,6 @@ class VeilederTilgangskontrollClient(
     companion object {
         private val log = LoggerFactory.getLogger(VeilederTilgangskontrollClient::class.java)
 
-        const val TILGANGSKONTROLL_PERSON_PATH = "/syfo-tilgangskontroll/api/tilgang/navident/person"
+        const val TILGANGSKONTROLL_PERSON_PATH = "/api/tilgang/navident/person"
     }
 }
