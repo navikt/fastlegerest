@@ -16,11 +16,11 @@ import testhelper.getRandomPort
 class VeilederTilgangskontrollMock {
     private val port = getRandomPort()
     val url = "http://localhost:$port"
-    val tilgangFalse = Tilgang(
-        harTilgang = false,
+    private val tilgangFalse = Tilgang(
+        erGodkjent = false,
     )
-    val tilgangTrue = Tilgang(
-        harTilgang = true,
+    private val tilgangTrue = Tilgang(
+        erGodkjent = true,
     )
 
     val name = "veiledertilgangskontroll"

@@ -42,14 +42,8 @@ spec:
     inbound:
       rules:
         - application: syfomodiaperson
-          namespace: teamsykefravr
-          cluster: prod-gcp
         - application: finnfastlege
-          namespace: teamsykefravr
-          cluster: prod-gcp
         - application: isdialogmelding
-          namespace: teamsykefravr
-          cluster: prod-gcp
     outbound:
       external:
         - host: "login.microsoftonline.com"
@@ -57,7 +51,7 @@ spec:
         - host: "pdl-api.prod-fss-pub.nais.io"
       rules:
         - application: fastlegerest-redis
-        - application: syfo-tilgangskontroll
+        - application: istilgangskontroll
   azure:
     application:
       allowAllUsers: true
@@ -71,10 +65,10 @@ spec:
   env:
     - name: REDIS_HOST
       value: "fastlegerest-redis.teamsykefravr.svc.cluster.local"
-    - name: SYFOTILGANGSKONTROLL_CLIENT_ID
-      value: "prod-gcp.teamsykefravr.syfo-tilgangskontroll"
-    - name: SYFOTILGANGSKONTROLL_URL
-      value: "http://syfo-tilgangskontroll"
+    - name: ISTILGANGSKONTROLL_CLIENT_ID
+      value: "prod-gcp.teamsykefravr.istilgangskontroll"
+    - name: ISTILGANGSKONTROLL_URL
+      value: "http://istilgangskontroll"
     - name: PDL_CLIENT_ID
       value: "prod-fss.pdl.pdl-api"
     - name: PDL_URL

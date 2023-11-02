@@ -11,7 +11,7 @@ import java.net.ServerSocket
 fun testEnvironment(
     azureTokenEndpoint: String = "azureTokenEndpoint",
     pdlUrl: String = "pdl",
-    syfotilgangskontrollUrl: String = "tilgangskontroll",
+    istilgangskontrollUrl: String = "tilgangskontroll",
     isproxyUrl: String = "isproxy",
 ) = Environment(
     azure = AzureEnvironment(
@@ -30,9 +30,9 @@ fun testEnvironment(
             clientId = "dev-fss.pdl.pdl-api",
             baseUrl = pdlUrl,
         ),
-        syfotilgangskontroll = ClientEnvironment(
-            clientId = "dev-gcp.teamsykefravr.syfotilgangskontroll",
-            baseUrl = syfotilgangskontrollUrl,
+        istilgangskontroll = ClientEnvironment(
+            clientId = "dev-gcp.teamsykefravr.istilgangskontroll",
+            baseUrl = istilgangskontrollUrl,
         )
     ),
     redisHost = "localhost",
