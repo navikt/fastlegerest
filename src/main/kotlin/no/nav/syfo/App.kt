@@ -10,6 +10,10 @@ import no.nav.syfo.application.Environment
 import no.nav.syfo.application.api.apiModule
 import no.nav.syfo.application.api.authentication.getWellKnown
 import no.nav.syfo.application.cache.RedisStore
+import no.nav.syfo.fastlege.ws.adresseregister.AdresseregisterClient
+import no.nav.syfo.fastlege.ws.adresseregister.adresseregisterSoapClient
+import no.nav.syfo.fastlege.ws.fastlegeregister.FastlegeInformasjonClient
+import no.nav.syfo.fastlege.ws.fastlegeregister.fastlegeSoapClient
 import org.slf4j.LoggerFactory
 import redis.clients.jedis.*
 import java.util.concurrent.TimeUnit
@@ -35,12 +39,29 @@ fun main() {
         connector {
             port = applicationPort
         }
+        val fastlegeClient = FastlegeInformasjonClient(
+            fastlegeSoapClient = fastlegeSoapClient(
+                serviceUrl = environment.fastlegeUrl,
+                username = environment.nhnUsername,
+                password = environment.nhnPassword,
+            ),
+        )
+        val adresseregisterClient = AdresseregisterClient(
+            adresseregisterSoapClient = adresseregisterSoapClient(
+                serviceUrl = environment.adresseregisterUrl,
+                username = environment.nhnUsername,
+                password = environment.nhnPassword,
+            ),
+        )
+
         module {
             apiModule(
                 applicationState = applicationState,
                 environment = environment,
                 wellKnownAzure = getWellKnown(environment.azure.appWellKnownUrl),
                 cache = cache,
+                fastlegeClient = fastlegeClient,
+                adresseregisterClient = adresseregisterClient,
             )
         }
     }

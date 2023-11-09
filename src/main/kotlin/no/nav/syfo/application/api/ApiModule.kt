@@ -9,18 +9,21 @@ import no.nav.syfo.application.api.authentication.*
 import no.nav.syfo.application.cache.RedisStore
 import no.nav.syfo.application.metric.registerMetricApi
 import no.nav.syfo.client.azuread.AzureAdClient
-import no.nav.syfo.client.fastlege.FastlegeClient
 import no.nav.syfo.client.pdl.PdlClient
 import no.nav.syfo.client.tilgangskontroll.VeilederTilgangskontrollClient
 import no.nav.syfo.fastlege.FastlegeService
 import no.nav.syfo.fastlege.api.registerFastlegeAzureADApi
 import no.nav.syfo.fastlege.api.system.registrerFastlegeSystemApi
+import no.nav.syfo.fastlege.ws.adresseregister.AdresseregisterClient
+import no.nav.syfo.fastlege.ws.fastlegeregister.FastlegeInformasjonClient
 
 fun Application.apiModule(
     applicationState: ApplicationState,
     environment: Environment,
     wellKnownAzure: WellKnown,
     cache: RedisStore,
+    fastlegeClient: FastlegeInformasjonClient,
+    adresseregisterClient: AdresseregisterClient,
 ) {
     installMetrics()
     installCallId()
@@ -47,13 +50,10 @@ fun Application.apiModule(
         azureAdClient = azureAdClient,
         clientEnvironment = environment.clients.pdl,
     )
-    val isproxyClient = FastlegeClient(
-        azureAdClient = azureAdClient,
-        clientEnvironment = environment.clients.isproxy,
-    )
     val fastlegeService = FastlegeService(
         pdlClient = pdlClient,
-        fastlegeClient = isproxyClient,
+        fastlegeClient = fastlegeClient,
+        adresseregisterClient = adresseregisterClient,
         cache = cache,
     )
 
