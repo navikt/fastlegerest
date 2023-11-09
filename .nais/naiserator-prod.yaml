@@ -47,7 +47,6 @@ spec:
     outbound:
       external:
         - host: "login.microsoftonline.com"
-        - host: "isproxy.prod-fss-pub.nais.io"
         - host: "pdl-api.prod-fss-pub.nais.io"
         - host: "ws.nhn.no"
       rules:
