@@ -1,4 +1,4 @@
-package no.nav.syfo.testhelper.mock
+package testhelper.mock
 
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -9,10 +9,8 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import no.nav.syfo.application.api.authentication.installContentNegotiation
 import no.nav.syfo.client.pdl.*
-import no.nav.syfo.testhelper.UserConstants.ARBEIDSTAKER_PERSONIDENT
-import no.nav.syfo.testhelper.generatePdlHentPerson
-import no.nav.syfo.testhelper.generatePdlPersonNavn
-import no.nav.syfo.testhelper.getRandomPort
+import testhelper.*
+import testhelper.UserConstants.ARBEIDSTAKER_PERSONIDENT
 
 class PdlMock {
     private val port = getRandomPort()

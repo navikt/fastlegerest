@@ -6,17 +6,16 @@ import io.ktor.http.*
 import io.ktor.server.testing.*
 import no.nav.syfo.fastlege.domain.Fastlege
 import no.nav.syfo.fastlege.domain.RelasjonKodeVerdi
-import no.nav.syfo.testhelper.ExternalMockEnvironment
-import no.nav.syfo.testhelper.UserConstants.ARBEIDSTAKER_PERSONIDENT_NO_FASTLEGE
-import no.nav.syfo.testhelper.UserConstants.ARBEIDSTAKER_PERSONIDENT_VEILEDER_NO_ACCESS
-import no.nav.syfo.testhelper.UserConstants.FASTLEGEOPPSLAG_PERSON_ID
-import no.nav.syfo.testhelper.UserConstants.VEILEDER_IDENT
-import no.nav.syfo.testhelper.generateJWTNavIdent
-import no.nav.syfo.testhelper.testApiModule
 import no.nav.syfo.util.*
 import org.amshove.kluent.shouldBeEqualTo
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import testhelper.*
+import testhelper.UserConstants.ARBEIDSTAKER_PERSONIDENT
+import testhelper.UserConstants.ARBEIDSTAKER_PERSONIDENT_FASTLEGE_AND_VIKAR
+import testhelper.UserConstants.ARBEIDSTAKER_PERSONIDENT_NO_FASTLEGE
+import testhelper.UserConstants.ARBEIDSTAKER_PERSONIDENT_VEILEDER_NO_ACCESS
+import testhelper.UserConstants.VEILEDER_IDENT
 
 class FastlegeAzureADApiTest : Spek({
     val objectMapper: ObjectMapper = configuredJacksonMapper()
@@ -44,13 +43,13 @@ class FastlegeAzureADApiTest : Spek({
                         with(
                             handleRequest(HttpMethod.Get, FASTLEGE_PATH) {
                                 addHeader(HttpHeaders.Authorization, bearerHeader(validToken))
-                                addHeader(NAV_PERSONIDENT_HEADER, FASTLEGEOPPSLAG_PERSON_ID)
+                                addHeader(NAV_PERSONIDENT_HEADER, ARBEIDSTAKER_PERSONIDENT.value)
                             }
                         ) {
                             response.status() shouldBeEqualTo HttpStatusCode.OK
                             val fastlege = objectMapper.readValue<Fastlege>(response.content!!)
                             fastlege.relasjon.kodeVerdi shouldBeEqualTo RelasjonKodeVerdi.FASTLEGE.kodeVerdi
-                            fastlege.pasient!!.fnr shouldBeEqualTo FASTLEGEOPPSLAG_PERSON_ID
+                            fastlege.pasient!!.fnr shouldBeEqualTo ARBEIDSTAKER_PERSONIDENT.value
                         }
                     }
                     it("should return fastlege when both fastlege and vikar") {
@@ -58,13 +57,13 @@ class FastlegeAzureADApiTest : Spek({
                         with(
                             handleRequest(HttpMethod.Get, FASTLEGE_PATH) {
                                 addHeader(HttpHeaders.Authorization, bearerHeader(validToken))
-                                addHeader(NAV_PERSONIDENT_HEADER, FASTLEGEOPPSLAG_PERSON_ID)
+                                addHeader(NAV_PERSONIDENT_HEADER, ARBEIDSTAKER_PERSONIDENT_FASTLEGE_AND_VIKAR.value)
                             }
                         ) {
                             response.status() shouldBeEqualTo HttpStatusCode.OK
                             val fastlege = objectMapper.readValue<Fastlege>(response.content!!)
                             fastlege.relasjon.kodeVerdi shouldBeEqualTo RelasjonKodeVerdi.FASTLEGE.kodeVerdi
-                            fastlege.pasient!!.fnr shouldBeEqualTo FASTLEGEOPPSLAG_PERSON_ID
+                            fastlege.pasient!!.fnr shouldBeEqualTo ARBEIDSTAKER_PERSONIDENT_FASTLEGE_AND_VIKAR.value
                         }
                     }
                 }

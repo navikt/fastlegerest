@@ -1,8 +1,8 @@
-package no.nav.syfo.testhelper
+package testhelper
 
 import io.ktor.server.netty.*
 import no.nav.syfo.application.ApplicationState
-import no.nav.syfo.testhelper.mock.*
+import testhelper.mock.*
 
 class ExternalMockEnvironment {
     val applicationState: ApplicationState = testAppState()
@@ -10,11 +10,11 @@ class ExternalMockEnvironment {
     val azureAdMock = AzureAdMock()
     val pdlMock = PdlMock()
     val tilgangskontrollMock = VeilederTilgangskontrollMock()
-    val fastlegeMock = FastlegeMock()
-    val adresseregisterMock = AdresseregisterMock()
+    val isproxy = IsproxyMock()
 
     val externalApplicationMockMap = hashMapOf(
         azureAdMock.name to azureAdMock.server,
+        isproxy.name to isproxy.server,
         pdlMock.name to pdlMock.server,
         tilgangskontrollMock.name to tilgangskontrollMock.server,
     )
@@ -23,6 +23,7 @@ class ExternalMockEnvironment {
         azureTokenEndpoint = azureAdMock.url,
         pdlUrl = pdlMock.url,
         istilgangskontrollUrl = tilgangskontrollMock.url,
+        isproxyUrl = isproxy.url,
     )
 
     val wellKnownInternalAzureAD = wellKnownInternalAzureAD()

@@ -1,4 +1,4 @@
-package no.nav.syfo.testhelper.mock
+package testhelper.mock
 
 import io.ktor.server.application.*
 import io.ktor.http.*
@@ -9,9 +9,9 @@ import io.ktor.server.routing.*
 import no.nav.syfo.application.api.authentication.installContentNegotiation
 import no.nav.syfo.client.tilgangskontroll.Tilgang
 import no.nav.syfo.client.tilgangskontroll.VeilederTilgangskontrollClient.Companion.TILGANGSKONTROLL_PERSON_PATH
-import no.nav.syfo.testhelper.UserConstants.ARBEIDSTAKER_PERSONIDENT_VEILEDER_NO_ACCESS
-import no.nav.syfo.testhelper.getRandomPort
 import no.nav.syfo.util.NAV_PERSONIDENT_HEADER
+import testhelper.UserConstants.ARBEIDSTAKER_PERSONIDENT_VEILEDER_NO_ACCESS
+import testhelper.getRandomPort
 
 class VeilederTilgangskontrollMock {
     private val port = getRandomPort()

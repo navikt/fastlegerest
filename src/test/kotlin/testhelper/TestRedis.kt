@@ -1,4 +1,4 @@
-package no.nav.syfo.testhelper
+package testhelper
 
 import no.nav.syfo.application.Environment
 import redis.embedded.RedisServer

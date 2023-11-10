@@ -1,25 +1,25 @@
 package no.nav.syfo.fastlege
 
 import no.nav.syfo.application.cache.RedisStore
+import no.nav.syfo.client.fastlege.FastlegeClient
+import no.nav.syfo.client.fastlege.toFastlege
 import no.nav.syfo.client.pdl.PdlClient
 import no.nav.syfo.client.pdl.PdlHentPerson
 import no.nav.syfo.fastlege.domain.*
-import no.nav.syfo.fastlege.ws.adresseregister.AdresseregisterClient
-import no.nav.syfo.fastlege.ws.fastlegeregister.FastlegeInformasjonClient
 import no.nav.syfo.util.*
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 
 class FastlegeService(
     private val pdlClient: PdlClient,
-    private val fastlegeClient: FastlegeInformasjonClient,
-    private val adresseregisterClient: AdresseregisterClient,
+    private val fastlegeClient: FastlegeClient,
     private val cache: RedisStore,
 ) {
     suspend fun hentBrukersFastleger(
         personIdent: PersonIdent,
-    ): List<Fastlege> =
-        try {
+        callId: String,
+    ): List<Fastlege> {
+        return try {
             val cacheKey = "fastleger-$personIdent"
             val cachedValue = cache.getListObject<Fastlege>(cacheKey)
             if (cachedValue != null) {
@@ -28,15 +28,15 @@ class FastlegeService(
             } else {
                 val maybePerson = pdlClient.person(personIdent)
                 val pasient = toPasient(personIdent, maybePerson)
-                fastlegeClient.hentBrukersFastleger(personIdent).map { fastlege ->
-                    fastlege.copy(
+                fastlegeClient.getFastleger(personIdent, callId).map { fastlege ->
+                    fastlege.toFastlege(
                         pasient = Pasient(
                             fnr = personIdent.value,
                             fornavn = pasient?.fornavn ?: "",
                             mellomnavn = pasient?.mellomnavn,
                             etternavn = pasient?.etternavn ?: "",
                         ),
-                        foreldreEnhetHerId = hentForeldreEnhetHerId(fastlege.herId),
+                        foreldreEnhetHerId = hentForeldreEnhetHerId(fastlege.herId, callId),
                     )
                 }.also {
                     COUNT_CALL_FASTLEGER_CACHE_MISS.increment()
@@ -47,20 +47,25 @@ class FastlegeService(
             log.error("Søkte opp og fikk en feil fra fastlegetjenesten fordi tjenesten er nede", e)
             throw e
         }
+    }
 
     suspend fun hentBrukersFastlege(
         personIdent: PersonIdent,
+        callId: String,
     ): Fastlege? {
         return hentBrukersFastleger(
             personIdent = personIdent,
+            callId = callId,
         ).aktiv()
     }
 
     suspend fun hentBrukersFastlegevikar(
         personIdent: PersonIdent,
+        callId: String,
     ): Fastlege? {
         return hentBrukersFastleger(
             personIdent = personIdent,
+            callId = callId,
         ).vikar()
     }
 
@@ -80,12 +85,14 @@ class FastlegeService(
         }
     }
 
-    private fun hentForeldreEnhetHerId(
+    private suspend fun hentForeldreEnhetHerId(
         fastlegeHerId: Int?,
+        callId: String,
     ): Int? {
         return fastlegeHerId?.let { herId ->
-            adresseregisterClient.hentPraksisInfoForFastlege(
+            fastlegeClient.getPraksisInfo(
                 herId = herId,
+                callId = callId,
             )?.foreldreEnhetHerId
         }
     }

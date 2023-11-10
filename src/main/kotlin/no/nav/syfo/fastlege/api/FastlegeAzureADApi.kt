@@ -5,8 +5,8 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import no.nav.syfo.client.tilgangskontroll.VeilederTilgangskontrollClient
 import no.nav.syfo.fastlege.FastlegeService
-import no.nav.syfo.fastlege.exception.FastlegeIkkeFunnet
-import no.nav.syfo.fastlege.exception.HarIkkeTilgang
+import no.nav.syfo.fastlege.expection.FastlegeIkkeFunnet
+import no.nav.syfo.fastlege.expection.HarIkkeTilgang
 import no.nav.syfo.util.*
 
 const val FASTLEGE_PATH = "/fastlegerest/api/v2/fastlege"
@@ -28,7 +28,7 @@ fun Route.registerFastlegeAzureADApi(
                 throw HarIkkeTilgang()
             }
 
-            val fastlege = fastlegeService.hentBrukersFastlege(requestedPersonIdent)
+            val fastlege = fastlegeService.hentBrukersFastlege(requestedPersonIdent, callId)
                 ?: throw FastlegeIkkeFunnet()
             call.respond(fastlege)
         }
@@ -44,7 +44,7 @@ fun Route.registerFastlegeAzureADApi(
                 throw HarIkkeTilgang()
             }
 
-            val fastleger = fastlegeService.hentBrukersFastleger(requestedPersonIdent)
+            val fastleger = fastlegeService.hentBrukersFastleger(requestedPersonIdent, callId)
             call.respond(fastleger)
         }
     }

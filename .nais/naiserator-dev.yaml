@@ -47,8 +47,8 @@ spec:
     outbound:
       external:
         - host: "login.microsoftonline.com"
+        - host: "isproxy.dev-fss-pub.nais.io"
         - host: "pdl-api.dev-fss-pub.nais.io"
-        - host: "ws.test.nhn.no"
       rules:
         - application: fastlegerest-redis
         - application: istilgangskontroll
@@ -62,7 +62,6 @@ spec:
           - "NAVident"
   envFrom:
     - secret: fastlegerest-redis-password
-    - secret: fastlegerest-nhn-serviceuser
   env:
     - name: REDIS_HOST
       value: "fastlegerest-redis.teamsykefravr.svc.cluster.local"
@@ -74,7 +73,7 @@ spec:
       value: "dev-fss.pdl.pdl-api"
     - name: PDL_URL
       value: "https://pdl-api.dev-fss-pub.nais.io/graphql"
-    - name: FASTLEGE_URL
-      value: "https://ws.test.nhn.no/v2/flr/Basic"
-    - name: ADRESSEREGISTER_URL
-      value: "https://ws.test.nhn.no/v1/AR/Basic"
+    - name: ISPROXY_CLIENT_ID
+      value: "dev-fss.teamsykefravr.isproxy"
+    - name: ISPROXY_URL
+      value: "https://isproxy.dev-fss-pub.nais.io"

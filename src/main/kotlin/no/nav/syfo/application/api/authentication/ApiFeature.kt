@@ -16,7 +16,7 @@ import io.micrometer.core.instrument.distribution.DistributionStatisticConfig
 import net.logstash.logback.argument.StructuredArguments
 import no.nav.syfo.application.api.ForbiddenAPIConsumer
 import no.nav.syfo.application.metric.METRICS_REGISTRY
-import no.nav.syfo.fastlege.exception.*
+import no.nav.syfo.fastlege.expection.*
 import no.nav.syfo.util.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

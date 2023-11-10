@@ -1,4 +1,4 @@
-package no.nav.syfo.fastlege.exception
+package no.nav.syfo.fastlege.expection
 
 class FastlegeIkkeFunnet : RuntimeException(FASTLEGEIKKEFUNNET_MSG_DEFAULT) {
     companion object {

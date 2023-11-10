@@ -6,12 +6,12 @@ import io.ktor.http.*
 import io.ktor.server.testing.*
 import no.nav.syfo.fastlege.domain.Fastlege
 import no.nav.syfo.fastlege.domain.RelasjonKodeVerdi
-import no.nav.syfo.testhelper.*
-import no.nav.syfo.testhelper.UserConstants.ARBEIDSTAKER_PERSONIDENT
 import no.nav.syfo.util.*
 import org.amshove.kluent.shouldBeEqualTo
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import testhelper.*
+import testhelper.UserConstants.ARBEIDSTAKER_PERSONIDENT
 
 class FastlegeSystemApiTest : Spek({
     val objectMapper: ObjectMapper = configuredJacksonMapper()
@@ -47,13 +47,13 @@ class FastlegeSystemApiTest : Spek({
                         with(
                             handleRequest(HttpMethod.Get, fastlegeSystemPath) {
                                 addHeader(HttpHeaders.Authorization, bearerHeader(validToken))
-                                addHeader(NAV_PERSONIDENT_HEADER, UserConstants.FASTLEGEOPPSLAG_PERSON_ID)
+                                addHeader(NAV_PERSONIDENT_HEADER, ARBEIDSTAKER_PERSONIDENT.value)
                             }
                         ) {
                             response.status() shouldBeEqualTo HttpStatusCode.OK
                             val fastlege = objectMapper.readValue<Fastlege>(response.content!!)
                             fastlege.relasjon.kodeVerdi shouldBeEqualTo RelasjonKodeVerdi.FASTLEGE.kodeVerdi
-                            fastlege.pasient!!.fnr shouldBeEqualTo UserConstants.FASTLEGEOPPSLAG_PERSON_ID
+                            fastlege.pasient!!.fnr shouldBeEqualTo ARBEIDSTAKER_PERSONIDENT.value
                         }
                     }
                     it("should return fastlege when both fastlege and vikar") {
@@ -61,13 +61,13 @@ class FastlegeSystemApiTest : Spek({
                         with(
                             handleRequest(HttpMethod.Get, fastlegeSystemPath) {
                                 addHeader(HttpHeaders.Authorization, bearerHeader(validToken))
-                                addHeader(NAV_PERSONIDENT_HEADER, UserConstants.FASTLEGEOPPSLAG_PERSON_ID)
+                                addHeader(NAV_PERSONIDENT_HEADER, UserConstants.ARBEIDSTAKER_PERSONIDENT_FASTLEGE_AND_VIKAR.value)
                             }
                         ) {
                             response.status() shouldBeEqualTo HttpStatusCode.OK
                             val fastlege = objectMapper.readValue<Fastlege>(response.content!!)
                             fastlege.relasjon.kodeVerdi shouldBeEqualTo RelasjonKodeVerdi.FASTLEGE.kodeVerdi
-                            fastlege.pasient!!.fnr shouldBeEqualTo UserConstants.FASTLEGEOPPSLAG_PERSON_ID
+                            fastlege.pasient!!.fnr shouldBeEqualTo UserConstants.ARBEIDSTAKER_PERSONIDENT_FASTLEGE_AND_VIKAR.value
                         }
                     }
                     it("should return vikar") {
@@ -75,13 +75,13 @@ class FastlegeSystemApiTest : Spek({
                         with(
                             handleRequest(HttpMethod.Get, vikarSystemPath) {
                                 addHeader(HttpHeaders.Authorization, bearerHeader(validToken))
-                                addHeader(NAV_PERSONIDENT_HEADER, UserConstants.FASTLEGEOPPSLAG_PERSON_ID)
+                                addHeader(NAV_PERSONIDENT_HEADER, UserConstants.ARBEIDSTAKER_PERSONIDENT_FASTLEGE_AND_VIKAR.value)
                             }
                         ) {
                             response.status() shouldBeEqualTo HttpStatusCode.OK
                             val fastlege = objectMapper.readValue<Fastlege>(response.content!!)
                             fastlege.relasjon.kodeVerdi shouldBeEqualTo RelasjonKodeVerdi.VIKAR.kodeVerdi
-                            fastlege.pasient!!.fnr shouldBeEqualTo UserConstants.FASTLEGEOPPSLAG_PERSON_ID
+                            fastlege.pasient!!.fnr shouldBeEqualTo UserConstants.ARBEIDSTAKER_PERSONIDENT_FASTLEGE_AND_VIKAR.value
                         }
                     }
                 }

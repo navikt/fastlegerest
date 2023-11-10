@@ -1,4 +1,4 @@
-package no.nav.syfo.testhelper.mock
+package testhelper.mock
 
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -8,7 +8,7 @@ import io.ktor.server.routing.*
 import no.nav.syfo.application.api.authentication.WellKnown
 import no.nav.syfo.application.api.authentication.installContentNegotiation
 import no.nav.syfo.client.azuread.AzureAdTokenResponse
-import no.nav.syfo.testhelper.getRandomPort
+import testhelper.getRandomPort
 import java.nio.file.Paths
 
 fun wellKnownInternalAzureAD(): WellKnown {

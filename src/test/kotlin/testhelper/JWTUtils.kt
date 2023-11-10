@@ -1,4 +1,4 @@
-package no.nav.syfo.testhelper
+package testhelper
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm

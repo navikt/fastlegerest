@@ -1,4 +1,4 @@
-package no.nav.syfo.testhelper
+package testhelper
 
 import no.nav.syfo.client.pdl.PdlHentPerson
 import no.nav.syfo.client.pdl.PdlPerson
