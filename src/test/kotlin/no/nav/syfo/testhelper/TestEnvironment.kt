@@ -1,4 +1,4 @@
-package testhelper
+package no.nav.syfo.testhelper
 
 import no.nav.syfo.application.*
 import no.nav.syfo.client.ClientEnvironment
@@ -12,7 +12,6 @@ fun testEnvironment(
     azureTokenEndpoint: String = "azureTokenEndpoint",
     pdlUrl: String = "pdl",
     istilgangskontrollUrl: String = "tilgangskontroll",
-    isproxyUrl: String = "isproxy",
 ) = Environment(
     azure = AzureEnvironment(
         appClientId = "appClientId",
@@ -22,10 +21,6 @@ fun testEnvironment(
         appWellKnownUrl = "appWellKnownUrl",
     ),
     clients = ClientsEnvironment(
-        isproxy = ClientEnvironment(
-            clientId = "dev-fss.teamsykefravr.isproxy",
-            baseUrl = isproxyUrl,
-        ),
         pdl = ClientEnvironment(
             clientId = "dev-fss.pdl.pdl-api",
             baseUrl = pdlUrl,
@@ -38,6 +33,10 @@ fun testEnvironment(
     redisHost = "localhost",
     redisPort = 6599,
     redisSecret = "password",
+    fastlegeUrl = "hhtp://fastlege",
+    adresseregisterUrl = "http:/adressereg",
+    nhnUsername = "nhnUser",
+    nhnPassword = "nhnPw",
 )
 
 fun testAppState() = ApplicationState(

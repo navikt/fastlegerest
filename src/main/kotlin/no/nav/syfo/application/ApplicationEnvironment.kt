@@ -16,10 +16,6 @@ data class Environment(
         openidConfigTokenEndpoint = getEnvVar("AZURE_OPENID_CONFIG_TOKEN_ENDPOINT"),
     ),
     val clients: ClientsEnvironment = ClientsEnvironment(
-        isproxy = ClientEnvironment(
-            clientId = getEnvVar("ISPROXY_CLIENT_ID"),
-            baseUrl = getEnvVar("ISPROXY_URL"),
-        ),
         pdl = ClientEnvironment(
             clientId = getEnvVar("PDL_CLIENT_ID"),
             baseUrl = getEnvVar("PDL_URL"),
@@ -32,6 +28,10 @@ data class Environment(
     val redisHost: String = getEnvVar("REDIS_HOST"),
     val redisPort: Int = getEnvVar("REDIS_PORT", "6379").toInt(),
     val redisSecret: String = getEnvVar("REDIS_PASSWORD"),
+    val fastlegeUrl: String = getEnvVar("FASTLEGE_URL"),
+    val adresseregisterUrl: String = getEnvVar("ADRESSEREGISTER_URL"),
+    val nhnUsername: String = getEnvVar("NHN_USERNAME"),
+    val nhnPassword: String = getEnvVar("NHN_PASSWORD"),
 )
 
 fun getEnvVar(varName: String, defaultValue: String? = null) =
