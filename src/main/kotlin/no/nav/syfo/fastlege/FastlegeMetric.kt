@@ -17,6 +17,11 @@ const val CALL_ADRESSEREGISTER_SUCCESS = "${CALL_ADRESSEREGISTER}_success_count"
 const val CALL_ADRESSEREGISTER_NOT_FOUND = "${CALL_ADRESSEREGISTER}_not_found_count"
 const val CALL_ADRESSEREGISTER_FAIL = "${CALL_ADRESSEREGISTER}_fail_count"
 
+const val CALL_ADRESSEREGISTER_BEHANDLERE = "${METRICS_NS}_call_adresseregister_behandlere"
+const val CALL_ADRESSEREGISTER_BEHANDLERE_SUCCESS = "${CALL_ADRESSEREGISTER_BEHANDLERE}_success_count"
+const val CALL_ADRESSEREGISTER_BEHANDLERE_NOT_FOUND = "${CALL_ADRESSEREGISTER_BEHANDLERE}_not_found_count"
+const val CALL_ADRESSEREGISTER_BEHANDLERE_FAIL = "${CALL_ADRESSEREGISTER_BEHANDLERE}_fail_count"
+
 val COUNT_FASTLEGE_SUCCESS: Counter = builder(CALL_FASTLEGE_SUCCESS)
     .description("Counts the number of successful calls to Fastlegeregisteret")
     .register(METRICS_REGISTRY)
@@ -39,5 +44,14 @@ val COUNT_ADRESSEREGISTER_NOT_FOUND: Counter = builder(CALL_ADRESSEREGISTER_NOT_
     .description("Counts the number of calls to adresseregisteret where result is not found")
     .register(METRICS_REGISTRY)
 val COUNT_ADRESSEREGISTER_FAIL: Counter = builder(CALL_ADRESSEREGISTER_FAIL)
-    .description("Counts the number of failed calls to adresseregisteret")
+    .description("Counts the number of failed calls to adresseregisteret behandlere")
+    .register(METRICS_REGISTRY)
+val COUNT_ADRESSEREGISTER_BEHANDLERE_SUCCESS: Counter = builder(CALL_ADRESSEREGISTER_BEHANDLERE_SUCCESS)
+    .description("Counts the number of successful calls to adresseregisteret behandlere")
+    .register(METRICS_REGISTRY)
+val COUNT_ADRESSEREGISTER_BEHANDLERE_NOT_FOUND: Counter = builder(CALL_ADRESSEREGISTER_BEHANDLERE_NOT_FOUND)
+    .description("Counts the number of calls to adresseregisteret behandlere where result is not found")
+    .register(METRICS_REGISTRY)
+val COUNT_ADRESSEREGISTER_BEHANDLERE_FAIL: Counter = builder(CALL_ADRESSEREGISTER_BEHANDLERE_FAIL)
+    .description("Counts the number of failed calls to adresseregisteret behandlere")
     .register(METRICS_REGISTRY)
