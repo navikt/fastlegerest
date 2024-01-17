@@ -47,6 +47,7 @@ class AdresseregisterClient(
                     fornavn = orgPerson.person.firstName,
                     mellomnavn = orgPerson.person.middleName,
                     etternavn = orgPerson.person.lastName,
+                    type = orgPerson.type.firstOrNull(),
                 )
             }.also {
                 COUNT_ADRESSEREGISTER_BEHANDLERE_SUCCESS.increment()
