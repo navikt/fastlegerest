@@ -102,7 +102,7 @@ class FastlegeSystemApiTest : Spek({
                             val behandler = behandlere[0]
                             behandler.aktiv shouldBeEqualTo true
                             behandler.etternavn shouldBeEqualTo UserConstants.FASTLEGE_ETTERNAVN
-                            behandler.hprId shouldBeEqualTo UserConstants.FASTLEGE_HPR_NR.toString()
+                            behandler.hprId shouldBeEqualTo UserConstants.FASTLEGE_HPR_NR
                             behandler.herId shouldBeEqualTo UserConstants.HER_ID
                             behandler.personIdent shouldBeEqualTo UserConstants.FASTLEGE_FNR
                         }
