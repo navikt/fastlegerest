@@ -47,8 +47,8 @@ class AdresseregisterClient(
                     fornavn = orgPerson.person.firstName,
                     mellomnavn = orgPerson.person.middleName,
                     etternavn = orgPerson.person.lastName,
-                    kategori = orgPerson.person.hprInformation.authorizations?.authorizations?.map {
-                        aut -> aut.profession?.codeValue
+                    kategori = orgPerson.person.hprInformation.authorizations?.authorizations?.map { aut ->
+                        aut.profession?.codeValue
                     }?.firstOrNull()
                 )
             }.also {
