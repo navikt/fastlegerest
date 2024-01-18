@@ -25,17 +25,20 @@ import javax.xml.datatype.XMLGregorianCalendar
 val wsOrganizationPerson = WSOrganizationPerson()
     .withActive(true)
     .withHerId(HER_ID)
+    .withTitle("Lege")
     .withPerson(
         WSPerson()
             .withFirstName(FASTLEGE_FORNAVN)
             .withLastName(FASTLEGE_ETTERNAVN)
             .withHPRInformation(WSHPRInformation().withHPRNo(FASTLEGE_HPR_NR.toString()))
             .withCitizenId(WSCitizenId().withId(FASTLEGE_FNR))
+
     )
 
 val wsOrganizationPersonInactive = WSOrganizationPerson()
     .withActive(false)
     .withHerId(HER_ID_INACTIVE)
+    .withTitle("Lege")
     .withPerson(
         WSPerson()
             .withFirstName(FASTLEGE_FORNAVN)

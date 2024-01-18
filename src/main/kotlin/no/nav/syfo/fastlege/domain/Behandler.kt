@@ -8,5 +8,5 @@ data class Behandler(
     val personIdent: String?,
     val herId: Int,
     val hprId: String?,
-    val tittel: String,
+    val tittel: String?,
 )
