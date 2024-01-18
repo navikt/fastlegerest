@@ -43,11 +43,13 @@ class AdresseregisterClient(
                     aktiv = orgPerson.isActive,
                     herId = orgPerson.herId,
                     personIdent = orgPerson.person.citizenId.id,
-                    hprId = orgPerson.person.hprInformation.hprNo,
+                    hprId = orgPerson.person.hprInformation.hprNumber,
                     fornavn = orgPerson.person.firstName,
                     mellomnavn = orgPerson.person.middleName,
                     etternavn = orgPerson.person.lastName,
-                    tittel = orgPerson.title,
+                    kategori = orgPerson.person.hprInformation.authorizations?.authorizations?.map {
+                        aut -> aut.profession?.codeValue
+                    }?.firstOrNull()
                 )
             }.also {
                 COUNT_ADRESSEREGISTER_BEHANDLERE_SUCCESS.increment()

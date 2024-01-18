@@ -7,6 +7,6 @@ data class Behandler(
     val etternavn: String,
     val personIdent: String?,
     val herId: Int,
-    val hprId: String?,
-    val tittel: String?,
+    val hprId: Int?,
+    val kategori: String?,
 )
