@@ -9,14 +9,16 @@ import no.nav.syfo.fastlege.exception.FastlegeIkkeFunnet
 import no.nav.syfo.fastlege.exception.FastlegevikarIkkeFunnet
 import no.nav.syfo.util.*
 
-const val FASTLEGE_SYSTEM_PATH = "/fastlegerest/api/system/v1/fastlege"
+const val SYSTEM_PATH = "/fastlegerest/api/system/v1"
+const val herIdParam = "herid"
+val authorizedApplicationNameList = listOf("isdialogmelding")
 
 fun Route.registrerFastlegeSystemApi(
     apiConsumerAccessService: APISystemConsumerAccessService,
     fastlegeService: FastlegeService,
 ) {
-    route(FASTLEGE_SYSTEM_PATH) {
-        get("/aktiv/personident") {
+    route(SYSTEM_PATH) {
+        get("/fastlege/aktiv/personident") {
             val callId = getCallId()
             val token = getBearerHeader()
                 ?: throw IllegalArgumentException("No Authorization header supplied to system api when getting fastlege, callID=$callId")
@@ -25,7 +27,7 @@ fun Route.registrerFastlegeSystemApi(
             } ?: throw IllegalArgumentException("No PersonIdent supplied")
 
             apiConsumerAccessService.validateSystemConsumerApplicationClientId(
-                authorizedApplicationNameList = listOf("isdialogmelding"),
+                authorizedApplicationNameList = authorizedApplicationNameList,
                 token = token,
             )
 
@@ -33,7 +35,7 @@ fun Route.registrerFastlegeSystemApi(
                 ?: throw FastlegeIkkeFunnet()
             call.respond(fastlege)
         }
-        get("/vikar/personident") {
+        get("/fastlege/vikar/personident") {
             val callId = getCallId()
             val token = getBearerHeader()
                 ?: throw IllegalArgumentException("No Authorization header supplied to system api when getting vikar, callID=$callId")
@@ -42,13 +44,28 @@ fun Route.registrerFastlegeSystemApi(
             } ?: throw IllegalArgumentException("No PersonIdent supplied")
 
             apiConsumerAccessService.validateSystemConsumerApplicationClientId(
-                authorizedApplicationNameList = listOf("isdialogmelding"),
+                authorizedApplicationNameList = authorizedApplicationNameList,
                 token = token,
             )
 
             val vikar = fastlegeService.hentBrukersFastlegevikar(requestedPersonIdent)
                 ?: throw FastlegevikarIkkeFunnet()
             call.respond(vikar)
+        }
+        get("/{$herIdParam}/behandlere") {
+            val callId = getCallId()
+            val token = getBearerHeader()
+                ?: throw IllegalArgumentException("No Authorization header supplied to system api when getting behandlere, callID=$callId")
+            val kontorHerId = this.call.parameters[herIdParam]?.toInt()
+                ?: throw IllegalArgumentException("No herId supplied")
+
+            apiConsumerAccessService.validateSystemConsumerApplicationClientId(
+                authorizedApplicationNameList = authorizedApplicationNameList,
+                token = token,
+            )
+
+            val behandlere = fastlegeService.hentBehandlereForKontor(kontorHerId)
+            call.respond(behandlere)
         }
     }
 }

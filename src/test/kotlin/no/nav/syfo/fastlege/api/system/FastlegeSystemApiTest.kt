@@ -4,10 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.http.*
 import io.ktor.server.testing.*
+import no.nav.syfo.fastlege.domain.Behandler
 import no.nav.syfo.fastlege.domain.Fastlege
 import no.nav.syfo.fastlege.domain.RelasjonKodeVerdi
 import no.nav.syfo.testhelper.*
 import no.nav.syfo.testhelper.UserConstants.ARBEIDSTAKER_PERSONIDENT
+import no.nav.syfo.testhelper.UserConstants.PARENT_HER_ID
+import no.nav.syfo.testhelper.UserConstants.PARENT_HER_ID_WITH_INACTIVE_BEHANDLER
 import no.nav.syfo.util.*
 import org.amshove.kluent.shouldBeEqualTo
 import org.spekframework.spek2.Spek
@@ -38,8 +41,10 @@ class FastlegeSystemApiTest : Spek({
                     externalMockEnvironment.wellKnownInternalAzureAD.issuer,
                     azp = testSyfomodiapersonClientId,
                 )
-                val fastlegeSystemPath = "$FASTLEGE_SYSTEM_PATH/aktiv/personident"
-                val vikarSystemPath = "$FASTLEGE_SYSTEM_PATH/vikar/personident"
+                val fastlegeSystemPath = "$SYSTEM_PATH/fastlege/aktiv/personident"
+                val vikarSystemPath = "$SYSTEM_PATH/fastlege/vikar/personident"
+                val behandlereSystemPath = "$SYSTEM_PATH/$PARENT_HER_ID/behandlere"
+                val behandlereSystemPathInactive = "$SYSTEM_PATH/$PARENT_HER_ID_WITH_INACTIVE_BEHANDLER/behandlere"
 
                 describe("Happy path") {
                     it("should return fastlege") {
@@ -82,6 +87,40 @@ class FastlegeSystemApiTest : Spek({
                             val fastlege = objectMapper.readValue<Fastlege>(response.content!!)
                             fastlege.relasjon.kodeVerdi shouldBeEqualTo RelasjonKodeVerdi.VIKAR.kodeVerdi
                             fastlege.pasient!!.fnr shouldBeEqualTo UserConstants.FASTLEGEOPPSLAG_PERSON_ID
+                        }
+                    }
+                    it("should return list of behandlere for kontor") {
+
+                        with(
+                            handleRequest(HttpMethod.Get, behandlereSystemPath) {
+                                addHeader(HttpHeaders.Authorization, bearerHeader(validToken))
+                            }
+                        ) {
+                            response.status() shouldBeEqualTo HttpStatusCode.OK
+                            val behandlere = objectMapper.readValue<List<Behandler>>(response.content!!)
+                            behandlere.size shouldBeEqualTo 1
+                            val behandler = behandlere[0]
+                            behandler.aktiv shouldBeEqualTo true
+                            behandler.etternavn shouldBeEqualTo UserConstants.FASTLEGE_ETTERNAVN
+                            behandler.hprId shouldBeEqualTo UserConstants.FASTLEGE_HPR_NR
+                            behandler.herId shouldBeEqualTo UserConstants.HER_ID
+                            behandler.personIdent shouldBeEqualTo UserConstants.FASTLEGE_FNR
+                        }
+                    }
+                    it("should return list of behandlere for kontor when some are inactive") {
+
+                        with(
+                            handleRequest(HttpMethod.Get, behandlereSystemPathInactive) {
+                                addHeader(HttpHeaders.Authorization, bearerHeader(validToken))
+                            }
+                        ) {
+                            response.status() shouldBeEqualTo HttpStatusCode.OK
+                            val behandlere = objectMapper.readValue<List<Behandler>>(response.content!!)
+                            behandlere.size shouldBeEqualTo 2
+                            val behandler = behandlere[0]
+                            behandler.aktiv shouldBeEqualTo true
+                            val behandlerInactive = behandlere[1]
+                            behandlerInactive.aktiv shouldBeEqualTo false
                         }
                     }
                 }

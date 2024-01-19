@@ -64,6 +64,11 @@ class FastlegeService(
         ).vikar()
     }
 
+    fun hentBehandlereForKontor(
+        kontorHerId: Int,
+    ): List<Behandler> =
+        adresseregisterClient.hentBehandlereForKontor(kontorHerId)
+
     private fun toPasient(
         personIdent: PersonIdent,
         maybePerson: PdlHentPerson?,
