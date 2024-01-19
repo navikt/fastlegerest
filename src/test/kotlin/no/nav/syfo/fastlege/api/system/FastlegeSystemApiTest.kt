@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import no.nav.syfo.fastlege.domain.Behandler
+import no.nav.syfo.fastlege.domain.BehandlerKontor
 import no.nav.syfo.fastlege.domain.Fastlege
 import no.nav.syfo.fastlege.domain.RelasjonKodeVerdi
 import no.nav.syfo.testhelper.*
@@ -97,9 +97,10 @@ class FastlegeSystemApiTest : Spek({
                             }
                         ) {
                             response.status() shouldBeEqualTo HttpStatusCode.OK
-                            val behandlere = objectMapper.readValue<List<Behandler>>(response.content!!)
-                            behandlere.size shouldBeEqualTo 1
-                            val behandler = behandlere[0]
+                            val behandlerKontor = objectMapper.readValue<BehandlerKontor>(response.content!!)
+                            behandlerKontor.aktiv shouldBeEqualTo true
+                            behandlerKontor.behandlere.size shouldBeEqualTo 1
+                            val behandler = behandlerKontor.behandlere[0]
                             behandler.aktiv shouldBeEqualTo true
                             behandler.etternavn shouldBeEqualTo UserConstants.FASTLEGE_ETTERNAVN
                             behandler.hprId shouldBeEqualTo UserConstants.FASTLEGE_HPR_NR
@@ -115,11 +116,12 @@ class FastlegeSystemApiTest : Spek({
                             }
                         ) {
                             response.status() shouldBeEqualTo HttpStatusCode.OK
-                            val behandlere = objectMapper.readValue<List<Behandler>>(response.content!!)
-                            behandlere.size shouldBeEqualTo 2
-                            val behandler = behandlere[0]
+                            val behandlerKontor = objectMapper.readValue<BehandlerKontor>(response.content!!)
+                            behandlerKontor.aktiv shouldBeEqualTo true
+                            behandlerKontor.behandlere.size shouldBeEqualTo 2
+                            val behandler = behandlerKontor.behandlere[0]
                             behandler.aktiv shouldBeEqualTo true
-                            val behandlerInactive = behandlere[1]
+                            val behandlerInactive = behandlerKontor.behandlere[1]
                             behandlerInactive.aktiv shouldBeEqualTo false
                         }
                     }
