@@ -65,7 +65,7 @@ fun Route.registrerFastlegeSystemApi(
                 token = token,
             )
 
-            val behandlerKontor = fastlegeService.hentBehandlereForKontor(kontorHerId)
+            val behandlerKontor = fastlegeService.hentBehandlerKontor(kontorHerId)
             if (behandlerKontor != null) {
                 call.respond(behandlerKontor)
             } else {

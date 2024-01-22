@@ -64,7 +64,7 @@ class FastlegeService(
         ).vikar()
     }
 
-    fun hentBehandlereForKontor(
+    fun hentBehandlerKontor(
         kontorHerId: Int,
     ): BehandlerKontor? =
         adresseregisterClient.hentBehandlerKontor(kontorHerId)
