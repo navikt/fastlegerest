@@ -67,7 +67,7 @@ class FastlegeService(
     fun hentBehandlereForKontor(
         kontorHerId: Int,
     ): BehandlerKontor? =
-        adresseregisterClient.hentBehandlereForKontor(kontorHerId)
+        adresseregisterClient.hentBehandlerKontor(kontorHerId)
 
     private fun toPasient(
         personIdent: PersonIdent,

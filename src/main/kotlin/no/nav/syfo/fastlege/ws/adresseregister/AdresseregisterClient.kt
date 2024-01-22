@@ -38,14 +38,14 @@ class AdresseregisterClient(
             throw e
         }
 
-    fun hentBehandlereForKontor(parentHerId: Int) =
+    fun hentBehandlerKontor(parentHerId: Int) =
         try {
             val wsOrg = adresseregisterSoapClient.getOrganizationDetails(parentHerId)
             BehandlerKontor(
                 aktiv = wsOrg.isActive,
-                her_id = wsOrg.herId,
+                herId = wsOrg.herId,
                 navn = wsOrg.name,
-                besoeksadresse = extractPhysicalAddress(wsOrg, "RES"),
+                besoksadresse = extractPhysicalAddress(wsOrg, "RES"),
                 postadresse = extractPhysicalAddress(wsOrg, "PST"),
                 telefon = extractElectronicAddressField(wsOrg, "E_TLF"),
                 epost = extractElectronicAddressField(wsOrg, "E_EDI"),

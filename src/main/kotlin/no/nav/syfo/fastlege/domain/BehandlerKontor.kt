@@ -2,9 +2,9 @@ package no.nav.syfo.fastlege.domain
 
 data class BehandlerKontor(
     val aktiv: Boolean,
-    val her_id: Int,
+    val herId: Int,
     val navn: String,
-    val besoeksadresse: Adresse?,
+    val besoksadresse: Adresse?,
     val postadresse: Adresse?,
     val telefon: String?,
     val epost: String?,
