@@ -1,6 +1,8 @@
 package no.nav.syfo.testhelper.mock
 
 import com.microsoft.schemas._2003._10.serialization.arrays.WSArrayOfint
+import no.nav.syfo.testhelper.UserConstants.FASTLEGEKONTOR_NAVN
+import no.nav.syfo.testhelper.UserConstants.FASTLEGEKONTOR_ORGNR
 import no.nav.syfo.testhelper.UserConstants.FASTLEGE_ETTERNAVN
 import no.nav.syfo.testhelper.UserConstants.FASTLEGE_FNR
 import no.nav.syfo.testhelper.UserConstants.FASTLEGE_FNR_INACTIVE
@@ -61,6 +63,10 @@ class AdresseregisterMock : ICommunicationPartyService {
             throw ICommunicationPartyServiceGetOrganizationPersonDetailsGenericFaultFaultFaultMessage()
         }
         return WSOrganization()
+            .withActive(true)
+            .withHerId(parentHerId)
+            .withName(FASTLEGEKONTOR_NAVN)
+            .withOrganizationNumber(FASTLEGEKONTOR_ORGNR)
             .withPeople(
                 WSArrayOfOrganizationPerson()
                     .withOrganizationPersons(

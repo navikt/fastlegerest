@@ -1,5 +1,6 @@
 package no.nav.syfo.fastlege.api.system
 
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -64,8 +65,12 @@ fun Route.registrerFastlegeSystemApi(
                 token = token,
             )
 
-            val behandlere = fastlegeService.hentBehandlereForKontor(kontorHerId)
-            call.respond(behandlere)
+            val behandlerKontor = fastlegeService.hentBehandlerKontor(kontorHerId)
+            if (behandlerKontor != null) {
+                call.respond(behandlerKontor)
+            } else {
+                call.respond(HttpStatusCode.NoContent)
+            }
         }
     }
 }
