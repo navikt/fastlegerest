@@ -7,28 +7,29 @@ version = "0.0.1"
 object Versions {
     const val commonsCollection = "3.2.2"
     const val commonsTextVersion = "1.10.0"
-    const val cxf = "3.5.5"
+    const val cxf = "3.6.2"
     const val jackson = "2.13.4.2"
-    const val jacksonDataType = "2.14.0"
+    const val jacksonDataType = "2.16.0"
     const val javaxActivation = "1.2.0"
     const val javaxWsRsApi = "2.1.1"
     const val jaxb = "2.3.1"
     const val jaxws = "2.3.5"
-    const val jedis = "4.2.3"
-    const val kluent = "1.72"
-    const val ktor = "2.3.5"
-    const val logback = "1.4.7"
-    const val logstashEncoder = "7.2"
-    const val micrometerRegistry = "1.10.3"
-    const val mockk = "1.13.2"
-    const val nimbusjosejwt = "9.25.1"
+    const val jedis = "5.1.0"
+    const val json = "20231013"
+    const val kluent = "1.73"
+    const val ktor = "2.3.7"
+    const val logback = "1.4.14"
+    const val logstashEncoder = "7.4"
+    const val micrometerRegistry = "1.12.0"
+    const val mockk = "1.13.8"
+    const val nimbusjosejwt = "9.37.2"
     const val redisEmbedded = "0.7.3"
     const val spek = "2.0.19"
     const val syfotjenester = "1.2022.09.09-14.42-5356e2174b6c"
 }
 
 plugins {
-    kotlin("jvm") version "1.9.20"
+    kotlin("jvm") version "1.9.22"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("org.jlleitschuh.gradle.ktlint") version "11.4.2"
 }
@@ -84,6 +85,7 @@ dependencies {
     // Logging
     implementation("ch.qos.logback:logback-classic:${Versions.logback}")
     implementation("net.logstash.logback:logstash-logback-encoder:${Versions.logstashEncoder}")
+    implementation("org.json:json:${Versions.json}")
 
     // Metrics and Prometheus
     implementation("io.ktor:ktor-server-metrics-micrometer:${Versions.ktor}")
