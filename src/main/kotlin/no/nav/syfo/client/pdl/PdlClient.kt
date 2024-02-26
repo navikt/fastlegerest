@@ -10,9 +10,6 @@ import no.nav.syfo.client.httpClientDefault
 import no.nav.syfo.util.*
 import org.slf4j.LoggerFactory
 
-const val TEMA_HEADER = "Tema"
-const val ALLE_TEMA_HEADERVERDI = "GEN"
-
 class PdlClient(
     private val azureAdClient: AzureAdClient,
     private val clientEnvironment: ClientEnvironment,
@@ -32,7 +29,7 @@ class PdlClient(
             setBody(request)
             header(HttpHeaders.ContentType, "application/json")
             header(HttpHeaders.Authorization, bearerHeader(token))
-            header(TEMA_HEADER, ALLE_TEMA_HEADERVERDI)
+            header(BEHANDLINGSNUMMER_HEADER_KEY, BEHANDLINGSNUMMER_HEADER_VALUE)
         }
 
         when (response.status) {
@@ -62,5 +59,10 @@ class PdlClient(
 
     companion object {
         private val logger = LoggerFactory.getLogger(PdlClient::class.java)
+
+        // Se behandlingskatalog https://behandlingskatalog.intern.nav.no/
+        // Behandling: Sykefraværsoppfølging: Vurdere behov for oppfølging og rett til sykepenger etter §§ 8-4 og 8-8
+        private const val BEHANDLINGSNUMMER_HEADER_KEY = "behandlingsnummer"
+        private const val BEHANDLINGSNUMMER_HEADER_VALUE = "B426"
     }
 }
