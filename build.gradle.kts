@@ -1,47 +1,40 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer
 
 group = "no.nav.syfo"
 version = "0.0.1"
 
 val commonsCollectionVersion = "3.2.2"
-val commonsTextVersion = "1.10.0"
+val commonsTextVersion = "1.12.0"
 val cxfVersion = "3.6.2"
-val jacksonVersion = "2.13.4.2"
-val jacksonDataTypeVersion = "2.16.0"
+val jacksonVersion = "2.17.2"
+val jacksonDataTypeVersion = "2.17.2"
 val javaxActivationVersion = "1.2.0"
 val javaxWsRsApiVersion = "2.1.1"
 val jaxbVersion = "2.3.1"
 val jaxwsVersion = "2.3.5"
-val jedisVersion = "5.1.0"
+val jedisVersion = "5.1.5"
 val jsonVersion = "20231013"
 val kluentVersion = "1.73"
-val ktorVersion = "2.3.7"
-val logbackVersion = "1.4.14"
+val ktorVersion = "2.3.12"
+val logbackVersion = "1.5.8"
 val logstashEncoderVersion = "7.4"
-val micrometerRegistryVersion = "1.12.0"
-val mockkVersion = "1.13.8"
-val nimbusjosejwtVersion = "9.37.2"
+val micrometerRegistryVersion = "1.12.8"
+val mockkVersion = "1.13.12"
+val nimbusjosejwtVersion = "9.41.1"
 val redisEmbeddedVersion = "0.7.3"
 val spekVersion = "2.0.19"
 val syfotjenesterVersion = "1.2022.09.09-14.42-5356e2174b6c"
 
 plugins {
-    kotlin("jvm") version "2.0.10"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    kotlin("jvm") version "2.0.20"
+    id("com.gradleup.shadow") version "8.3.2"
     id("org.jlleitschuh.gradle.ktlint") version "11.4.2"
 }
 
-val githubUser: String by project
-val githubPassword: String by project
 repositories {
     mavenCentral()
     maven {
-        url = uri("https://maven.pkg.github.com/navikt/tjenestespesifikasjoner")
-        credentials {
-            username = githubUser
-            password = githubPassword
-        }
+        url = uri("https://github-package-registry-mirror.gc.nav.no/cached/maven-release")
     }
 }
 
@@ -109,7 +102,7 @@ kotlin {
 }
 
 tasks {
-    withType<Jar> {
+    jar {
         manifest.attributes["Main-Class"] = "no.nav.syfo.AppKt"
     }
 
@@ -119,7 +112,7 @@ tasks {
         }
     }
 
-    withType<ShadowJar> {
+    shadowJar {
         transform(ServiceFileTransformer::class.java) {
             setPath("META-INF/cxf")
             include("bus-extensions.txt")
@@ -130,7 +123,7 @@ tasks {
         archiveVersion.set("")
     }
 
-    withType<Test> {
+    test {
         useJUnitPlatform {
             includeEngines("spek2")
         }
