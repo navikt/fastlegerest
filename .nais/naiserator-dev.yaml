@@ -50,7 +50,6 @@ spec:
         - host: "pdl-api.dev-fss-pub.nais.io"
         - host: "ws.test.nhn.no"
       rules:
-        - application: fastlegerest-redis
         - application: istilgangskontroll
   azure:
     application:
@@ -60,12 +59,12 @@ spec:
       claims:
         extra:
           - "NAVident"
+  redis:
+    - instance: cache
+      access: readwrite
   envFrom:
-    - secret: fastlegerest-redis-password
     - secret: fastlegerest-nhn-serviceuser
   env:
-    - name: REDIS_HOST
-      value: "fastlegerest-redis.teamsykefravr.svc.cluster.local"
     - name: ISTILGANGSKONTROLL_CLIENT_ID
       value: "dev-gcp.teamsykefravr.istilgangskontroll"
     - name: ISTILGANGSKONTROLL_URL

@@ -1,12 +1,14 @@
 package no.nav.syfo.testhelper
 
 import no.nav.syfo.application.*
+import no.nav.syfo.application.cache.RedisConfig
 import no.nav.syfo.client.ClientEnvironment
 import no.nav.syfo.client.ClientsEnvironment
 import no.nav.syfo.client.azuread.AzureEnvironment
 import no.nav.syfo.fastlege.api.system.access.PreAuthorizedClient
 import no.nav.syfo.util.configuredJacksonMapper
 import java.net.ServerSocket
+import java.net.URI
 
 fun testEnvironment(
     azureTokenEndpoint: String = "azureTokenEndpoint",
@@ -30,9 +32,13 @@ fun testEnvironment(
             baseUrl = istilgangskontrollUrl,
         )
     ),
-    redisHost = "localhost",
-    redisPort = 6599,
-    redisSecret = "password",
+    redisConfig = RedisConfig(
+        redisUri = URI("http://localhost:6379"),
+        redisDB = 0,
+        redisUsername = "redisUser",
+        redisPassword = "redisPassword",
+        ssl = false,
+    ),
     fastlegeUrl = "hhtp://fastlege",
     adresseregisterUrl = "http:/adressereg",
     nhnUsername = "nhnUser",

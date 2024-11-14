@@ -1,8 +1,10 @@
 package no.nav.syfo.application
 
+import no.nav.syfo.application.cache.RedisConfig
 import no.nav.syfo.client.ClientEnvironment
 import no.nav.syfo.client.ClientsEnvironment
 import no.nav.syfo.client.azuread.AzureEnvironment
+import java.net.URI
 
 data class Environment(
     val namespace: String = "teamsykefravr",
@@ -25,9 +27,12 @@ data class Environment(
             baseUrl = getEnvVar("ISTILGANGSKONTROLL_URL"),
         )
     ),
-    val redisHost: String = getEnvVar("REDIS_HOST"),
-    val redisPort: Int = getEnvVar("REDIS_PORT", "6379").toInt(),
-    val redisSecret: String = getEnvVar("REDIS_PASSWORD"),
+    val redisConfig: RedisConfig = RedisConfig(
+        redisUri = URI(getEnvVar("REDIS_URI_CACHE")),
+        redisDB = 1, // se https://github.com/navikt/istilgangskontroll/blob/master/README.md
+        redisUsername = getEnvVar("REDIS_USERNAME_CACHE"),
+        redisPassword = getEnvVar("REDIS_PASSWORD_CACHE"),
+    ),
     val fastlegeUrl: String = getEnvVar("FASTLEGE_URL"),
     val adresseregisterUrl: String = getEnvVar("ADRESSEREGISTER_URL"),
     val nhnUsername: String = getEnvVar("NHN_USERNAME"),

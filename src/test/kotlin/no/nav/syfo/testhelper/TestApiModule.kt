@@ -10,20 +10,24 @@ import redis.clients.jedis.*
 fun Application.testApiModule(
     externalMockEnvironment: ExternalMockEnvironment,
 ) {
+    val redisConfig = externalMockEnvironment.environment.redisConfig
     val cache = RedisStore(
         JedisPool(
             JedisPoolConfig(),
-            externalMockEnvironment.environment.redisHost,
-            externalMockEnvironment.environment.redisPort,
-            Protocol.DEFAULT_TIMEOUT,
-            externalMockEnvironment.environment.redisSecret
+            HostAndPort(redisConfig.host, redisConfig.port),
+            DefaultJedisClientConfig.builder()
+                .ssl(redisConfig.ssl)
+                .password(redisConfig.redisPassword)
+                .build()
         )
     )
+    externalMockEnvironment.redisCache = cache
+
     this.apiModule(
         applicationState = externalMockEnvironment.applicationState,
         environment = externalMockEnvironment.environment,
         wellKnownAzure = externalMockEnvironment.wellKnownInternalAzureAD,
-        cache = cache,
+        cache = externalMockEnvironment.redisCache,
         fastlegeClient = FastlegeInformasjonClient(externalMockEnvironment.fastlegeMock),
         adresseregisterClient = AdresseregisterClient(externalMockEnvironment.adresseregisterMock)
     )

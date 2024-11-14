@@ -24,13 +24,17 @@ fun main() {
     val applicationState = ApplicationState()
     val logger = LoggerFactory.getLogger("ktor.application")
     val environment = Environment()
+    val redisConfig = environment.redisConfig
     val cache = RedisStore(
         JedisPool(
             JedisPoolConfig(),
-            environment.redisHost,
-            environment.redisPort,
-            Protocol.DEFAULT_TIMEOUT,
-            environment.redisSecret
+            HostAndPort(redisConfig.host, redisConfig.port),
+            DefaultJedisClientConfig.builder()
+                .ssl(redisConfig.ssl)
+                .user(redisConfig.redisUsername)
+                .password(redisConfig.redisPassword)
+                .database(redisConfig.redisDB)
+                .build()
         )
     )
     val applicationEngineEnvironment = applicationEngineEnvironment {
