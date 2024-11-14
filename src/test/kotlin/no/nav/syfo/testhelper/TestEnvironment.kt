@@ -39,6 +39,7 @@ fun testEnvironment(
         redisPassword = "redisPassword",
         ssl = false,
     ),
+    fastlegeUrl = "hhtp://fastlege",
     adresseregisterUrl = "http:/adressereg",
     nhnUsername = "nhnUser",
     nhnPassword = "nhnPw",
