@@ -1,8 +1,11 @@
 package no.nav.syfo.fastlege.api.system
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.serialization.jackson.*
 import io.ktor.server.testing.*
 import no.nav.syfo.fastlege.domain.BehandlerKontor
 import no.nav.syfo.fastlege.domain.Fastlege
@@ -17,169 +20,159 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class FastlegeSystemApiTest : Spek({
-    val objectMapper: ObjectMapper = configuredJacksonMapper()
-
     describe(FastlegeSystemApiTest::class.java.simpleName) {
 
-        with(TestApplicationEngine()) {
-            start()
+        val externalMockEnvironment = ExternalMockEnvironment.getInstance()
 
-            val externalMockEnvironment = ExternalMockEnvironment.getInstance()
+        fun ApplicationTestBuilder.setupApiAndClient(): HttpClient {
+            application {
+                testApiModule(
+                    externalMockEnvironment = externalMockEnvironment,
+                )
+            }
+            val client = createClient {
+                install(ContentNegotiation) {
+                    jackson { configure() }
+                }
+            }
+            return client
+        }
 
-            application.testApiModule(
-                externalMockEnvironment = externalMockEnvironment,
+        describe("Finn fastlege") {
+            val validToken = generateJWTSystem(
+                externalMockEnvironment.environment.azure.appClientId,
+                externalMockEnvironment.wellKnownInternalAzureAD.issuer,
+                azp = testIsdialogmeldingClientId,
             )
+            val invalidToken = generateJWTSystem(
+                externalMockEnvironment.environment.azure.appClientId,
+                externalMockEnvironment.wellKnownInternalAzureAD.issuer,
+                azp = testSyfomodiapersonClientId,
+            )
+            val fastlegeSystemPath = "$SYSTEM_PATH/fastlege/aktiv/personident"
+            val vikarSystemPath = "$SYSTEM_PATH/fastlege/vikar/personident"
+            val behandlereSystemPath = "$SYSTEM_PATH/$PARENT_HER_ID/behandlere"
+            val behandlereSystemPathInactive = "$SYSTEM_PATH/$PARENT_HER_ID_WITH_INACTIVE_BEHANDLER/behandlere"
 
-            describe("Finn fastlege") {
-                val validToken = generateJWTSystem(
-                    externalMockEnvironment.environment.azure.appClientId,
-                    externalMockEnvironment.wellKnownInternalAzureAD.issuer,
-                    azp = testIsdialogmeldingClientId,
-                )
-                val invalidToken = generateJWTSystem(
-                    externalMockEnvironment.environment.azure.appClientId,
-                    externalMockEnvironment.wellKnownInternalAzureAD.issuer,
-                    azp = testSyfomodiapersonClientId,
-                )
-                val fastlegeSystemPath = "$SYSTEM_PATH/fastlege/aktiv/personident"
-                val vikarSystemPath = "$SYSTEM_PATH/fastlege/vikar/personident"
-                val behandlereSystemPath = "$SYSTEM_PATH/$PARENT_HER_ID/behandlere"
-                val behandlereSystemPathInactive = "$SYSTEM_PATH/$PARENT_HER_ID_WITH_INACTIVE_BEHANDLER/behandlere"
-
-                describe("Happy path") {
-                    it("should return fastlege") {
-
-                        with(
-                            handleRequest(HttpMethod.Get, fastlegeSystemPath) {
-                                addHeader(HttpHeaders.Authorization, bearerHeader(validToken))
-                                addHeader(NAV_PERSONIDENT_HEADER, UserConstants.FASTLEGEOPPSLAG_PERSON_ID)
-                            }
-                        ) {
-                            response.status() shouldBeEqualTo HttpStatusCode.OK
-                            val fastlege = objectMapper.readValue<Fastlege>(response.content!!)
-                            fastlege.relasjon.kodeVerdi shouldBeEqualTo RelasjonKodeVerdi.FASTLEGE.kodeVerdi
-                            fastlege.pasient!!.fnr shouldBeEqualTo UserConstants.FASTLEGEOPPSLAG_PERSON_ID
+            describe("Happy path") {
+                it("should return fastlege") {
+                    testApplication {
+                        val client = setupApiAndClient()
+                        val response = client.get(fastlegeSystemPath) {
+                            bearerAuth(validToken)
+                            header(NAV_PERSONIDENT_HEADER, UserConstants.FASTLEGEOPPSLAG_PERSON_ID)
                         }
-                    }
-                    it("should return fastlege when both fastlege and vikar") {
+                        response.status shouldBeEqualTo HttpStatusCode.OK
 
-                        with(
-                            handleRequest(HttpMethod.Get, fastlegeSystemPath) {
-                                addHeader(HttpHeaders.Authorization, bearerHeader(validToken))
-                                addHeader(NAV_PERSONIDENT_HEADER, UserConstants.FASTLEGEOPPSLAG_PERSON_ID)
-                            }
-                        ) {
-                            response.status() shouldBeEqualTo HttpStatusCode.OK
-                            val fastlege = objectMapper.readValue<Fastlege>(response.content!!)
-                            fastlege.relasjon.kodeVerdi shouldBeEqualTo RelasjonKodeVerdi.FASTLEGE.kodeVerdi
-                            fastlege.pasient!!.fnr shouldBeEqualTo UserConstants.FASTLEGEOPPSLAG_PERSON_ID
-                        }
-                    }
-                    it("should return vikar") {
-
-                        with(
-                            handleRequest(HttpMethod.Get, vikarSystemPath) {
-                                addHeader(HttpHeaders.Authorization, bearerHeader(validToken))
-                                addHeader(NAV_PERSONIDENT_HEADER, UserConstants.FASTLEGEOPPSLAG_PERSON_ID)
-                            }
-                        ) {
-                            response.status() shouldBeEqualTo HttpStatusCode.OK
-                            val fastlege = objectMapper.readValue<Fastlege>(response.content!!)
-                            fastlege.relasjon.kodeVerdi shouldBeEqualTo RelasjonKodeVerdi.VIKAR.kodeVerdi
-                            fastlege.pasient!!.fnr shouldBeEqualTo UserConstants.FASTLEGEOPPSLAG_PERSON_ID
-                        }
-                    }
-                    it("should return list of behandlere for kontor") {
-
-                        with(
-                            handleRequest(HttpMethod.Get, behandlereSystemPath) {
-                                addHeader(HttpHeaders.Authorization, bearerHeader(validToken))
-                            }
-                        ) {
-                            response.status() shouldBeEqualTo HttpStatusCode.OK
-                            val behandlerKontor = objectMapper.readValue<BehandlerKontor>(response.content!!)
-                            behandlerKontor.aktiv shouldBeEqualTo true
-                            behandlerKontor.behandlere.size shouldBeEqualTo 1
-                            val behandler = behandlerKontor.behandlere[0]
-                            behandler.aktiv shouldBeEqualTo true
-                            behandler.etternavn shouldBeEqualTo UserConstants.FASTLEGE_ETTERNAVN
-                            behandler.hprId shouldBeEqualTo UserConstants.FASTLEGE_HPR_NR
-                            behandler.herId shouldBeEqualTo UserConstants.HER_ID
-                            behandler.personIdent shouldBeEqualTo UserConstants.FASTLEGE_FNR
-                        }
-                    }
-                    it("should return list of behandlere for kontor when some are inactive") {
-
-                        with(
-                            handleRequest(HttpMethod.Get, behandlereSystemPathInactive) {
-                                addHeader(HttpHeaders.Authorization, bearerHeader(validToken))
-                            }
-                        ) {
-                            response.status() shouldBeEqualTo HttpStatusCode.OK
-                            val behandlerKontor = objectMapper.readValue<BehandlerKontor>(response.content!!)
-                            behandlerKontor.aktiv shouldBeEqualTo true
-                            behandlerKontor.behandlere.size shouldBeEqualTo 2
-                            val behandler = behandlerKontor.behandlere[0]
-                            behandler.aktiv shouldBeEqualTo true
-                            val behandlerInactive = behandlerKontor.behandlere[1]
-                            behandlerInactive.aktiv shouldBeEqualTo false
-                        }
+                        val fastlege = response.body<Fastlege>()
+                        fastlege.relasjon.kodeVerdi shouldBeEqualTo RelasjonKodeVerdi.FASTLEGE.kodeVerdi
+                        fastlege.pasient!!.fnr shouldBeEqualTo UserConstants.FASTLEGEOPPSLAG_PERSON_ID
                     }
                 }
-                describe("Unhappy paths") {
-                    it("no fastlege") {
-                        with(
-                            handleRequest(HttpMethod.Get, fastlegeSystemPath) {
-                                addHeader(HttpHeaders.Authorization, bearerHeader(validToken))
-                                addHeader(NAV_PERSONIDENT_HEADER, UserConstants.ARBEIDSTAKER_PERSONIDENT_NO_FASTLEGE.value)
-                            }
-                        ) {
-                            response.status() shouldBeEqualTo HttpStatusCode.NotFound
-                            response.content shouldBeEqualTo "Fant ikke aktiv fastlege"
+                it("should return vikar") {
+                    testApplication {
+                        val client = setupApiAndClient()
+                        val response = client.get(vikarSystemPath) {
+                            bearerAuth(validToken)
+                            header(NAV_PERSONIDENT_HEADER, UserConstants.FASTLEGEOPPSLAG_PERSON_ID)
                         }
+                        response.status shouldBeEqualTo HttpStatusCode.OK
+
+                        val fastlege = response.body<Fastlege>()
+                        fastlege.relasjon.kodeVerdi shouldBeEqualTo RelasjonKodeVerdi.VIKAR.kodeVerdi
+                        fastlege.pasient!!.fnr shouldBeEqualTo UserConstants.FASTLEGEOPPSLAG_PERSON_ID
                     }
-                    it("no fastlegevikar") {
-                        with(
-                            handleRequest(HttpMethod.Get, vikarSystemPath) {
-                                addHeader(HttpHeaders.Authorization, bearerHeader(validToken))
-                                addHeader(NAV_PERSONIDENT_HEADER, UserConstants.ARBEIDSTAKER_PERSONIDENT_NO_FASTLEGE.value)
-                            }
-                        ) {
-                            response.status() shouldBeEqualTo HttpStatusCode.NotFound
-                            response.content shouldBeEqualTo "Fant ikke fastlegevikar"
+                }
+                it("should return list of behandlere for kontor") {
+                    testApplication {
+                        val client = setupApiAndClient()
+                        val response = client.get(behandlereSystemPath) {
+                            bearerAuth(validToken)
                         }
+                        response.status shouldBeEqualTo HttpStatusCode.OK
+
+                        val behandlerKontor = response.body<BehandlerKontor>()
+                        behandlerKontor.aktiv shouldBeEqualTo true
+                        behandlerKontor.behandlere.size shouldBeEqualTo 1
+                        val behandler = behandlerKontor.behandlere[0]
+                        behandler.aktiv shouldBeEqualTo true
+                        behandler.etternavn shouldBeEqualTo UserConstants.FASTLEGE_ETTERNAVN
+                        behandler.hprId shouldBeEqualTo UserConstants.FASTLEGE_HPR_NR
+                        behandler.herId shouldBeEqualTo UserConstants.HER_ID
+                        behandler.personIdent shouldBeEqualTo UserConstants.FASTLEGE_FNR
                     }
-                    it("token from app with no access") {
-                        with(
-                            handleRequest(HttpMethod.Get, fastlegeSystemPath) {
-                                addHeader(HttpHeaders.Authorization, bearerHeader(invalidToken))
-                                addHeader(NAV_PERSONIDENT_HEADER, ARBEIDSTAKER_PERSONIDENT.value)
-                            }
-                        ) {
-                            response.status() shouldBeEqualTo HttpStatusCode.Forbidden
-                            response.content shouldBeEqualTo "Consumer with clientId=syfomodiaperson-client-id is denied access to API"
+                }
+                it("should return list of behandlere for kontor when some are inactive") {
+                    testApplication {
+                        val client = setupApiAndClient()
+                        val response = client.get(behandlereSystemPathInactive) {
+                            bearerAuth(validToken)
                         }
+                        response.status shouldBeEqualTo HttpStatusCode.OK
+
+                        val behandlerKontor = response.body<BehandlerKontor>()
+                        behandlerKontor.aktiv shouldBeEqualTo true
+                        behandlerKontor.behandlere.size shouldBeEqualTo 2
+                        val behandler = behandlerKontor.behandlere[0]
+                        behandler.aktiv shouldBeEqualTo true
+                        val behandlerInactive = behandlerKontor.behandlere[1]
+                        behandlerInactive.aktiv shouldBeEqualTo false
                     }
-                    it("invalid fnr") {
-                        with(
-                            handleRequest(HttpMethod.Get, fastlegeSystemPath) {
-                                addHeader(HttpHeaders.Authorization, bearerHeader(validToken))
-                                addHeader(NAV_PERSONIDENT_HEADER, "123")
-                            }
-                        ) {
-                            response.status() shouldBeEqualTo HttpStatusCode.BadRequest
-                            response.content shouldBeEqualTo "Value is not a valid PersonIdentNumber"
+                }
+            }
+            describe("Unhappy paths") {
+                it("no fastlege") {
+                    testApplication {
+                        val client = setupApiAndClient()
+                        val response = client.get(fastlegeSystemPath) {
+                            bearerAuth(validToken)
+                            header(NAV_PERSONIDENT_HEADER, UserConstants.ARBEIDSTAKER_PERSONIDENT_NO_FASTLEGE.value)
                         }
+                        response.status shouldBeEqualTo HttpStatusCode.NotFound
+                        response.body<String>() shouldBeEqualTo "Fant ikke aktiv fastlege"
                     }
-                    it("no fnr") {
-                        with(
-                            handleRequest(HttpMethod.Get, fastlegeSystemPath) {
-                                addHeader(HttpHeaders.Authorization, bearerHeader(validToken))
-                            }
-                        ) {
-                            response.status() shouldBeEqualTo HttpStatusCode.BadRequest
-                            response.content shouldBeEqualTo "No PersonIdent supplied"
+                }
+                it("no fastlegevikar") {
+                    testApplication {
+                        val client = setupApiAndClient()
+                        val response = client.get(vikarSystemPath) {
+                            bearerAuth(validToken)
+                            header(NAV_PERSONIDENT_HEADER, UserConstants.ARBEIDSTAKER_PERSONIDENT_NO_FASTLEGE.value)
                         }
+                        response.status shouldBeEqualTo HttpStatusCode.NotFound
+                        response.body<String>() shouldBeEqualTo "Fant ikke fastlegevikar"
+                    }
+                }
+                it("token from app with no access") {
+                    testApplication {
+                        val client = setupApiAndClient()
+                        val response = client.get(fastlegeSystemPath) {
+                            bearerAuth(invalidToken)
+                            header(NAV_PERSONIDENT_HEADER, ARBEIDSTAKER_PERSONIDENT.value)
+                        }
+                        response.status shouldBeEqualTo HttpStatusCode.Forbidden
+                        response.body<String>() shouldBeEqualTo "Consumer with clientId=syfomodiaperson-client-id is denied access to API"
+                    }
+                }
+                it("invalid fnr") {
+                    testApplication {
+                        val client = setupApiAndClient()
+                        val response = client.get(fastlegeSystemPath) {
+                            bearerAuth(invalidToken)
+                            header(NAV_PERSONIDENT_HEADER, "123")
+                        }
+                        response.status shouldBeEqualTo HttpStatusCode.BadRequest
+                        response.body<String>() shouldBeEqualTo "Value is not a valid PersonIdentNumber"
+                    }
+                }
+                it("no fnr") {
+                    testApplication {
+                        val client = setupApiAndClient()
+                        val response = client.get(fastlegeSystemPath) {
+                            bearerAuth(invalidToken)
+                        }
+                        response.status shouldBeEqualTo HttpStatusCode.BadRequest
+                        response.body<String>() shouldBeEqualTo "No PersonIdent supplied"
                     }
                 }
             }

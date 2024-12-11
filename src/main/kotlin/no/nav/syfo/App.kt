@@ -37,28 +37,38 @@ fun main() {
                 .build()
         )
     )
-    val applicationEngineEnvironment = applicationEngineEnvironment {
+
+    val applicationEnvironment = applicationEnvironment {
         log = logger
         config = HoconApplicationConfig(ConfigFactory.load())
-        connector {
-            port = applicationPort
-        }
-        val fastlegeClient = FastlegeInformasjonClient(
-            fastlegeSoapClient = fastlegeSoapClient(
-                serviceUrl = environment.fastlegeUrl,
-                username = environment.nhnUsername,
-                password = environment.nhnPassword,
-            ),
-        )
-        val adresseregisterClient = AdresseregisterClient(
-            adresseregisterSoapClient = adresseregisterSoapClient(
-                serviceUrl = environment.adresseregisterUrl,
-                username = environment.nhnUsername,
-                password = environment.nhnPassword,
-            ),
-        )
+    }
 
-        module {
+    val server = embeddedServer(
+        Netty,
+        environment = applicationEnvironment,
+        configure = {
+            connector {
+                port = applicationPort
+            }
+            connectionGroupSize = 8
+            workerGroupSize = 8
+            callGroupSize = 16
+        },
+        module = {
+            val fastlegeClient = FastlegeInformasjonClient(
+                fastlegeSoapClient = fastlegeSoapClient(
+                    serviceUrl = environment.fastlegeUrl,
+                    username = environment.nhnUsername,
+                    password = environment.nhnPassword,
+                ),
+            )
+            val adresseregisterClient = AdresseregisterClient(
+                adresseregisterSoapClient = adresseregisterSoapClient(
+                    serviceUrl = environment.adresseregisterUrl,
+                    username = environment.nhnUsername,
+                    password = environment.nhnPassword,
+                ),
+            )
             apiModule(
                 applicationState = applicationState,
                 environment = environment,
@@ -67,22 +77,12 @@ fun main() {
                 fastlegeClient = fastlegeClient,
                 adresseregisterClient = adresseregisterClient,
             )
+            monitor.subscribe(ApplicationStarted) {
+                applicationState.ready = true
+                logger.info("Application is ready, running Java VM ${Runtime.version()}")
+            }
         }
-    }
-
-    applicationEngineEnvironment.monitor.subscribe(ApplicationStarted) {
-        applicationState.ready = true
-        logger.info("Application is ready, running Java VM ${Runtime.version()}")
-    }
-
-    val server = embeddedServer(
-        factory = Netty,
-        environment = applicationEngineEnvironment,
-    ) {
-        connectionGroupSize = 8
-        workerGroupSize = 8
-        callGroupSize = 16
-    }
+    )
 
     Runtime.getRuntime().addShutdownHook(
         Thread {
