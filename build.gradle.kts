@@ -5,30 +5,30 @@ version = "0.0.1"
 
 val commonsCollectionVersion = "3.2.2"
 val commonsTextVersion = "1.12.0"
-val cxfVersion = "3.6.2"
-val jacksonVersion = "2.17.2"
+val cxfVersion = "3.6.5"
+val jacksonVersion = "2.18.0"
 val jacksonDataTypeVersion = "2.17.2"
 val javaxActivationVersion = "1.2.0"
 val javaxWsRsApiVersion = "2.1.1"
 val jaxbVersion = "2.3.1"
 val jaxwsVersion = "2.3.5"
 val jedisVersion = "5.1.5"
-val jsonVersion = "20231013"
+val jsonVersion = "20240303"
 val kluentVersion = "1.73"
-val ktorVersion = "2.3.12"
-val logbackVersion = "1.5.8"
+val ktorVersion = "3.0.2"
+val logbackVersion = "1.5.12"
 val logstashEncoderVersion = "7.4"
 val micrometerRegistryVersion = "1.12.8"
 val mockkVersion = "1.13.12"
-val nimbusjosejwtVersion = "9.41.1"
+val nimbusjosejwtVersion = "9.47"
 val redisEmbeddedVersion = "0.7.3"
 val spekVersion = "2.0.19"
 val syfotjenesterVersion = "1.2022.09.09-14.42-5356e2174b6c"
 
 plugins {
-    kotlin("jvm") version "2.0.20"
+    kotlin("jvm") version "2.0.21"
     id("com.gradleup.shadow") version "8.3.2"
-    id("org.jlleitschuh.gradle.ktlint") version "11.4.2"
+    id("org.jlleitschuh.gradle.ktlint") version "11.6.1"
 }
 
 repositories {
@@ -89,7 +89,7 @@ dependencies {
     implementation("redis.clients:jedis:$jedisVersion")
 
     // Tests
-    testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
+    testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("org.amshove.kluent:kluent:$kluentVersion")
     testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
