@@ -59,7 +59,7 @@ spec:
       claims:
         extra:
           - "NAVident"
-  redis:
+  valkey:
     - instance: cache
       access: readwrite
   envFrom:

@@ -1,6 +1,6 @@
 package no.nav.syfo.fastlege
 
-import no.nav.syfo.application.cache.RedisStore
+import no.nav.syfo.application.cache.ValkeyStore
 import no.nav.syfo.client.pdl.PdlClient
 import no.nav.syfo.client.pdl.PdlHentPerson
 import no.nav.syfo.fastlege.domain.*
@@ -14,7 +14,7 @@ class FastlegeService(
     private val pdlClient: PdlClient,
     private val fastlegeClient: FastlegeInformasjonClient,
     private val adresseregisterClient: AdresseregisterClient,
-    private val cache: RedisStore,
+    private val cache: ValkeyStore,
 ) {
     suspend fun hentBrukersFastleger(
         personIdent: PersonIdent,

@@ -2,7 +2,7 @@ package no.nav.syfo.testhelper
 
 import io.ktor.server.netty.*
 import no.nav.syfo.application.ApplicationState
-import no.nav.syfo.application.cache.RedisStore
+import no.nav.syfo.application.cache.ValkeyStore
 import no.nav.syfo.testhelper.mock.*
 
 class ExternalMockEnvironment {
@@ -27,7 +27,7 @@ class ExternalMockEnvironment {
     )
 
     val wellKnownInternalAzureAD = wellKnownInternalAzureAD()
-    lateinit var redisCache: RedisStore
+    lateinit var valkeyCache: ValkeyStore
 
     companion object {
         private val singletonInstance: ExternalMockEnvironment by lazy {

@@ -6,7 +6,7 @@ import io.ktor.server.routing.*
 import no.nav.syfo.application.ApplicationState
 import no.nav.syfo.application.Environment
 import no.nav.syfo.application.api.authentication.*
-import no.nav.syfo.application.cache.RedisStore
+import no.nav.syfo.application.cache.ValkeyStore
 import no.nav.syfo.application.metric.registerMetricApi
 import no.nav.syfo.client.azuread.AzureAdClient
 import no.nav.syfo.client.pdl.PdlClient
@@ -21,7 +21,7 @@ fun Application.apiModule(
     applicationState: ApplicationState,
     environment: Environment,
     wellKnownAzure: WellKnown,
-    cache: RedisStore,
+    cache: ValkeyStore,
     fastlegeClient: FastlegeInformasjonClient,
     adresseregisterClient: AdresseregisterClient,
 ) {
