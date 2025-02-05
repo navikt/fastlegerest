@@ -2,7 +2,7 @@ package no.nav.syfo.testhelper
 
 import io.ktor.server.application.*
 import no.nav.syfo.application.api.apiModule
-import no.nav.syfo.application.cache.RedisStore
+import no.nav.syfo.application.cache.ValkeyStore
 import no.nav.syfo.fastlege.ws.adresseregister.AdresseregisterClient
 import no.nav.syfo.fastlege.ws.fastlegeregister.FastlegeInformasjonClient
 import redis.clients.jedis.*
@@ -10,24 +10,24 @@ import redis.clients.jedis.*
 fun Application.testApiModule(
     externalMockEnvironment: ExternalMockEnvironment,
 ) {
-    val redisConfig = externalMockEnvironment.environment.redisConfig
-    val cache = RedisStore(
+    val valkeyConfig = externalMockEnvironment.environment.valkeyConfig
+    val cache = ValkeyStore(
         JedisPool(
             JedisPoolConfig(),
-            HostAndPort(redisConfig.host, redisConfig.port),
+            HostAndPort(valkeyConfig.host, valkeyConfig.port),
             DefaultJedisClientConfig.builder()
-                .ssl(redisConfig.ssl)
-                .password(redisConfig.redisPassword)
+                .ssl(valkeyConfig.ssl)
+                .password(valkeyConfig.valkeyPassword)
                 .build()
         )
     )
-    externalMockEnvironment.redisCache = cache
+    externalMockEnvironment.valkeyCache = cache
 
     this.apiModule(
         applicationState = externalMockEnvironment.applicationState,
         environment = externalMockEnvironment.environment,
         wellKnownAzure = externalMockEnvironment.wellKnownInternalAzureAD,
-        cache = externalMockEnvironment.redisCache,
+        cache = externalMockEnvironment.valkeyCache,
         fastlegeClient = FastlegeInformasjonClient(externalMockEnvironment.fastlegeMock),
         adresseregisterClient = AdresseregisterClient(externalMockEnvironment.adresseregisterMock)
     )

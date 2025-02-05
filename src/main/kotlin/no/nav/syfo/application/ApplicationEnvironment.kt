@@ -1,6 +1,6 @@
 package no.nav.syfo.application
 
-import no.nav.syfo.application.cache.RedisConfig
+import no.nav.syfo.application.cache.ValkeyConfig
 import no.nav.syfo.client.ClientEnvironment
 import no.nav.syfo.client.ClientsEnvironment
 import no.nav.syfo.client.azuread.AzureEnvironment
@@ -27,11 +27,11 @@ data class Environment(
             baseUrl = getEnvVar("ISTILGANGSKONTROLL_URL"),
         )
     ),
-    val redisConfig: RedisConfig = RedisConfig(
-        redisUri = URI(getEnvVar("REDIS_URI_CACHE")),
-        redisDB = 1, // se https://github.com/navikt/istilgangskontroll/blob/master/README.md
-        redisUsername = getEnvVar("REDIS_USERNAME_CACHE"),
-        redisPassword = getEnvVar("REDIS_PASSWORD_CACHE"),
+    val valkeyConfig: ValkeyConfig = ValkeyConfig(
+        valkeyUri = URI(getEnvVar("VALKEY_URI_CACHE")),
+        valkeyDB = 1, // se https://github.com/navikt/istilgangskontroll/blob/master/README.md
+        valkeyUsername = getEnvVar("VALKEY_USERNAME_CACHE"),
+        valkeyPassword = getEnvVar("VALKEY_PASSWORD_CACHE"),
     ),
     val fastlegeUrl: String = getEnvVar("FASTLEGE_URL"),
     val adresseregisterUrl: String = getEnvVar("ADRESSEREGISTER_URL"),

@@ -9,7 +9,7 @@ import no.nav.syfo.application.ApplicationState
 import no.nav.syfo.application.Environment
 import no.nav.syfo.application.api.apiModule
 import no.nav.syfo.application.api.authentication.getWellKnown
-import no.nav.syfo.application.cache.RedisStore
+import no.nav.syfo.application.cache.ValkeyStore
 import no.nav.syfo.fastlege.ws.adresseregister.AdresseregisterClient
 import no.nav.syfo.fastlege.ws.adresseregister.adresseregisterSoapClient
 import no.nav.syfo.fastlege.ws.fastlegeregister.FastlegeInformasjonClient
@@ -24,16 +24,16 @@ fun main() {
     val applicationState = ApplicationState()
     val logger = LoggerFactory.getLogger("ktor.application")
     val environment = Environment()
-    val redisConfig = environment.redisConfig
-    val cache = RedisStore(
+    val valkeyConfig = environment.valkeyConfig
+    val cache = ValkeyStore(
         JedisPool(
             JedisPoolConfig(),
-            HostAndPort(redisConfig.host, redisConfig.port),
+            HostAndPort(valkeyConfig.host, valkeyConfig.port),
             DefaultJedisClientConfig.builder()
-                .ssl(redisConfig.ssl)
-                .user(redisConfig.redisUsername)
-                .password(redisConfig.redisPassword)
-                .database(redisConfig.redisDB)
+                .ssl(valkeyConfig.ssl)
+                .user(valkeyConfig.valkeyUsername)
+                .password(valkeyConfig.valkeyPassword)
+                .database(valkeyConfig.valkeyDB)
                 .build()
         )
     )

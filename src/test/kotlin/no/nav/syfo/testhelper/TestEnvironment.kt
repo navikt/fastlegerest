@@ -1,7 +1,7 @@
 package no.nav.syfo.testhelper
 
 import no.nav.syfo.application.*
-import no.nav.syfo.application.cache.RedisConfig
+import no.nav.syfo.application.cache.ValkeyConfig
 import no.nav.syfo.client.ClientEnvironment
 import no.nav.syfo.client.ClientsEnvironment
 import no.nav.syfo.client.azuread.AzureEnvironment
@@ -32,11 +32,11 @@ fun testEnvironment(
             baseUrl = istilgangskontrollUrl,
         )
     ),
-    redisConfig = RedisConfig(
-        redisUri = URI("http://localhost:6379"),
-        redisDB = 0,
-        redisUsername = "redisUser",
-        redisPassword = "redisPassword",
+    valkeyConfig = ValkeyConfig(
+        valkeyUri = URI("http://localhost:6379"),
+        valkeyDB = 0,
+        valkeyUsername = "valkeyUser",
+        valkeyPassword = "valkeyPassword",
         ssl = false,
     ),
     fastlegeUrl = "hhtp://fastlege",
