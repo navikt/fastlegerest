@@ -5,7 +5,7 @@ version = "0.0.1"
 
 val commonsCollectionVersion = "3.2.2"
 val commonsTextVersion = "1.12.0"
-val cxfVersion = "3.6.5"
+val cxfVersion = "4.1.1"
 val jacksonVersion = "2.18.3"
 val jacksonDataTypeVersion = "2.18.3"
 val javaxActivationVersion = "1.2.0"
