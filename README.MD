@@ -13,9 +13,8 @@ Fastlegerest er en backend-app som tilbyr et rest-api for oppslag av arbeidstake
 
 ##### Test Libraries:
 
-* Kluent
 * Mockk
-* Spek
+* JUnit
 
 #### Requirements
 
