@@ -15,167 +15,190 @@ import no.nav.syfo.testhelper.UserConstants.ARBEIDSTAKER_PERSONIDENT
 import no.nav.syfo.testhelper.UserConstants.PARENT_HER_ID
 import no.nav.syfo.testhelper.UserConstants.PARENT_HER_ID_WITH_INACTIVE_BEHANDLER
 import no.nav.syfo.util.*
-import org.amshove.kluent.shouldBeEqualTo
-import org.spekframework.spek2.Spek
-import org.spekframework.spek2.style.specification.describe
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
-class FastlegeSystemApiTest : Spek({
-    describe(FastlegeSystemApiTest::class.java.simpleName) {
+class FastlegeSystemApiTest {
 
-        val externalMockEnvironment = ExternalMockEnvironment.getInstance()
+    private val externalMockEnvironment = ExternalMockEnvironment.getInstance()
 
-        fun ApplicationTestBuilder.setupApiAndClient(): HttpClient {
-            application {
-                testApiModule(
-                    externalMockEnvironment = externalMockEnvironment,
-                )
+    private fun ApplicationTestBuilder.setupApiAndClient(): HttpClient {
+        application {
+            testApiModule(
+                externalMockEnvironment = externalMockEnvironment,
+            )
+        }
+        val client = createClient {
+            install(ContentNegotiation) {
+                jackson { configure() }
             }
-            val client = createClient {
-                install(ContentNegotiation) {
-                    jackson { configure() }
+        }
+        return client
+    }
+
+    private val validToken = generateJWTSystem(
+        externalMockEnvironment.environment.azure.appClientId,
+        externalMockEnvironment.wellKnownInternalAzureAD.issuer,
+        azp = testIsdialogmeldingClientId,
+    )
+    private val invalidToken = generateJWTSystem(
+        externalMockEnvironment.environment.azure.appClientId,
+        externalMockEnvironment.wellKnownInternalAzureAD.issuer,
+        azp = testSyfomodiapersonClientId,
+    )
+    private val fastlegeSystemPath = "$SYSTEM_PATH/fastlege/aktiv/personident"
+    private val vikarSystemPath = "$SYSTEM_PATH/fastlege/vikar/personident"
+    private val behandlereSystemPath = "$SYSTEM_PATH/$PARENT_HER_ID/behandlere"
+    private val behandlereSystemPathInactive = "$SYSTEM_PATH/$PARENT_HER_ID_WITH_INACTIVE_BEHANDLER/behandlere"
+
+    @Nested
+    @DisplayName("Happy path")
+    inner class HappyPath {
+        @Test
+        fun `should return fastlege`() {
+            testApplication {
+                val client = setupApiAndClient()
+                val response = client.get(fastlegeSystemPath) {
+                    bearerAuth(validToken)
+                    header(NAV_PERSONIDENT_HEADER, UserConstants.FASTLEGEOPPSLAG_PERSON_ID)
                 }
+                assertEquals(HttpStatusCode.OK, response.status)
+
+                val fastlege = response.body<Fastlege>()
+                assertEquals(RelasjonKodeVerdi.FASTLEGE.kodeVerdi, fastlege.relasjon.kodeVerdi)
+                assertEquals(UserConstants.FASTLEGEOPPSLAG_PERSON_ID, fastlege.pasient!!.fnr)
             }
-            return client
         }
 
-        describe("Finn fastlege") {
-            val validToken = generateJWTSystem(
-                externalMockEnvironment.environment.azure.appClientId,
-                externalMockEnvironment.wellKnownInternalAzureAD.issuer,
-                azp = testIsdialogmeldingClientId,
-            )
-            val invalidToken = generateJWTSystem(
-                externalMockEnvironment.environment.azure.appClientId,
-                externalMockEnvironment.wellKnownInternalAzureAD.issuer,
-                azp = testSyfomodiapersonClientId,
-            )
-            val fastlegeSystemPath = "$SYSTEM_PATH/fastlege/aktiv/personident"
-            val vikarSystemPath = "$SYSTEM_PATH/fastlege/vikar/personident"
-            val behandlereSystemPath = "$SYSTEM_PATH/$PARENT_HER_ID/behandlere"
-            val behandlereSystemPathInactive = "$SYSTEM_PATH/$PARENT_HER_ID_WITH_INACTIVE_BEHANDLER/behandlere"
-
-            describe("Happy path") {
-                it("should return fastlege") {
-                    testApplication {
-                        val client = setupApiAndClient()
-                        val response = client.get(fastlegeSystemPath) {
-                            bearerAuth(validToken)
-                            header(NAV_PERSONIDENT_HEADER, UserConstants.FASTLEGEOPPSLAG_PERSON_ID)
-                        }
-                        response.status shouldBeEqualTo HttpStatusCode.OK
-
-                        val fastlege = response.body<Fastlege>()
-                        fastlege.relasjon.kodeVerdi shouldBeEqualTo RelasjonKodeVerdi.FASTLEGE.kodeVerdi
-                        fastlege.pasient!!.fnr shouldBeEqualTo UserConstants.FASTLEGEOPPSLAG_PERSON_ID
-                    }
+        @Test
+        fun `should return vikar`() {
+            testApplication {
+                val client = setupApiAndClient()
+                val response = client.get(vikarSystemPath) {
+                    bearerAuth(validToken)
+                    header(NAV_PERSONIDENT_HEADER, UserConstants.FASTLEGEOPPSLAG_PERSON_ID)
                 }
-                it("should return vikar") {
-                    testApplication {
-                        val client = setupApiAndClient()
-                        val response = client.get(vikarSystemPath) {
-                            bearerAuth(validToken)
-                            header(NAV_PERSONIDENT_HEADER, UserConstants.FASTLEGEOPPSLAG_PERSON_ID)
-                        }
-                        response.status shouldBeEqualTo HttpStatusCode.OK
+                assertEquals(HttpStatusCode.OK, response.status)
 
-                        val fastlege = response.body<Fastlege>()
-                        fastlege.relasjon.kodeVerdi shouldBeEqualTo RelasjonKodeVerdi.VIKAR.kodeVerdi
-                        fastlege.pasient!!.fnr shouldBeEqualTo UserConstants.FASTLEGEOPPSLAG_PERSON_ID
-                    }
-                }
-                it("should return list of behandlere for kontor") {
-                    testApplication {
-                        val client = setupApiAndClient()
-                        val response = client.get(behandlereSystemPath) {
-                            bearerAuth(validToken)
-                        }
-                        response.status shouldBeEqualTo HttpStatusCode.OK
-
-                        val behandlerKontor = response.body<BehandlerKontor>()
-                        behandlerKontor.aktiv shouldBeEqualTo true
-                        behandlerKontor.behandlere.size shouldBeEqualTo 1
-                        val behandler = behandlerKontor.behandlere[0]
-                        behandler.aktiv shouldBeEqualTo true
-                        behandler.etternavn shouldBeEqualTo UserConstants.FASTLEGE_ETTERNAVN
-                        behandler.hprId shouldBeEqualTo UserConstants.FASTLEGE_HPR_NR
-                        behandler.herId shouldBeEqualTo UserConstants.HER_ID
-                        behandler.personIdent shouldBeEqualTo UserConstants.FASTLEGE_FNR
-                    }
-                }
-                it("should return list of behandlere for kontor when some are inactive") {
-                    testApplication {
-                        val client = setupApiAndClient()
-                        val response = client.get(behandlereSystemPathInactive) {
-                            bearerAuth(validToken)
-                        }
-                        response.status shouldBeEqualTo HttpStatusCode.OK
-
-                        val behandlerKontor = response.body<BehandlerKontor>()
-                        behandlerKontor.aktiv shouldBeEqualTo true
-                        behandlerKontor.behandlere.size shouldBeEqualTo 2
-                        val behandler = behandlerKontor.behandlere[0]
-                        behandler.aktiv shouldBeEqualTo true
-                        val behandlerInactive = behandlerKontor.behandlere[1]
-                        behandlerInactive.aktiv shouldBeEqualTo false
-                    }
-                }
+                val fastlege = response.body<Fastlege>()
+                assertEquals(RelasjonKodeVerdi.VIKAR.kodeVerdi, fastlege.relasjon.kodeVerdi)
+                assertEquals(UserConstants.FASTLEGEOPPSLAG_PERSON_ID, fastlege.pasient!!.fnr)
             }
-            describe("Unhappy paths") {
-                it("no fastlege") {
-                    testApplication {
-                        val client = setupApiAndClient()
-                        val response = client.get(fastlegeSystemPath) {
-                            bearerAuth(validToken)
-                            header(NAV_PERSONIDENT_HEADER, UserConstants.ARBEIDSTAKER_PERSONIDENT_NO_FASTLEGE.value)
-                        }
-                        response.status shouldBeEqualTo HttpStatusCode.NotFound
-                        response.body<String>() shouldBeEqualTo "Fant ikke aktiv fastlege"
-                    }
+        }
+
+        @Test
+        fun `should return list of behandlere for kontor`() {
+            testApplication {
+                val client = setupApiAndClient()
+                val response = client.get(behandlereSystemPath) {
+                    bearerAuth(validToken)
                 }
-                it("no fastlegevikar") {
-                    testApplication {
-                        val client = setupApiAndClient()
-                        val response = client.get(vikarSystemPath) {
-                            bearerAuth(validToken)
-                            header(NAV_PERSONIDENT_HEADER, UserConstants.ARBEIDSTAKER_PERSONIDENT_NO_FASTLEGE.value)
-                        }
-                        response.status shouldBeEqualTo HttpStatusCode.NotFound
-                        response.body<String>() shouldBeEqualTo "Fant ikke fastlegevikar"
-                    }
+                assertEquals(HttpStatusCode.OK, response.status)
+
+                val behandlerKontor = response.body<BehandlerKontor>()
+                assertTrue(behandlerKontor.aktiv)
+                assertEquals(1, behandlerKontor.behandlere.size)
+                val behandler = behandlerKontor.behandlere[0]
+                assertTrue(behandler.aktiv)
+                assertEquals(UserConstants.FASTLEGE_ETTERNAVN, behandler.etternavn)
+                assertEquals(UserConstants.FASTLEGE_HPR_NR, behandler.hprId)
+                assertEquals(UserConstants.HER_ID, behandler.herId)
+                assertEquals(UserConstants.FASTLEGE_FNR, behandler.personIdent)
+            }
+        }
+
+        @Test
+        fun `should return list of behandlere for kontor when some are inactive`() {
+            testApplication {
+                val client = setupApiAndClient()
+                val response = client.get(behandlereSystemPathInactive) {
+                    bearerAuth(validToken)
                 }
-                it("token from app with no access") {
-                    testApplication {
-                        val client = setupApiAndClient()
-                        val response = client.get(fastlegeSystemPath) {
-                            bearerAuth(invalidToken)
-                            header(NAV_PERSONIDENT_HEADER, ARBEIDSTAKER_PERSONIDENT.value)
-                        }
-                        response.status shouldBeEqualTo HttpStatusCode.Forbidden
-                        response.body<String>() shouldBeEqualTo "Consumer with clientId=syfomodiaperson-client-id is denied access to API"
-                    }
-                }
-                it("invalid fnr") {
-                    testApplication {
-                        val client = setupApiAndClient()
-                        val response = client.get(fastlegeSystemPath) {
-                            bearerAuth(invalidToken)
-                            header(NAV_PERSONIDENT_HEADER, "123")
-                        }
-                        response.status shouldBeEqualTo HttpStatusCode.BadRequest
-                        response.body<String>() shouldBeEqualTo "Value is not a valid PersonIdentNumber"
-                    }
-                }
-                it("no fnr") {
-                    testApplication {
-                        val client = setupApiAndClient()
-                        val response = client.get(fastlegeSystemPath) {
-                            bearerAuth(invalidToken)
-                        }
-                        response.status shouldBeEqualTo HttpStatusCode.BadRequest
-                        response.body<String>() shouldBeEqualTo "No PersonIdent supplied"
-                    }
-                }
+                assertEquals(HttpStatusCode.OK, response.status)
+
+                val behandlerKontor = response.body<BehandlerKontor>()
+                assertTrue(behandlerKontor.aktiv)
+                assertEquals(2, behandlerKontor.behandlere.size)
+                val behandler = behandlerKontor.behandlere[0]
+                assertTrue(behandler.aktiv)
+                val behandlerInactive = behandlerKontor.behandlere[1]
+                assertFalse(behandlerInactive.aktiv)
             }
         }
     }
-})
+
+    @Nested
+    @DisplayName("Unhappy paths")
+    inner class UnhappyPaths {
+        @Test
+        fun `no fastlege`() {
+            testApplication {
+                val client = setupApiAndClient()
+                val response = client.get(fastlegeSystemPath) {
+                    bearerAuth(validToken)
+                    header(NAV_PERSONIDENT_HEADER, UserConstants.ARBEIDSTAKER_PERSONIDENT_NO_FASTLEGE.value)
+                }
+                assertEquals(HttpStatusCode.NotFound, response.status)
+                assertEquals("Fant ikke aktiv fastlege", response.body<String>())
+            }
+        }
+
+        @Test
+        fun `no fastlegevikar`() {
+            testApplication {
+                val client = setupApiAndClient()
+                val response = client.get(vikarSystemPath) {
+                    bearerAuth(validToken)
+                    header(NAV_PERSONIDENT_HEADER, UserConstants.ARBEIDSTAKER_PERSONIDENT_NO_FASTLEGE.value)
+                }
+                assertEquals(HttpStatusCode.NotFound, response.status)
+                assertEquals("Fant ikke fastlegevikar", response.body<String>())
+            }
+        }
+
+        @Test
+        fun `token from app with no access`() {
+            testApplication {
+                val client = setupApiAndClient()
+                val response = client.get(fastlegeSystemPath) {
+                    bearerAuth(invalidToken)
+                    header(NAV_PERSONIDENT_HEADER, ARBEIDSTAKER_PERSONIDENT.value)
+                }
+                assertEquals(HttpStatusCode.Forbidden, response.status)
+                assertEquals(
+                    "Consumer with clientId=syfomodiaperson-client-id is denied access to API",
+                    response.body<String>()
+                )
+            }
+        }
+
+        @Test
+        fun `invalid fnr`() {
+            testApplication {
+                val client = setupApiAndClient()
+                val response = client.get(fastlegeSystemPath) {
+                    bearerAuth(invalidToken)
+                    header(NAV_PERSONIDENT_HEADER, "123")
+                }
+                assertEquals(HttpStatusCode.BadRequest, response.status)
+                assertEquals("Value is not a valid PersonIdentNumber", response.body<String>())
+            }
+        }
+
+        @Test
+        fun `no fnr`() {
+            testApplication {
+                val client = setupApiAndClient()
+                val response = client.get(fastlegeSystemPath) {
+                    bearerAuth(invalidToken)
+                }
+                assertEquals(HttpStatusCode.BadRequest, response.status)
+                assertEquals("No PersonIdent supplied", response.body<String>())
+            }
+        }
+    }
+}

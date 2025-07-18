@@ -1,3 +1,4 @@
+import com.adarshr.gradle.testlogger.theme.ThemeType
 import com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer
 
 group = "no.nav.syfo"
@@ -14,7 +15,6 @@ val jaxbVersion = "2.3.1"
 val jaxwsVersion = "2.3.5"
 val jedisVersion = "5.2.0"
 val jsonVersion = "20250107"
-val kluentVersion = "1.73"
 val ktorVersion = "3.1.2"
 val logbackVersion = "1.5.18"
 val logstashEncoderVersion = "7.4"
@@ -22,13 +22,13 @@ val micrometerRegistryVersion = "1.12.13"
 val mockkVersion = "1.13.17"
 val nimbusjosejwtVersion = "10.0.2"
 val redisEmbeddedVersion = "0.7.3"
-val spekVersion = "2.0.19"
 val syfotjenesterVersion = "1.2022.09.09-14.42-5356e2174b6c"
 
 plugins {
     kotlin("jvm") version "2.1.20"
     id("com.gradleup.shadow") version "8.3.6"
     id("org.jlleitschuh.gradle.ktlint") version "11.6.1"
+    id("com.adarshr.test-logger") version "4.0.0"
 }
 
 repositories {
@@ -91,10 +91,8 @@ dependencies {
     // Tests
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
-    testImplementation("org.amshove.kluent:kluent:$kluentVersion")
-    testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
+    testImplementation(kotlin("test"))
     testImplementation("com.nimbusds:nimbus-jose-jwt:$nimbusjosejwtVersion")
-    testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
 }
 
 kotlin {
@@ -124,9 +122,11 @@ tasks {
     }
 
     test {
-        useJUnitPlatform {
-            includeEngines("spek2")
+        useJUnitPlatform()
+        testlogger {
+            theme = ThemeType.STANDARD_PARALLEL
+            showFullStackTraces = true
+            showPassed = false
         }
-        testLogging.showStandardStreams = true
     }
 }
