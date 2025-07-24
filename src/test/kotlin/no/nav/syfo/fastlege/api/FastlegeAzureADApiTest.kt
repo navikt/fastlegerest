@@ -17,10 +17,10 @@ import no.nav.syfo.testhelper.UserConstants.VEILEDER_IDENT
 import no.nav.syfo.testhelper.generateJWTNavIdent
 import no.nav.syfo.testhelper.testApiModule
 import no.nav.syfo.util.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
 
 class FastlegeAzureADApiTest {
 
