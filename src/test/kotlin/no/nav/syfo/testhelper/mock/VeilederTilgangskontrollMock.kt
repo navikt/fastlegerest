@@ -1,6 +1,5 @@
 package no.nav.syfo.testhelper.mock
 
-import io.ktor.server.application.*
 import io.ktor.http.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -8,7 +7,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import no.nav.syfo.application.api.authentication.installContentNegotiation
 import no.nav.syfo.client.tilgangskontroll.Tilgang
-import no.nav.syfo.client.tilgangskontroll.VeilederTilgangskontrollClient.Companion.TILGANGSKONTROLL_PERSON_PATH
+import no.nav.syfo.client.tilgangskontroll.VeilederTilgangskontrollClient.Companion.TILGANGSKONTROLL_FASTLEGE_PERSON_PATH
 import no.nav.syfo.testhelper.UserConstants.ARBEIDSTAKER_PERSONIDENT_VEILEDER_NO_ACCESS
 import no.nav.syfo.testhelper.getRandomPort
 import no.nav.syfo.util.NAV_PERSONIDENT_HEADER
@@ -30,7 +29,7 @@ class VeilederTilgangskontrollMock {
     ) {
         installContentNegotiation()
         routing {
-            get(TILGANGSKONTROLL_PERSON_PATH) {
+            get(TILGANGSKONTROLL_FASTLEGE_PERSON_PATH) {
                 when {
                     call.request.headers[NAV_PERSONIDENT_HEADER] == ARBEIDSTAKER_PERSONIDENT_VEILEDER_NO_ACCESS.value -> {
                         call.respond(HttpStatusCode.Forbidden, tilgangFalse)

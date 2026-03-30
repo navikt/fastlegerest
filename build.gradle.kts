@@ -6,9 +6,9 @@ version = "0.0.1"
 
 val commonsCollectionVersion = "3.2.2"
 val commonsTextVersion = "1.15.0"
-val cxfVersion = "3.6.5"
-val jacksonVersion = "2.21.1"
+val cxfVersion = "3.6.10"
 val jacksonDataTypeVersion = "2.21.1"
+val jacksonDatabindVersion = "3.1.0"
 val javaxActivationVersion = "1.2.0"
 val javaxWsRsApiVersion = "2.1.1"
 val jaxbVersion = "2.3.1"
@@ -66,7 +66,6 @@ dependencies {
             strictly(commonsCollectionVersion)
         }
     }
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonDataTypeVersion")
     implementation("javax.xml.bind:jaxb-api:$jaxbVersion")
     implementation("org.glassfish.jaxb:jaxb-runtime:$jaxbVersion")
 
@@ -83,7 +82,8 @@ dependencies {
     implementation("io.micrometer:micrometer-registry-prometheus:$micrometerRegistryVersion")
 
     // (De-)serialization
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonDataTypeVersion")
+    implementation("tools.jackson.core:jackson-databind:$jacksonDatabindVersion")
 
     // Cache
     implementation("redis.clients:jedis:$jedisVersion")
