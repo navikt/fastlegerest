@@ -17,7 +17,7 @@ class VeilederTilgangskontrollClient(
     private val clientEnvironment: ClientEnvironment,
 ) {
     private val httpClient = httpClientDefault()
-    private val tilgangskontrollPersonUrl = "${clientEnvironment.baseUrl}$TILGANGSKONTROLL_PERSON_PATH"
+    private val tilgangskontrollPersonUrl = "${clientEnvironment.baseUrl}$TILGANGSKONTROLL_FASTLEGE_PERSON_PATH"
 
     suspend fun hasAccess(
         callId: String,
@@ -62,6 +62,6 @@ class VeilederTilgangskontrollClient(
     companion object {
         private val log = LoggerFactory.getLogger(VeilederTilgangskontrollClient::class.java)
 
-        const val TILGANGSKONTROLL_PERSON_PATH = "/api/tilgang/navident/person"
+        const val TILGANGSKONTROLL_FASTLEGE_PERSON_PATH = "/api/tilgang/navident/fastlege/person"
     }
 }
