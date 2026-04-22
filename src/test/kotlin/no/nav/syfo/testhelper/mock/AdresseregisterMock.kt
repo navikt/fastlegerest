@@ -2,6 +2,7 @@ package no.nav.syfo.testhelper.mock
 
 import com.microsoft.schemas._2003._10.serialization.arrays.WSArrayOfint
 import no.nav.syfo.testhelper.UserConstants.FASTLEGEKONTOR_NAVN
+import no.nav.syfo.testhelper.UserConstants.FASTLEGEKONTOR_VISNINGSNAVN
 import no.nav.syfo.testhelper.UserConstants.FASTLEGEKONTOR_ORGNR
 import no.nav.syfo.testhelper.UserConstants.FASTLEGE_ETTERNAVN
 import no.nav.syfo.testhelper.UserConstants.FASTLEGE_FNR
@@ -66,6 +67,7 @@ class AdresseregisterMock : ICommunicationPartyService {
             .withActive(true)
             .withHerId(parentHerId)
             .withName(FASTLEGEKONTOR_NAVN)
+            .withDisplayName(FASTLEGEKONTOR_VISNINGSNAVN)
             .withOrganizationNumber(FASTLEGEKONTOR_ORGNR)
             .withPeople(
                 WSArrayOfOrganizationPerson()

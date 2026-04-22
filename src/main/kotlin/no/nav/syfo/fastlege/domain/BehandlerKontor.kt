@@ -4,6 +4,7 @@ data class BehandlerKontor(
     val aktiv: Boolean,
     val herId: Int,
     val navn: String,
+    val visningsnavn: String,
     val besoksadresse: Adresse?,
     val postadresse: Adresse?,
     val telefon: String?,

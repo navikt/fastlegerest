@@ -45,6 +45,7 @@ class AdresseregisterClient(
                 aktiv = wsOrg.isActive,
                 herId = wsOrg.herId,
                 navn = wsOrg.name,
+                visningsnavn = wsOrg.displayName ?: wsOrg.name,
                 besoksadresse = extractPhysicalAddress(wsOrg, "RES"),
                 postadresse = extractPhysicalAddress(wsOrg, "PST"),
                 telefon = extractElectronicAddressField(wsOrg, "E_TLF"),

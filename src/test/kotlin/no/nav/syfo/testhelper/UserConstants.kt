@@ -33,6 +33,7 @@ object UserConstants {
     const val FASTLEGE_VIKAR_STILLINGSPROSENT = 60
 
     const val FASTLEGEKONTOR_NAVN = "Fastlegekontoret"
+    const val FASTLEGEKONTOR_VISNINGSNAVN = "Fastlegekontoret visningsnavn"
     const val FASTLEGEKONTOR_ORGNR = 123456789
     const val FASTLEGEKONTOR_TLF = "12345678"
     const val FASTLEGEKONTOR_EPOST = "test@nav.no"
