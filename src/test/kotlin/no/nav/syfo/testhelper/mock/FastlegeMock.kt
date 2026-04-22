@@ -5,6 +5,7 @@ import com.microsoft.schemas._2003._10.serialization.arrays.unngaduplikat.ArrayO
 import no.nav.syfo.testhelper.UserConstants.FASTLEGEKONTOR_ADR
 import no.nav.syfo.testhelper.UserConstants.FASTLEGEKONTOR_EPOST
 import no.nav.syfo.testhelper.UserConstants.FASTLEGEKONTOR_NAVN
+import no.nav.syfo.testhelper.UserConstants.FASTLEGEKONTOR_VISNINGSNAVN
 import no.nav.syfo.testhelper.UserConstants.FASTLEGEKONTOR_ORGNR
 import no.nav.syfo.testhelper.UserConstants.FASTLEGEKONTOR_POSTBOKS
 import no.nav.syfo.testhelper.UserConstants.FASTLEGEKONTOR_POSTNR
@@ -62,6 +63,7 @@ class FastlegeMock : IFlrReadOperations {
                         .withGPOffice(
                             WSGPOffice()
                                 .withName(FASTLEGEKONTOR_NAVN)
+                                .withDisplayName(FASTLEGEKONTOR_VISNINGSNAVN)
                                 .withOrganizationNumber(FASTLEGEKONTOR_ORGNR)
                                 .withElectronicAddresses(
                                     WSArrayOfElectronicAddress()

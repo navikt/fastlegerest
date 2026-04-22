@@ -101,6 +101,8 @@ class FastlegeSystemApiTest {
 
                 val behandlerKontor = response.body<BehandlerKontor>()
                 assertTrue(behandlerKontor.aktiv)
+                assertEquals(behandlerKontor.navn, UserConstants.FASTLEGEKONTOR_NAVN)
+                assertEquals(behandlerKontor.visningsnavn, UserConstants.FASTLEGEKONTOR_VISNINGSNAVN)
                 assertEquals(1, behandlerKontor.behandlere.size)
                 val behandler = behandlerKontor.behandlere[0]
                 assertTrue(behandler.aktiv)
