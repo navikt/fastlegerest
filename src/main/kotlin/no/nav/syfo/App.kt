@@ -16,7 +16,6 @@ import no.nav.syfo.fastlege.ws.fastlegeregister.FastlegeInformasjonClient
 import no.nav.syfo.fastlege.ws.fastlegeregister.fastlegeSoapClient
 import org.slf4j.LoggerFactory
 import redis.clients.jedis.*
-import java.util.concurrent.TimeUnit
 
 const val applicationPort = 8080
 
@@ -86,7 +85,7 @@ fun main() {
 
     Runtime.getRuntime().addShutdownHook(
         Thread {
-            server.stop(10, 10, TimeUnit.SECONDS)
+            applicationState.ready = false
         }
     )
 
