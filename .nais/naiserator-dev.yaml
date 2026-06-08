@@ -44,8 +44,6 @@ spec:
         - application: syfomodiaperson
         - application: finnfastlege
         - application: isdialogmelding
-        - application: dokumentinnhenting
-          namespace: aap
     outbound:
       external:
         - host: "login.microsoftonline.com"
