@@ -10,6 +10,7 @@ import no.nav.syfo.fastlege.exception.HarIkkeTilgang
 import no.nav.syfo.util.*
 
 const val FASTLEGE_PATH = "/fastlegerest/api/v2/fastlege"
+const val INNBYGGER_FASTLEGE_PATH = "/fastlegerest/api/v2/innbygger/fastlege"
 
 fun Route.registerFastlegeAzureADApi(
     fastlegeService: FastlegeService,
@@ -19,7 +20,7 @@ fun Route.registerFastlegeAzureADApi(
         get("") {
             val callId = getCallId()
             val token = getBearerHeader()
-                ?: throw IllegalArgumentException("No Authorization header supplied to system api when getting fastlege, callID=$callId")
+                ?: throw IllegalArgumentException("No Authorization header supplied when getting fastlege, callID=$callId")
             val requestedPersonIdent = getPersonIdentHeader()?.let { personIdent ->
                 PersonIdent(personIdent)
             } ?: throw IllegalArgumentException("No PersonIdent supplied")
@@ -35,7 +36,7 @@ fun Route.registerFastlegeAzureADApi(
         get("/fastleger") {
             val callId = getCallId()
             val token = getBearerHeader()
-                ?: throw IllegalArgumentException("No Authorization header supplied to system api when getting fastlege, callID=$callId")
+                ?: throw IllegalArgumentException("No Authorization header supplied when getting fastlege, callID=$callId")
             val requestedPersonIdent = getPersonIdentHeader()?.let { personIdent ->
                 PersonIdent(personIdent)
             } ?: throw IllegalArgumentException("No PersonIdent supplied")
@@ -46,6 +47,24 @@ fun Route.registerFastlegeAzureADApi(
 
             val fastleger = fastlegeService.hentBrukersFastleger(requestedPersonIdent)
             call.respond(fastleger)
+        }
+    }
+    route(INNBYGGER_FASTLEGE_PATH) {
+        get("") {
+            val callId = getCallId()
+            val token = getBearerHeader()
+                ?: throw IllegalArgumentException("No Authorization header supplied to when getting fastlege, callID=$callId")
+            val requestedPersonIdent = getPersonIdentHeader()?.let { personIdent ->
+                PersonIdent(personIdent)
+            } ?: throw IllegalArgumentException("No PersonIdent supplied")
+
+            if (!tilgangkontrollClient.hasInnbyggerAccess(callId, requestedPersonIdent, token)) {
+                throw HarIkkeTilgang()
+            }
+
+            val fastlege = fastlegeService.hentBrukersFastlege(requestedPersonIdent)
+                ?: throw FastlegeIkkeFunnet()
+            call.respond(fastlege)
         }
     }
 }

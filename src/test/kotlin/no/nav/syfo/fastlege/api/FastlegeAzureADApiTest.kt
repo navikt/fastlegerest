@@ -66,6 +66,22 @@ class FastlegeAzureADApiTest {
         }
 
         @Test
+        fun `should return fastlege for innbygger`() {
+            testApplication {
+                val client = setupApiAndClient()
+                val response = client.get(INNBYGGER_FASTLEGE_PATH) {
+                    bearerAuth(validToken)
+                    header(NAV_PERSONIDENT_HEADER, FASTLEGEOPPSLAG_PERSON_ID)
+                }
+                assertEquals(HttpStatusCode.OK, response.status)
+
+                val fastlege = response.body<Fastlege>()
+                assertEquals(RelasjonKodeVerdi.FASTLEGE.kodeVerdi, fastlege.relasjon.kodeVerdi)
+                assertEquals(FASTLEGEOPPSLAG_PERSON_ID, fastlege.pasient!!.fnr)
+            }
+        }
+
+        @Test
         fun `should return fastlege when both fastlege and vikar`() {
             testApplication {
                 val client = setupApiAndClient()
@@ -103,6 +119,19 @@ class FastlegeAzureADApiTest {
             testApplication {
                 val client = setupApiAndClient()
                 val response = client.get(FASTLEGE_PATH) {
+                    bearerAuth(validToken)
+                    header(NAV_PERSONIDENT_HEADER, ARBEIDSTAKER_PERSONIDENT_VEILEDER_NO_ACCESS.value)
+                }
+                assertEquals(HttpStatusCode.Forbidden, response.status)
+                assertEquals("Denied NAVIdent access to personIdent", response.body<String>())
+            }
+        }
+
+        @Test
+        fun `veileder has no innbygger access`() {
+            testApplication {
+                val client = setupApiAndClient()
+                val response = client.get(INNBYGGER_FASTLEGE_PATH) {
                     bearerAuth(validToken)
                     header(NAV_PERSONIDENT_HEADER, ARBEIDSTAKER_PERSONIDENT_VEILEDER_NO_ACCESS.value)
                 }
