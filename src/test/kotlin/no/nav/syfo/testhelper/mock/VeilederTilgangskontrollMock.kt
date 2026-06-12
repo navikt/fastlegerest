@@ -8,7 +8,7 @@ import io.ktor.server.routing.*
 import no.nav.syfo.application.api.authentication.installContentNegotiation
 import no.nav.syfo.client.tilgangskontroll.Tilgang
 import no.nav.syfo.client.tilgangskontroll.VeilederTilgangskontrollClient.Companion.TILGANGSKONTROLL_FASTLEGE_PERSON_PATH
-import no.nav.syfo.client.tilgangskontroll.VeilederTilgangskontrollClient.Companion.TILGANGSKONTROLL_INNBYGGER_PATH
+import no.nav.syfo.client.tilgangskontroll.VeilederTilgangskontrollClient.Companion.TILGANGSKONTROLL_POPULASJON_PATH
 import no.nav.syfo.testhelper.UserConstants.ARBEIDSTAKER_PERSONIDENT_VEILEDER_NO_ACCESS
 import no.nav.syfo.testhelper.getRandomPort
 import no.nav.syfo.util.NAV_PERSONIDENT_HEADER
@@ -43,7 +43,7 @@ class VeilederTilgangskontrollMock {
                     }
                 }
             }
-            get(TILGANGSKONTROLL_INNBYGGER_PATH) {
+            get(TILGANGSKONTROLL_POPULASJON_PATH) {
                 when {
                     call.request.headers[NAV_PERSONIDENT_HEADER] == ARBEIDSTAKER_PERSONIDENT_VEILEDER_NO_ACCESS.value -> {
                         call.respond(HttpStatusCode.Forbidden, tilgangFalse)

@@ -1,6 +1,5 @@
 package no.nav.syfo.fastlege.api
 
-import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import no.nav.syfo.client.tilgangskontroll.VeilederTilgangskontrollClient
@@ -58,7 +57,7 @@ fun Route.registerFastlegeAzureADApi(
                 PersonIdent(personIdent)
             } ?: throw IllegalArgumentException("No PersonIdent supplied")
 
-            if (!tilgangkontrollClient.hasInnbyggerAccess(callId, requestedPersonIdent, token)) {
+            if (!tilgangkontrollClient.hasPopulasjonAccess(callId, requestedPersonIdent, token)) {
                 throw HarIkkeTilgang()
             }
 
