@@ -9,14 +9,14 @@ import no.nav.syfo.fastlege.exception.HarIkkeTilgang
 import no.nav.syfo.util.*
 
 const val FASTLEGE_PATH = "/fastlegerest/api/v2/fastlege"
-const val INNBYGGER_FASTLEGE_PATH = "/fastlegerest/api/v2/innbygger/fastlege"
+const val POPULASJON_FASTLEGE_PATH = "/fastlegerest/api/v2/populasjon/fastlege"
 
 fun Route.registerFastlegeAzureADApi(
     fastlegeService: FastlegeService,
     tilgangkontrollClient: VeilederTilgangskontrollClient,
 ) {
     route(FASTLEGE_PATH) {
-        get("") {
+        get {
             val callId = getCallId()
             val token = getBearerHeader()
                 ?: throw IllegalArgumentException("No Authorization header supplied when getting fastlege, callID=$callId")
@@ -48,20 +48,20 @@ fun Route.registerFastlegeAzureADApi(
             call.respond(fastleger)
         }
     }
-    route(INNBYGGER_FASTLEGE_PATH) {
-        get("") {
+    route(POPULASJON_FASTLEGE_PATH) {
+        get {
             val callId = getCallId()
             val token = getBearerHeader()
                 ?: throw IllegalArgumentException("No Authorization header supplied to when getting fastlege, callID=$callId")
-            val requestedPersonIdent = getPersonIdentHeader()?.let { personIdent ->
-                PersonIdent(personIdent)
-            } ?: throw IllegalArgumentException("No PersonIdent supplied")
+            val requestedPersonident = getPersonIdentHeader()?.let { personident ->
+                PersonIdent(personident)
+            } ?: throw IllegalArgumentException("No Personident supplied")
 
-            if (!tilgangkontrollClient.hasPopulasjonAccess(callId, requestedPersonIdent, token)) {
+            if (!tilgangkontrollClient.hasPopulasjonAccess(callId, requestedPersonident, token)) {
                 throw HarIkkeTilgang()
             }
 
-            val fastlege = fastlegeService.hentBrukersFastlege(requestedPersonIdent)
+            val fastlege = fastlegeService.hentBrukersFastlege(requestedPersonident)
                 ?: throw FastlegeIkkeFunnet()
             call.respond(fastlege)
         }

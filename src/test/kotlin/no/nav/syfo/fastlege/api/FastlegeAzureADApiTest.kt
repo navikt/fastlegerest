@@ -66,10 +66,10 @@ class FastlegeAzureADApiTest {
         }
 
         @Test
-        fun `should return fastlege for innbygger`() {
+        fun `should return fastlege for innbygger via populasjon-api`() {
             testApplication {
                 val client = setupApiAndClient()
-                val response = client.get(INNBYGGER_FASTLEGE_PATH) {
+                val response = client.get(POPULASJON_FASTLEGE_PATH) {
                     bearerAuth(validToken)
                     header(NAV_PERSONIDENT_HEADER, FASTLEGEOPPSLAG_PERSON_ID)
                 }
@@ -128,10 +128,10 @@ class FastlegeAzureADApiTest {
         }
 
         @Test
-        fun `veileder has no innbygger access`() {
+        fun `veileder has no populasjon access`() {
             testApplication {
                 val client = setupApiAndClient()
-                val response = client.get(INNBYGGER_FASTLEGE_PATH) {
+                val response = client.get(POPULASJON_FASTLEGE_PATH) {
                     bearerAuth(validToken)
                     header(NAV_PERSONIDENT_HEADER, ARBEIDSTAKER_PERSONIDENT_VEILEDER_NO_ACCESS.value)
                 }
