@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory
 import java.net.URL
 import java.time.Duration
 import java.util.*
+import java.util.concurrent.CancellationException
 import java.util.concurrent.TimeUnit
 
 private val log: Logger = LoggerFactory.getLogger("no.nav.syfo.application.api.authentication")
@@ -95,6 +96,11 @@ fun Application.installContentNegotiation() {
 
 fun Application.installStatusPages() {
     install(StatusPages) {
+        // Client disconnected before the response was sent; rethrow so cancellation propagates
+        exception<CancellationException> { call, cause ->
+            call.application.log.debug("Request cancelled: ${cause.message}")
+            throw cause
+        }
         exception<Throwable> { call, cause ->
             val callId = call.getCallId()
             val consumerId = call.getConsumerId()
