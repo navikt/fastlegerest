@@ -7,8 +7,8 @@ version = "0.0.1"
 val commonsCollectionVersion = "3.2.2"
 val commonsTextVersion = "1.15.0"
 val cxfVersion = "3.6.12"
-val jacksonDataTypeVersion = "2.22.4"
-val jacksonDatabindVersion = "3.2.4"
+val jacksonDataTypeVersion = "2.23.0"
+val jacksonDatabindVersion = "3.3.0"
 val javaxActivationVersion = "1.2.0"
 val javaxWsRsApiVersion = "2.1.1"
 val jaxbVersion = "2.3.1"
@@ -19,7 +19,7 @@ val ktorVersion = "3.6.1"
 val logbackVersion = "1.6.6"
 val logstashEncoderVersion = "9.0"
 val micrometerRegistryVersion = "1.17.2"
-val mockkVersion = "1.14.11"
+val mockkVersion = "1.14.12"
 val nimbusjosejwtVersion = "10.10"
 val redisEmbeddedVersion = "0.7.3"
 val syfotjenesterVersion = "1.2022.09.09-14.42-5356e2174b6c"
@@ -46,6 +46,14 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
     implementation("io.ktor:ktor-server-auth-jwt:$ktorVersion")
+    constraints {
+        implementation("com.google.guava:guava") {
+            version {
+                require("33.8.0-jre")
+            }
+        }
+    }
+
     implementation("io.ktor:ktor-server-call-id:$ktorVersion")
     implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
@@ -59,6 +67,14 @@ dependencies {
     implementation("org.apache.cxf:cxf-rt-frontend-jaxws:$cxfVersion")
     implementation("javax.ws.rs:javax.ws.rs-api:$javaxWsRsApiVersion")
     implementation("com.sun.xml.ws:jaxws-ri:$jaxwsVersion")
+    constraints {
+        implementation("com.sun.mail:jakarta.mail") {
+            version {
+                require("1.6.8")
+            }
+        }
+    }
+
     implementation("com.sun.xml.ws:jaxws-tools:$jaxwsVersion")
     implementation("com.sun.activation:javax.activation:$javaxActivationVersion")
     implementation("commons-collections:commons-collections") {
