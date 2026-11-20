@@ -46,6 +46,14 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
     implementation("io.ktor:ktor-server-auth-jwt:$ktorVersion")
+    constraints {
+        implementation("com.google.guava:guava") {
+            version {
+                require("33.8.0-jre")
+            }
+        }
+    }
+
     implementation("io.ktor:ktor-server-call-id:$ktorVersion")
     implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
@@ -59,6 +67,14 @@ dependencies {
     implementation("org.apache.cxf:cxf-rt-frontend-jaxws:$cxfVersion")
     implementation("javax.ws.rs:javax.ws.rs-api:$javaxWsRsApiVersion")
     implementation("com.sun.xml.ws:jaxws-ri:$jaxwsVersion")
+    constraints {
+        implementation("com.sun.mail:jakarta.mail") {
+            version {
+                require("1.6.8")
+            }
+        }
+    }
+
     implementation("com.sun.xml.ws:jaxws-tools:$jaxwsVersion")
     implementation("com.sun.activation:javax.activation:$javaxActivationVersion")
     implementation("commons-collections:commons-collections") {
