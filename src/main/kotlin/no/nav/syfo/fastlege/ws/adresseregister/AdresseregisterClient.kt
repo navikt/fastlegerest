@@ -4,6 +4,7 @@ import no.nav.syfo.fastlege.*
 import no.nav.syfo.fastlege.domain.Adresse
 import no.nav.syfo.fastlege.domain.Behandler
 import no.nav.syfo.fastlege.domain.BehandlerKontor
+import no.nav.syfo.fastlege.domain.Tjeneste
 import no.nhn.register.communicationparty.ICommunicationPartyService
 import no.nhn.register.communicationparty.ICommunicationPartyServiceGetOrganizationDetailsGenericFaultFaultFaultMessage
 import no.nhn.register.communicationparty.ICommunicationPartyServiceGetOrganizationPersonDetailsGenericFaultFaultFaultMessage
@@ -64,6 +65,16 @@ class AdresseregisterClient(
                             aut.profession?.codeValue
                         }?.firstOrNull()
                     )
+                },
+                tjenester = wsOrg.services?.services.orEmpty().mapNotNull { wsService ->
+                    wsService.herId?.let { herId ->
+                        Tjeneste(
+                            aktiv = wsService.isActive ?: false,
+                            herId = herId,
+                            navn = wsService.name,
+                            visningsnavn = wsService.displayName ?: wsService.name,
+                        )
+                    }
                 },
             ).also {
                 COUNT_ADRESSEREGISTER_BEHANDLERE_SUCCESS.increment()

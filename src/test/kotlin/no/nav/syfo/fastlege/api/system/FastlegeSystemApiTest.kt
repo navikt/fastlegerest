@@ -110,6 +110,12 @@ class FastlegeSystemApiTest {
                 assertEquals(UserConstants.FASTLEGE_HPR_NR, behandler.hprId)
                 assertEquals(UserConstants.HER_ID, behandler.herId)
                 assertEquals(UserConstants.FASTLEGE_FNR, behandler.personIdent)
+                assertEquals(1, behandlerKontor.tjenester.size)
+                val tjeneste = behandlerKontor.tjenester[0]
+                assertTrue(tjeneste.aktiv)
+                assertEquals(UserConstants.TJENESTE_HER_ID, tjeneste.herId)
+                assertEquals(UserConstants.TJENESTE_NAVN, tjeneste.navn)
+                assertEquals(UserConstants.TJENESTE_VISNINGSNAVN, tjeneste.visningsnavn)
             }
         }
 
@@ -129,6 +135,9 @@ class FastlegeSystemApiTest {
                 assertTrue(behandler.aktiv)
                 val behandlerInactive = behandlerKontor.behandlere[1]
                 assertFalse(behandlerInactive.aktiv)
+                assertEquals(2, behandlerKontor.tjenester.size)
+                assertTrue(behandlerKontor.tjenester[0].aktiv)
+                assertFalse(behandlerKontor.tjenester[1].aktiv)
             }
         }
     }

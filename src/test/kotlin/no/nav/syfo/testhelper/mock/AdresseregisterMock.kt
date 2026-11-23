@@ -14,6 +14,10 @@ import no.nav.syfo.testhelper.UserConstants.HER_ID
 import no.nav.syfo.testhelper.UserConstants.HER_ID_INACTIVE
 import no.nav.syfo.testhelper.UserConstants.PARENT_HER_ID
 import no.nav.syfo.testhelper.UserConstants.PARENT_HER_ID_WITH_INACTIVE_BEHANDLER
+import no.nav.syfo.testhelper.UserConstants.TJENESTE_HER_ID
+import no.nav.syfo.testhelper.UserConstants.TJENESTE_HER_ID_INACTIVE
+import no.nav.syfo.testhelper.UserConstants.TJENESTE_NAVN
+import no.nav.syfo.testhelper.UserConstants.TJENESTE_VISNINGSNAVN
 import no.nhn.register.certificatedetails.WSArrayOfCertificateDetails
 import no.nhn.register.certificatedetails.WSCertificateDetails
 import no.nhn.register.certificatesearchresult.WSArrayOfLdapSearchProvider
@@ -47,6 +51,17 @@ val wsOrganizationPersonInactive = WSOrganizationPerson()
             .withCitizenId(WSCitizenId().withId(FASTLEGE_FNR_INACTIVE))
     )
 
+val wsTjeneste = WSService()
+    .withActive(true)
+    .withHerId(TJENESTE_HER_ID)
+    .withName(TJENESTE_NAVN)
+    .withDisplayName(TJENESTE_VISNINGSNAVN)
+
+val wsTjenesteInactive = WSService()
+    .withActive(false)
+    .withHerId(TJENESTE_HER_ID_INACTIVE)
+    .withName(TJENESTE_NAVN)
+
 val wsOrganizationPersons = listOf(wsOrganizationPerson)
 val wsOrganizationPersonsIncludingInactive = listOf(wsOrganizationPerson, wsOrganizationPersonInactive)
 
@@ -77,6 +92,14 @@ class AdresseregisterMock : ICommunicationPartyService {
                         else
                             wsOrganizationPersonsIncludingInactive
                     )
+            )
+            .withServices(
+                WSArrayOfService().withServices(
+                    if (parentHerId == PARENT_HER_ID)
+                        listOf(wsTjeneste)
+                    else
+                        listOf(wsTjeneste, wsTjenesteInactive)
+                )
             )
     }
 
