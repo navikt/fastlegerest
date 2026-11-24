@@ -11,4 +11,5 @@ data class BehandlerKontor(
     val epost: String?,
     val orgnummer: String?,
     val behandlere: List<Behandler>,
+    val tjenester: List<Tjeneste> = emptyList(),
 )

@@ -49,6 +49,10 @@ object UserConstants {
     const val HER_ID = 1234
     const val HER_ID_INACTIVE = 1235
     const val PARENT_HER_ID = 9876
+    const val TJENESTE_HER_ID = 4321
+    const val TJENESTE_HER_ID_INACTIVE = 4322
+    const val TJENESTE_NAVN = "Tjenesten"
+    const val TJENESTE_VISNINGSNAVN = "Tjenesten visningsnavn"
     const val PARENT_HER_ID_WITH_INACTIVE_BEHANDLER = 9877
 
     const val JWT_AZP = "syfomodiaperson"
